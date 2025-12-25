@@ -6,6 +6,23 @@
     <title>NEBULA:FOG:PRIME 2026 - BREACH PROTOCOL</title>
     <meta name="description" content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
 
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NEBULA:FOG:PRIME 2026 - The Singularity Protocol">
+    <meta property="og:description" content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. $5,000 prize pool. No spectators.">
+    <meta property="og:image" content="https://nebulafog.io/og-image.png">
+    <meta property="og:url" content="https://nebulafog.io">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NEBULA:FOG:PRIME 2026">
+    <meta name="twitter:description" content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
+    <meta name="twitter:image" content="https://nebulafog.io/og-image.png">
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#00ff9f">
+    <meta name="msapplication-TileColor" content="#030303">
+
     <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1014,9 +1031,9 @@
         <div class="footer-logo">NEBULA:FOG:PRIME</div>
         <p>&copy; 2026 // All systems nominal</p>
         <div class="footer-links">
-            <a href="#">X</a>
-            <a href="#">Discord</a>
-            <a href="#">GitHub</a>
+            <a href="https://x.com/nebulafogprime" target="_blank" rel="noopener" aria-label="Follow on X">X</a>
+            <a href="https://discord.gg/nebulafog" target="_blank" rel="noopener" aria-label="Join Discord">Discord</a>
+            <a href="https://github.com/nebulafog" target="_blank" rel="noopener" aria-label="View on GitHub">GitHub</a>
         </div>
     </footer>
 
@@ -1067,6 +1084,15 @@
                         el.innerHTML = line.text;
                         this.terminal.appendChild(el);
 
+                        // Play beep sound for each line
+                        if (window.soundManager && window.soundManager.initialized) {
+                            if (line.class === 'success') {
+                                window.soundManager.beep(1000, 0.06);
+                            } else {
+                                window.soundManager.beep(600 + Math.random() * 200, 0.04);
+                            }
+                        }
+
                         gsap.to(el, {
                             opacity: 1,
                             y: 0,
@@ -1086,6 +1112,12 @@
                     opacity: 1,
                     duration: 0.1
                 });
+
+                // Play access granted fanfare
+                if (window.soundManager) {
+                    window.soundManager.init();
+                    window.soundManager.accessGranted();
+                }
 
                 await this.sleep(1000);
 
@@ -1116,6 +1148,225 @@
         }
 
         // ========================================
+        // SOUND MANAGER - Web Audio API Synthesizer
+        // ========================================
+        class SoundManager {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+                this.initialized = false;
+                this.masterGain = null;
+            }
+
+            init() {
+                if (this.initialized) return;
+                try {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    this.masterGain = this.ctx.createGain();
+                    this.masterGain.gain.value = 0.3;
+                    this.masterGain.connect(this.ctx.destination);
+                    this.initialized = true;
+                } catch (e) {
+                    console.log('Web Audio not supported');
+                    this.enabled = false;
+                }
+            }
+
+            resume() {
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            // Boot beep - short high-pitched tone
+            beep(frequency = 800, duration = 0.08) {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'square';
+                osc.frequency.value = frequency;
+
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            }
+
+            // Success sound - ascending tones
+            success() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                [600, 800, 1000].forEach((freq, i) => {
+                    setTimeout(() => this.beep(freq, 0.1), i * 80);
+                });
+            }
+
+            // Error sound - low buzz
+            error() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.value = 100;
+
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.3);
+            }
+
+            // Click sound - short tick
+            click() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = 1200;
+
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.03);
+            }
+
+            // Hover sound - soft blip
+            hover() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.value = 600;
+
+                gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            }
+
+            // Decrypt sound - data processing
+            decrypt() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.beep(400 + Math.random() * 600, 0.05);
+                    }, i * 40);
+                }
+            }
+
+            // Glitch sound - noise burst
+            glitch() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                const bufferSize = this.ctx.sampleRate * 0.1;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1;
+                }
+
+                const noise = this.ctx.createBufferSource();
+                const gain = this.ctx.createGain();
+
+                noise.buffer = buffer;
+                gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.1);
+
+                noise.connect(gain);
+                gain.connect(this.masterGain);
+
+                noise.start();
+            }
+
+            // Access granted fanfare
+            accessGranted() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                const notes = [523, 659, 784, 1047]; // C5, E5, G5, C6
+                notes.forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+
+                        osc.type = 'sine';
+                        osc.frequency.value = freq;
+
+                        gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.3);
+
+                        osc.connect(gain);
+                        gain.connect(this.masterGain);
+
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 0.3);
+                    }, i * 100);
+                });
+            }
+
+            // Type sound - keyboard click
+            type() {
+                if (!this.enabled || !this.ctx) return;
+                this.resume();
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = 'square';
+                osc.frequency.value = 800 + Math.random() * 200;
+
+                gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.02);
+
+                osc.connect(gain);
+                gain.connect(this.masterGain);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.02);
+            }
+
+            toggle() {
+                this.enabled = !this.enabled;
+                return this.enabled;
+            }
+        }
+
+        // Global sound instance
+        window.soundManager = new SoundManager();
+
+        // ========================================
         // MAIN CONTROLLER
         // ========================================
         class MainController {
@@ -1126,11 +1377,16 @@
                 this.clickCount = 0;
                 this.clickTimer = null;
                 this.isInitialized = false;
+                this.sound = window.soundManager;
             }
 
             init() {
                 if (this.isInitialized) return;
                 this.isInitialized = true;
+
+                // Initialize sound on first user interaction
+                document.addEventListener('click', () => this.sound.init(), { once: true });
+                document.addEventListener('keydown', () => this.sound.init(), { once: true });
 
                 this.initCursor();
                 this.initParticles();
@@ -1140,6 +1396,125 @@
                 this.initInactivityDetection();
                 this.initIntrusionDetection();
                 this.initEasterEggs();
+                this.initSoundToggle();
+                this.initMobileEnhancements();
+            }
+
+            // ========================================
+            // SOUND TOGGLE UI
+            // ========================================
+            initSoundToggle() {
+                // Add sound toggle button
+                const toggle = document.createElement('button');
+                toggle.className = 'sound-toggle';
+                toggle.innerHTML = '🔊';
+                toggle.setAttribute('aria-label', 'Toggle sound');
+                const isMobile = window.matchMedia('(max-width: 768px)').matches;
+                toggle.style.cssText = `
+                    position: fixed;
+                    bottom: ${isMobile ? '1rem' : '2rem'};
+                    left: ${isMobile ? '1rem' : '2rem'};
+                    width: ${isMobile ? '44px' : '40px'};
+                    height: ${isMobile ? '44px' : '40px'};
+                    background: rgba(0, 255, 159, 0.1);
+                    border: 1px solid var(--color-primary);
+                    border-radius: 50%;
+                    color: var(--color-primary);
+                    font-size: 16px;
+                    cursor: pointer;
+                    z-index: 1000;
+                    transition: all 0.3s ease;
+                    -webkit-tap-highlight-color: transparent;
+                `;
+                toggle.addEventListener('click', () => {
+                    const enabled = this.sound.toggle();
+                    toggle.innerHTML = enabled ? '🔊' : '🔇';
+                    toggle.style.opacity = enabled ? '1' : '0.5';
+                    if (enabled) this.sound.click();
+                });
+                document.body.appendChild(toggle);
+            }
+
+            // ========================================
+            // MOBILE TOUCH ENHANCEMENTS
+            // ========================================
+            initMobileEnhancements() {
+                if (!window.matchMedia('(max-width: 768px)').matches) return;
+
+                // Tap to decrypt protocol cards immediately
+                document.querySelectorAll('.protocol-card').forEach(card => {
+                    card.addEventListener('touchstart', () => {
+                        if (!card.classList.contains('decrypted')) {
+                            card.classList.add('decrypted');
+                            this.sound.decrypt();
+                        }
+                    }, { passive: true });
+                });
+
+                // Swipe down to skip breach sequence
+                let touchStartY = 0;
+                const breachOverlay = document.getElementById('breach-overlay');
+
+                breachOverlay.addEventListener('touchstart', (e) => {
+                    touchStartY = e.touches[0].clientY;
+                }, { passive: true });
+
+                breachOverlay.addEventListener('touchmove', (e) => {
+                    const touchY = e.touches[0].clientY;
+                    const diff = touchY - touchStartY;
+
+                    // Swipe down more than 100px to skip
+                    if (diff > 100 && !breachOverlay.classList.contains('complete')) {
+                        // Visual feedback
+                        breachOverlay.style.opacity = Math.max(0, 1 - diff / 200);
+                    }
+                }, { passive: true });
+
+                breachOverlay.addEventListener('touchend', (e) => {
+                    const touchY = e.changedTouches[0].clientY;
+                    const diff = touchY - touchStartY;
+
+                    if (diff > 150) {
+                        // Skip breach sequence
+                        gsap.to(breachOverlay, {
+                            opacity: 0,
+                            duration: 0.3,
+                            onComplete: () => {
+                                breachOverlay.classList.add('complete');
+                                breachOverlay.style.display = 'none';
+                                window.mainController.init();
+                            }
+                        });
+                    } else {
+                        breachOverlay.style.opacity = 1;
+                    }
+                }, { passive: true });
+
+                // Pull to refresh prevention on scroll areas
+                document.body.style.overscrollBehavior = 'none';
+
+                // Better touch feedback on buttons
+                document.querySelectorAll('.btn-primary, .protocol-card').forEach(el => {
+                    el.addEventListener('touchstart', () => {
+                        el.style.transform = 'scale(0.98)';
+                        this.sound.click();
+                    }, { passive: true });
+
+                    el.addEventListener('touchend', () => {
+                        el.style.transform = '';
+                    }, { passive: true });
+                });
+
+                // Hide scroll indicator on first scroll
+                const scrollIndicator = document.getElementById('scroll-indicator');
+                let hasScrolled = false;
+
+                window.addEventListener('scroll', () => {
+                    if (!hasScrolled && window.scrollY > 50) {
+                        hasScrolled = true;
+                        gsap.to(scrollIndicator, { opacity: 0, duration: 0.3 });
+                    }
+                }, { passive: true });
             }
 
             // ========================================
@@ -1173,22 +1548,223 @@
                 };
                 animate();
 
-                // Hover effects
+                // Hover effects with sound
                 document.querySelectorAll('a, button, .btn-primary, .protocol-card').forEach(el => {
-                    el.addEventListener('mouseenter', () => this.cursorRing.classList.add('hover'));
+                    el.addEventListener('mouseenter', () => {
+                        this.cursorRing.classList.add('hover');
+                        this.sound.hover();
+                    });
                     el.addEventListener('mouseleave', () => this.cursorRing.classList.remove('hover'));
                 });
 
-                // Click effect
-                document.addEventListener('mousedown', () => this.cursorRing.classList.add('clicking'));
+                // Click effect with sound
+                document.addEventListener('mousedown', () => {
+                    this.cursorRing.classList.add('clicking');
+                    this.sound.click();
+                });
                 document.addEventListener('mouseup', () => this.cursorRing.classList.remove('clicking'));
             }
 
             // ========================================
-            // PARTICLE SYSTEM
+            // WEBGL SHADER BACKGROUND
             // ========================================
             initParticles() {
                 const canvas = document.getElementById('particles');
+
+                // Try WebGL first, fallback to 2D canvas
+                let gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+                if (!gl) {
+                    this.initParticles2D(canvas);
+                    return;
+                }
+
+                // Vertex shader
+                const vsSource = `
+                    attribute vec4 aPosition;
+                    void main() {
+                        gl_Position = aPosition;
+                    }
+                `;
+
+                // Fragment shader - cyberpunk noise with mouse/scroll interaction
+                const fsSource = `
+                    precision mediump float;
+                    uniform vec2 uResolution;
+                    uniform float uTime;
+                    uniform vec2 uMouse;
+                    uniform float uScroll;
+
+                    // Simplex noise function
+                    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+                    float snoise(vec2 v) {
+                        const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+                                           -0.577350269189626, 0.024390243902439);
+                        vec2 i  = floor(v + dot(v, C.yy));
+                        vec2 x0 = v - i + dot(i, C.xx);
+                        vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                        vec4 x12 = x0.xyxy + C.xxzz;
+                        x12.xy -= i1;
+                        i = mod289(i);
+                        vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+                        vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                        m = m*m; m = m*m;
+                        vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                        vec3 h = abs(x) - 0.5;
+                        vec3 ox = floor(x + 0.5);
+                        vec3 a0 = x - ox;
+                        m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+                        vec3 g;
+                        g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                        g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                        return 130.0 * dot(m, g);
+                    }
+
+                    void main() {
+                        vec2 uv = gl_FragCoord.xy / uResolution;
+                        vec2 p = uv * 2.0 - 1.0;
+                        p.x *= uResolution.x / uResolution.y;
+
+                        // Mouse influence
+                        vec2 mouse = uMouse * 2.0 - 1.0;
+                        mouse.x *= uResolution.x / uResolution.y;
+                        float mouseDist = length(p - mouse);
+                        float mouseInfluence = smoothstep(0.8, 0.0, mouseDist) * 0.3;
+
+                        // Flowing noise
+                        float t = uTime * 0.15;
+                        float scrollOffset = uScroll * 2.0;
+
+                        float noise1 = snoise(p * 1.5 + vec2(t, scrollOffset));
+                        float noise2 = snoise(p * 3.0 + vec2(-t * 0.5, scrollOffset * 0.5));
+                        float noise3 = snoise(p * 5.0 + vec2(t * 0.3, -scrollOffset * 0.3));
+
+                        float n = noise1 * 0.5 + noise2 * 0.3 + noise3 * 0.2;
+                        n = n * 0.5 + 0.5;
+
+                        // Cyberpunk color palette
+                        vec3 colorA = vec3(0.0, 1.0, 0.62); // Primary green
+                        vec3 colorB = vec3(1.0, 0.0, 0.5);  // Secondary pink
+                        vec3 colorC = vec3(0.0, 1.0, 1.0);  // Accent cyan
+
+                        // Color mixing based on noise and position
+                        vec3 color = mix(colorA, colorB, n * 0.5 + mouseInfluence);
+                        color = mix(color, colorC, noise3 * 0.3);
+
+                        // Vignette
+                        float vignette = 1.0 - length(p) * 0.4;
+                        vignette = clamp(vignette, 0.0, 1.0);
+
+                        // Grid overlay
+                        vec2 grid = fract(uv * vec2(50.0, 30.0));
+                        float gridLine = step(0.95, grid.x) + step(0.95, grid.y);
+                        gridLine *= 0.03;
+
+                        // Final color with very low alpha for subtlety
+                        float alpha = (n * 0.08 + gridLine + mouseInfluence * 0.2) * vignette;
+                        alpha = clamp(alpha, 0.0, 0.15);
+
+                        gl_FragColor = vec4(color, alpha);
+                    }
+                `;
+
+                // Compile shaders
+                const compileShader = (source, type) => {
+                    const shader = gl.createShader(type);
+                    gl.shaderSource(shader, source);
+                    gl.compileShader(shader);
+                    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                        console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+                        return null;
+                    }
+                    return shader;
+                };
+
+                const vs = compileShader(vsSource, gl.VERTEX_SHADER);
+                const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
+
+                if (!vs || !fs) {
+                    this.initParticles2D(canvas);
+                    return;
+                }
+
+                const program = gl.createProgram();
+                gl.attachShader(program, vs);
+                gl.attachShader(program, fs);
+                gl.linkProgram(program);
+
+                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                    console.error('Program link error:', gl.getProgramInfoLog(program));
+                    this.initParticles2D(canvas);
+                    return;
+                }
+
+                gl.useProgram(program);
+
+                // Create fullscreen quad
+                const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+                const buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+                const aPosition = gl.getAttribLocation(program, 'aPosition');
+                gl.enableVertexAttribArray(aPosition);
+                gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+                // Uniforms
+                const uResolution = gl.getUniformLocation(program, 'uResolution');
+                const uTime = gl.getUniformLocation(program, 'uTime');
+                const uMouse = gl.getUniformLocation(program, 'uMouse');
+                const uScroll = gl.getUniformLocation(program, 'uScroll');
+
+                let mouseX = 0.5, mouseY = 0.5;
+                let scrollProgress = 0;
+
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX / window.innerWidth;
+                    mouseY = 1.0 - e.clientY / window.innerHeight;
+                });
+
+                window.addEventListener('scroll', () => {
+                    const maxScroll = document.body.scrollHeight - window.innerHeight;
+                    scrollProgress = window.scrollY / maxScroll;
+                }, { passive: true });
+
+                const resize = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    gl.viewport(0, 0, canvas.width, canvas.height);
+                };
+                resize();
+                window.addEventListener('resize', resize);
+
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+                const startTime = performance.now();
+
+                const animate = () => {
+                    const time = (performance.now() - startTime) / 1000;
+
+                    gl.uniform2f(uResolution, canvas.width, canvas.height);
+                    gl.uniform1f(uTime, time);
+                    gl.uniform2f(uMouse, mouseX, mouseY);
+                    gl.uniform1f(uScroll, scrollProgress);
+
+                    gl.clearColor(0, 0, 0, 0);
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+                    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }
+
+            // Fallback 2D canvas particle system
+            initParticles2D(canvas) {
                 const ctx = canvas.getContext('2d');
                 let particles = [];
                 const maxParticles = window.matchMedia('(max-width: 768px)').matches ? 30 : 60;
@@ -1201,10 +1777,7 @@
                 window.addEventListener('resize', resize);
 
                 class Particle {
-                    constructor() {
-                        this.reset();
-                    }
-
+                    constructor() { this.reset(); }
                     reset() {
                         this.x = Math.random() * canvas.width;
                         this.y = Math.random() * canvas.height;
@@ -1213,17 +1786,11 @@
                         this.size = Math.random() * 2 + 1;
                         this.alpha = Math.random() * 0.5 + 0.1;
                     }
-
                     update() {
                         this.x += this.vx;
                         this.y += this.vy;
-
-                        if (this.x < 0 || this.x > canvas.width ||
-                            this.y < 0 || this.y > canvas.height) {
-                            this.reset();
-                        }
+                        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
                     }
-
                     draw() {
                         ctx.beginPath();
                         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -1232,25 +1799,16 @@
                     }
                 }
 
-                for (let i = 0; i < maxParticles; i++) {
-                    particles.push(new Particle());
-                }
+                for (let i = 0; i < maxParticles; i++) particles.push(new Particle());
 
                 const animate = () => {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                    particles.forEach(p => {
-                        p.update();
-                        p.draw();
-                    });
-
-                    // Draw connections
+                    particles.forEach(p => { p.update(); p.draw(); });
                     for (let i = 0; i < particles.length; i++) {
                         for (let j = i + 1; j < particles.length; j++) {
                             const dx = particles[i].x - particles[j].x;
                             const dy = particles[i].y - particles[j].y;
                             const dist = Math.sqrt(dx * dx + dy * dy);
-
                             if (dist < 120) {
                                 ctx.beginPath();
                                 ctx.moveTo(particles[i].x, particles[i].y);
@@ -1260,7 +1818,6 @@
                             }
                         }
                     }
-
                     requestAnimationFrame(animate);
                 };
                 animate();
@@ -1363,7 +1920,7 @@
                     }
                 });
 
-                // Protocol cards decrypt on scroll
+                // Protocol cards decrypt on scroll with sound
                 document.querySelectorAll('.protocol-card').forEach((card, i) => {
                     gsap.fromTo(card,
                         { opacity: 0, y: 100 },
@@ -1377,7 +1934,10 @@
                                 start: 'top 80%',
                                 end: 'top 40%',
                                 toggleClass: 'decrypted',
-                                onEnter: () => card.classList.add('decrypted'),
+                                onEnter: () => {
+                                    card.classList.add('decrypted');
+                                    this.sound.decrypt();
+                                },
                                 onLeaveBack: () => card.classList.remove('decrypted')
                             }
                         }
@@ -1452,15 +2012,30 @@
                     }
                 };
 
+                // Type sound on input
+                input.addEventListener('keydown', (e) => {
+                    if (e.key !== 'Enter') {
+                        this.sound.type();
+                    }
+                });
+
                 input.addEventListener('keypress', (e) => {
                     if (e.key === 'Enter') {
                         const cmd = input.value.toLowerCase().trim();
                         input.value = '';
 
                         if (cmd) {
-                            const response = commands[cmd]
+                            const isValid = commands[cmd];
+                            const response = isValid
                                 ? commands[cmd]()
                                 : `<p class="error">> Unknown command: ${cmd}</p>`;
+
+                            // Play success or error sound
+                            if (isValid) {
+                                this.sound.success();
+                            } else {
+                                this.sound.error();
+                            }
 
                             if (response) {
                                 output.innerHTML += response;
@@ -1536,6 +2111,7 @@
 
                     if (this.clickCount >= 5) {
                         overlay.classList.add('active');
+                        this.sound.glitch();
                         setTimeout(() => overlay.classList.remove('active'), 300);
                         this.clickCount = 0;
                     }
@@ -1545,6 +2121,7 @@
                 document.addEventListener('selectstart', (e) => {
                     if (Math.random() > 0.7) { // 30% chance to trigger
                         overlay.classList.add('active');
+                        this.sound.glitch();
                         setTimeout(() => overlay.classList.remove('active'), 200);
                     }
                 });
