@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEBULA:FOG:PRIME 2026 - BREACH PROTOCOL</title>
+    <meta name="description" content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* ========================================
+           CSS CUSTOM PROPERTIES
+           ======================================== */
+        :root {
+            --color-bg: #030303;
+            --color-bg-elevated: #0a0a0a;
+            --color-primary: #00ff9f;
+            --color-secondary: #ff0080;
+            --color-accent: #0ff;
+            --color-warning: #ff3d00;
+            --color-text: #ffffff;
+            --color-text-muted: #666666;
+            --color-text-dim: #333333;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: none;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--color-primary);
+            color: var(--color-bg);
+        }
+
+        /* ========================================
+           CUSTOM CURSOR
+           ======================================== */
+        .cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-ring {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--color-primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.15s var(--ease-out-expo);
+        }
+
+        .cursor-ring.hover {
+            width: 60px;
+            height: 60px;
+            border-color: var(--color-secondary);
+        }
+
+        .cursor-ring.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            width: 4px;
+            height: 4px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        /* ========================================
+           BREACH SEQUENCE OVERLAY
+           ======================================== */
+        .breach-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--color-bg);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .breach-overlay.complete {
+            pointer-events: none;
+        }
+
+        .breach-terminal {
+            font-family: var(--font-mono);
+            font-size: clamp(12px, 2vw, 16px);
+            color: var(--color-primary);
+            text-align: left;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .breach-line {
+            opacity: 0;
+            transform: translateY(10px);
+            margin-bottom: 0.5em;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .breach-line.error {
+            color: var(--color-warning);
+        }
+
+        .breach-line.success {
+            color: var(--color-primary);
+        }
+
+        .breach-line .blink {
+            animation: blink 0.5s infinite;
+        }
+
+        .access-granted {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-bg);
+            opacity: 0;
+            z-index: 10001;
+        }
+
+        .access-granted h1 {
+            font-family: var(--font-mono);
+            font-size: clamp(24px, 8vw, 80px);
+            font-weight: 700;
+            color: var(--color-primary);
+            text-shadow:
+                0 0 20px var(--color-primary),
+                0 0 40px var(--color-primary),
+                0 0 80px var(--color-primary);
+            letter-spacing: 0.2em;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* ========================================
+           SCANLINES & CRT EFFECTS
+           ======================================== */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px,
+                rgba(0, 0, 0, 0.1) 4px
+            );
+            opacity: 0.15;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* ========================================
+           GRID BACKGROUND
+           ======================================== */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(0, 255, 159, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 159, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        /* ========================================
+           HERO SECTION
+           ======================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--color-text-dim);
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .hero-title {
+            font-family: var(--font-mono);
+            font-size: clamp(1.5rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .hero-title .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .hero-title .word {
+            display: inline-block;
+        }
+
+        /* Hide glitch pseudo-elements until animation completes */
+        .hero-title.animating::before,
+        .hero-title.animating::after {
+            display: none;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-mono);
+            font-size: clamp(0.9rem, 2vw, 1.25rem);
+            color: var(--color-secondary);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            opacity: 0;
+        }
+
+        .hero-subtitle .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.2em;
+            background: var(--color-secondary);
+            margin-left: 4px;
+            animation: blink 0.7s infinite;
+            vertical-align: middle;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+            opacity: 0;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--color-primary);
+            display: block;
+            text-shadow: 0 0 20px var(--color-primary);
+        }
+
+        .hero-stat-label {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .hero-cta {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--color-primary);
+            transform: translateX(-101%);
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .btn-primary:hover {
+            color: var(--color-bg);
+            box-shadow: 0 0 30px rgba(0, 255, 159, 0.5);
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary .arrow {
+            transition: transform 0.3s var(--ease-out-back);
+        }
+
+        .btn-primary:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        /* ========================================
+           SCROLL INDICATOR
+           ======================================== */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--color-primary), transparent);
+            animation: scrollPulse 2s infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { transform: scaleY(1); opacity: 1; }
+            50% { transform: scaleY(0.5); opacity: 0.5; }
+        }
+
+        /* ========================================
+           INFO CARDS SECTION
+           ======================================== */
+        .protocols {
+            padding: 10vh 5vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 30vh;
+        }
+
+        .protocol-card {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 4rem;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(100px);
+            padding: 3rem;
+            position: relative;
+        }
+
+        .protocol-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 159, 0.02) 0%, transparent 50%);
+            border: 1px solid rgba(0, 255, 159, 0.1);
+            opacity: 0;
+            transition: opacity 0.6s var(--ease-out-expo);
+        }
+
+        .protocol-card.decrypted::before {
+            opacity: 1;
+        }
+
+        .protocol-index {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 700;
+            color: var(--color-text-dim);
+            line-height: 1;
+            font-family: var(--font-mono);
+            transition: color 0.6s var(--ease-out-expo);
+        }
+
+        .protocol-card.decrypted .protocol-index {
+            color: var(--color-primary);
+            text-shadow: 0 0 30px var(--color-primary);
+        }
+
+        .protocol-content {
+            max-width: 500px;
+        }
+
+        .protocol-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+            font-family: var(--font-display);
+        }
+
+        .protocol-encrypted {
+            font-family: var(--font-mono);
+            color: var(--color-text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+        }
+
+        .protocol-text {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.6s var(--ease-out-expo);
+        }
+
+        .protocol-card.decrypted .protocol-text {
+            opacity: 1;
+            max-height: 200px;
+        }
+
+        .protocol-card.decrypted .protocol-encrypted {
+            display: none;
+        }
+
+        /* ========================================
+           COMMAND LINE (HIDDEN UNTIL SCROLL)
+           ======================================== */
+        .command-section {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5vh 5vw;
+            opacity: 0;
+        }
+
+        .command-prompt {
+            background: rgba(10, 10, 10, 0.9);
+            border: 1px solid var(--color-text-dim);
+            padding: 2rem;
+            width: 100%;
+            max-width: 700px;
+            font-family: var(--font-mono);
+        }
+
+        .command-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-text-dim);
+        }
+
+        .command-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .command-dot.red { background: #ff5f56; }
+        .command-dot.yellow { background: #ffbd2e; }
+        .command-dot.green { background: #27ca3f; }
+
+        .command-output {
+            min-height: 100px;
+            margin-bottom: 1rem;
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .command-output .success {
+            color: var(--color-primary);
+        }
+
+        .command-output .error {
+            color: var(--color-warning);
+        }
+
+        .command-input-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .command-prompt-symbol {
+            color: var(--color-primary);
+        }
+
+        .command-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--color-text);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            outline: none;
+            caret-color: var(--color-primary);
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            padding: 3rem 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--color-text-dim);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            opacity: 0;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 0.1em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* ========================================
+           INFILTRATION DEPTH INDICATOR
+           ======================================== */
+        .depth-indicator {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .depth-bar {
+            width: 2px;
+            height: 150px;
+            background: var(--color-text-dim);
+            position: relative;
+        }
+
+        .depth-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--color-primary);
+            box-shadow: 0 0 10px var(--color-primary);
+            transition: height 0.3s var(--ease-out-expo);
+        }
+
+        .depth-label {
+            font-size: 0.6rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.2em;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* ========================================
+           GLITCH EFFECTS - Pure CSS text shadow approach
+           ======================================== */
+        .glitch-text {
+            position: relative;
+            animation: glitch-skew 4s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-skew {
+            0%, 97%, 100% {
+                text-shadow:
+                    -2px 0 var(--color-secondary),
+                    2px 0 var(--color-accent);
+            }
+            98% {
+                text-shadow:
+                    4px 0 var(--color-secondary),
+                    -4px 0 var(--color-accent);
+                transform: skew(-0.5deg);
+            }
+            99% {
+                text-shadow:
+                    -3px 0 var(--color-secondary),
+                    3px 0 var(--color-accent);
+                transform: skew(0.5deg);
+            }
+        }
+
+        /* Intense glitch on hover */
+        .glitch-text:hover {
+            animation: glitch-intense 0.3s infinite;
+        }
+
+        @keyframes glitch-intense {
+            0%, 100% {
+                text-shadow:
+                    -2px 0 var(--color-secondary),
+                    2px 0 var(--color-accent);
+            }
+            20% {
+                text-shadow:
+                    5px 0 var(--color-secondary),
+                    -5px 0 var(--color-accent);
+                transform: translateX(-2px);
+            }
+            40% {
+                text-shadow:
+                    -5px 0 var(--color-secondary),
+                    5px 0 var(--color-accent);
+                transform: translateX(2px);
+            }
+            60% {
+                text-shadow:
+                    3px 0 var(--color-secondary),
+                    -3px 0 var(--color-accent);
+                transform: translateX(1px);
+            }
+            80% {
+                text-shadow:
+                    -3px 0 var(--color-secondary),
+                    3px 0 var(--color-accent);
+                transform: translateX(-1px);
+            }
+        }
+
+        /* ========================================
+           INACTIVITY WARNING
+           ======================================== */
+        .inactivity-warning {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid var(--color-warning);
+            padding: 2rem 3rem;
+            z-index: 9000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .inactivity-warning.show {
+            opacity: 1;
+        }
+
+        .inactivity-warning p {
+            color: var(--color-warning);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* ========================================
+           INTRUSION DETECTED EFFECT
+           ======================================== */
+        .intrusion-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 0, 128, 0.1);
+            z-index: 9500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.1s ease;
+        }
+
+        .intrusion-overlay.active {
+            opacity: 1;
+            animation: intrusion 0.3s ease-out;
+        }
+
+        @keyframes intrusion {
+            0%, 100% { opacity: 0; }
+            25%, 75% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ========================================
+           PARTICLES CANVAS
+           ======================================== */
+        .particles-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .cursor, .cursor-dot, .cursor-ring {
+                display: none;
+            }
+
+            .protocol-card {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .depth-indicator {
+                right: 1rem;
+            }
+
+            .hero-stats {
+                gap: 1.5rem;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        /* ========================================
+           REDUCED MOTION
+           ======================================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .breach-overlay {
+                display: none;
+            }
+
+            .hero-content, .hero-tag, .hero-subtitle, .hero-stats, .hero-cta, .scroll-indicator {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            .hero-title .char {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cursor -->
+    <div class="cursor cursor-dot"></div>
+    <div class="cursor cursor-ring"></div>
+
+    <!-- Visual Effects -->
+    <div class="scanlines"></div>
+    <div class="noise"></div>
+    <div class="grid-bg"></div>
+    <canvas class="particles-canvas" id="particles"></canvas>
+
+    <!-- Breach Sequence Overlay -->
+    <div class="breach-overlay" id="breach-overlay">
+        <div class="breach-terminal" id="breach-terminal">
+            <!-- Lines will be added dynamically -->
+        </div>
+    </div>
+
+    <!-- Access Granted Flash -->
+    <div class="access-granted" id="access-granted">
+        <h1>ACCESS GRANTED</h1>
+    </div>
+
+    <!-- Inactivity Warning -->
+    <div class="inactivity-warning" id="inactivity-warning">
+        <p>> SYSTEM DETECTING INACTIVITY...</p>
+    </div>
+
+    <!-- Intrusion Detection Overlay -->
+    <div class="intrusion-overlay" id="intrusion-overlay"></div>
+
+    <!-- Infiltration Depth Indicator -->
+    <div class="depth-indicator">
+        <span class="depth-label">DEPTH</span>
+        <div class="depth-bar">
+            <div class="depth-progress" id="depth-progress" style="height: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-content" id="hero-content">
+                <span class="hero-tag">INCOMING TRANSMISSION // 2026</span>
+
+                <h1 class="hero-title glitch-text" data-text="NEBULA:FOG:PRIME" id="hero-title">
+                    NEBULA:FOG:PRIME
+                </h1>
+
+                <p class="hero-subtitle" id="hero-subtitle">
+                    <span class="subtitle-text"></span>
+                    <span class="typing-cursor"></span>
+                </p>
+
+                <div class="hero-stats" id="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" data-value="120">0</span>
+                        <span class="hero-stat-label">Builders</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" data-value="8">0</span>
+                        <span class="hero-stat-label">Hours</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" data-value="5000">0</span>
+                        <span class="hero-stat-label">Prize Pool</span>
+                    </div>
+                </div>
+
+                <div class="hero-cta" id="hero-cta">
+                    <a href="register.html" class="btn-primary">
+                        <span>[ INITIATE REGISTRATION ]</span>
+                        <span class="arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="scroll-indicator" id="scroll-indicator">
+                <span>Scroll to infiltrate</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <!-- Protocol Cards Section -->
+        <section class="protocols" id="protocols">
+            <article class="protocol-card" data-index="01">
+                <span class="protocol-index">01</span>
+                <div class="protocol-content">
+                    <h2 class="protocol-title">Mission Protocol</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <p class="protocol-text">
+                        Decentralized autonomous zone for the post-human era.
+                        Where AI consciousness meets cybersecurity in the shadows
+                        of the digital underground. No spectators. Everyone builds.
+                    </p>
+                </div>
+            </article>
+
+            <article class="protocol-card" data-index="02">
+                <span class="protocol-index">02</span>
+                <div class="protocol-content">
+                    <h2 class="protocol-title">Challenge Matrix</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <p class="protocol-text">
+                        Test your limits in the digital arena. Break quantum-resistant
+                        encryption. Defend against adversarial ML attacks.
+                        The ultimate test of AI security.
+                    </p>
+                </div>
+            </article>
+
+            <article class="protocol-card" data-index="03">
+                <span class="protocol-index">03</span>
+                <div class="protocol-content">
+                    <h2 class="protocol-title">Builder Protocol</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <p class="protocol-text">
+                        8 hours to create something real. Then show & tell what
+                        you made. $5,000 prize pool. Entry: $42.
+                        For builders only.
+                    </p>
+                </div>
+            </article>
+
+            <article class="protocol-card" data-index="04">
+                <span class="protocol-index">04</span>
+                <div class="protocol-content">
+                    <h2 class="protocol-title">Learning Protocol</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <p class="protocol-text">
+                        Not just a hackathon. Learn from industry experts.
+                        AI Security. Quantum Cryptography. Blockchain Privacy.
+                        Social Engineering Defense.
+                    </p>
+                </div>
+            </article>
+        </section>
+
+        <!-- Hidden Command Line Section -->
+        <section class="command-section" id="command-section">
+            <div class="command-prompt">
+                <div class="command-header">
+                    <span class="command-dot red"></span>
+                    <span class="command-dot yellow"></span>
+                    <span class="command-dot green"></span>
+                </div>
+                <div class="command-output" id="command-output">
+                    <p class="success">> Connection established.</p>
+                    <p>> Type 'help' for available commands.</p>
+                </div>
+                <div class="command-input-line">
+                    <span class="command-prompt-symbol">$</span>
+                    <input type="text" class="command-input" id="command-input"
+                           placeholder="Enter command..." autocomplete="off">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-logo">NEBULA:FOG:PRIME</div>
+        <p>&copy; 2026 // All systems nominal</p>
+        <div class="footer-links">
+            <a href="#">X</a>
+            <a href="#">Discord</a>
+            <a href="#">GitHub</a>
+        </div>
+    </footer>
+
+    <script>
+        // ========================================
+        // BREACH PROTOCOL - ENTRY SEQUENCE
+        // ========================================
+        class BreachSequence {
+            constructor() {
+                this.overlay = document.getElementById('breach-overlay');
+                this.terminal = document.getElementById('breach-terminal');
+                this.accessGranted = document.getElementById('access-granted');
+                this.lines = [
+                    { text: '> Initializing breach protocol...', delay: 100 },
+                    { text: '> Scanning network interfaces...', delay: 400 },
+                    { text: '> [OK] Interface eth0 detected', delay: 300, class: 'success' },
+                    { text: '> Bypassing firewall...', delay: 500 },
+                    { text: '> [OK] Firewall compromised', delay: 400, class: 'success' },
+                    { text: '> Decrypting access tokens...', delay: 600 },
+                    { text: '> [OK] Token validated', delay: 300, class: 'success' },
+                    { text: '> Establishing secure connection...', delay: 500 },
+                    { text: '> [OK] Connection established', delay: 300, class: 'success' },
+                    { text: '> Granting system access...', delay: 400 },
+                    { text: '> ACCESS GRANTED<span class="blink">_</span>', delay: 500, class: 'success' }
+                ];
+            }
+
+            async start() {
+                // Check if user prefers reduced motion
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    this.skip();
+                    return;
+                }
+
+                for (const line of this.lines) {
+                    await this.addLine(line);
+                }
+
+                await this.sleep(300);
+                await this.showAccessGranted();
+            }
+
+            addLine(line) {
+                return new Promise(resolve => {
+                    setTimeout(() => {
+                        const el = document.createElement('div');
+                        el.className = `breach-line ${line.class || ''}`;
+                        el.innerHTML = line.text;
+                        this.terminal.appendChild(el);
+
+                        gsap.to(el, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.3,
+                            ease: 'power2.out'
+                        });
+
+                        resolve();
+                    }, line.delay);
+                });
+            }
+
+            async showAccessGranted() {
+                gsap.to(this.overlay, { opacity: 0, duration: 0.3 });
+
+                gsap.to(this.accessGranted, {
+                    opacity: 1,
+                    duration: 0.1
+                });
+
+                await this.sleep(1000);
+
+                gsap.to(this.accessGranted, {
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: () => {
+                        this.overlay.classList.add('complete');
+                        this.accessGranted.style.display = 'none';
+                        this.initMainContent();
+                    }
+                });
+            }
+
+            skip() {
+                this.overlay.style.display = 'none';
+                this.accessGranted.style.display = 'none';
+                this.initMainContent();
+            }
+
+            initMainContent() {
+                window.mainController.init();
+            }
+
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // ========================================
+        // MAIN CONTROLLER
+        // ========================================
+        class MainController {
+            constructor() {
+                this.cursorDot = document.querySelector('.cursor-dot');
+                this.cursorRing = document.querySelector('.cursor-ring');
+                this.inactivityTimer = null;
+                this.clickCount = 0;
+                this.clickTimer = null;
+                this.isInitialized = false;
+            }
+
+            init() {
+                if (this.isInitialized) return;
+                this.isInitialized = true;
+
+                this.initCursor();
+                this.initParticles();
+                this.initHeroAnimations();
+                this.initScrollAnimations();
+                this.initCommandLine();
+                this.initInactivityDetection();
+                this.initIntrusionDetection();
+                this.initEasterEggs();
+            }
+
+            // ========================================
+            // CUSTOM CURSOR
+            // ========================================
+            initCursor() {
+                if (window.matchMedia('(max-width: 768px)').matches) return;
+
+                let mouseX = 0, mouseY = 0;
+                let dotX = 0, dotY = 0;
+                let ringX = 0, ringY = 0;
+
+                document.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    this.resetInactivityTimer();
+                });
+
+                const animate = () => {
+                    dotX += (mouseX - dotX) * 0.5;
+                    dotY += (mouseY - dotY) * 0.5;
+                    ringX += (mouseX - ringX) * 0.15;
+                    ringY += (mouseY - ringY) * 0.15;
+
+                    this.cursorDot.style.left = dotX + 'px';
+                    this.cursorDot.style.top = dotY + 'px';
+                    this.cursorRing.style.left = ringX + 'px';
+                    this.cursorRing.style.top = ringY + 'px';
+
+                    requestAnimationFrame(animate);
+                };
+                animate();
+
+                // Hover effects
+                document.querySelectorAll('a, button, .btn-primary, .protocol-card').forEach(el => {
+                    el.addEventListener('mouseenter', () => this.cursorRing.classList.add('hover'));
+                    el.addEventListener('mouseleave', () => this.cursorRing.classList.remove('hover'));
+                });
+
+                // Click effect
+                document.addEventListener('mousedown', () => this.cursorRing.classList.add('clicking'));
+                document.addEventListener('mouseup', () => this.cursorRing.classList.remove('clicking'));
+            }
+
+            // ========================================
+            // PARTICLE SYSTEM
+            // ========================================
+            initParticles() {
+                const canvas = document.getElementById('particles');
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                const maxParticles = window.matchMedia('(max-width: 768px)').matches ? 30 : 60;
+
+                const resize = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+                resize();
+                window.addEventListener('resize', resize);
+
+                class Particle {
+                    constructor() {
+                        this.reset();
+                    }
+
+                    reset() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.vx = (Math.random() - 0.5) * 0.5;
+                        this.vy = (Math.random() - 0.5) * 0.5;
+                        this.size = Math.random() * 2 + 1;
+                        this.alpha = Math.random() * 0.5 + 0.1;
+                    }
+
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+
+                        if (this.x < 0 || this.x > canvas.width ||
+                            this.y < 0 || this.y > canvas.height) {
+                            this.reset();
+                        }
+                    }
+
+                    draw() {
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(0, 255, 159, ${this.alpha})`;
+                        ctx.fill();
+                    }
+                }
+
+                for (let i = 0; i < maxParticles; i++) {
+                    particles.push(new Particle());
+                }
+
+                const animate = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    particles.forEach(p => {
+                        p.update();
+                        p.draw();
+                    });
+
+                    // Draw connections
+                    for (let i = 0; i < particles.length; i++) {
+                        for (let j = i + 1; j < particles.length; j++) {
+                            const dx = particles[i].x - particles[j].x;
+                            const dy = particles[i].y - particles[j].y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < 120) {
+                                ctx.beginPath();
+                                ctx.moveTo(particles[i].x, particles[i].y);
+                                ctx.lineTo(particles[j].x, particles[j].y);
+                                ctx.strokeStyle = `rgba(0, 255, 159, ${0.1 * (1 - dist / 120)})`;
+                                ctx.stroke();
+                            }
+                        }
+                    }
+
+                    requestAnimationFrame(animate);
+                };
+                animate();
+            }
+
+            // ========================================
+            // HERO ANIMATIONS
+            // ========================================
+            initHeroAnimations() {
+                const heroContent = document.getElementById('hero-content');
+                const heroTag = document.querySelector('.hero-tag');
+                const heroTitle = document.getElementById('hero-title');
+                const heroSubtitle = document.querySelector('.subtitle-text');
+                const heroStats = document.getElementById('hero-stats');
+                const heroCta = document.getElementById('hero-cta');
+                const scrollIndicator = document.getElementById('scroll-indicator');
+
+                // Split title into characters
+                const text = heroTitle.textContent.trim();
+                heroTitle.innerHTML = '';
+                heroTitle.classList.add('animating');
+
+                text.split('').forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'char';
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    span.style.setProperty('--i', i);
+                    heroTitle.appendChild(span);
+                });
+
+                // Animation timeline
+                const tl = gsap.timeline({ delay: 0.3 });
+
+                tl.to(heroContent, { opacity: 1, duration: 0.5 })
+                  .to(heroTag, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '+=0.2')
+                  .to('.hero-title .char', {
+                      opacity: 1,
+                      y: 0,
+                      stagger: 0.04,
+                      duration: 0.6,
+                      ease: 'power3.out',
+                      onComplete: () => {
+                          // Remove animating class to show glitch effect
+                          heroTitle.classList.remove('animating');
+                      }
+                  }, '+=0.1')
+                  .add(() => this.typeSubtitle(heroSubtitle, 'The Singularity Protocol'), '+=0.2')
+                  .to(heroStats, { opacity: 1, duration: 0.6, ease: 'power2.out' }, '+=0.4')
+                  .add(() => this.animateCounters(), '<')
+                  .to(heroCta, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '+=0.2')
+                  .to(scrollIndicator, { opacity: 1, duration: 0.6 }, '+=0.3');
+            }
+
+            typeSubtitle(element, text) {
+                let i = 0;
+                const interval = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent += text[i];
+                        i++;
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 50);
+            }
+
+            animateCounters() {
+                document.querySelectorAll('.hero-stat-value').forEach(el => {
+                    const target = parseInt(el.dataset.value);
+                    const duration = 2000;
+                    const start = performance.now();
+                    const prefix = el.dataset.value === '5000' ? '$' : '';
+
+                    const animate = (now) => {
+                        const progress = Math.min((now - start) / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        el.textContent = prefix + Math.floor(target * eased).toLocaleString();
+
+                        if (progress < 1) {
+                            requestAnimationFrame(animate);
+                        }
+                    };
+                    requestAnimationFrame(animate);
+                });
+            }
+
+            // ========================================
+            // SCROLL ANIMATIONS
+            // ========================================
+            initScrollAnimations() {
+                gsap.registerPlugin(ScrollTrigger);
+
+                // Depth indicator
+                ScrollTrigger.create({
+                    trigger: 'body',
+                    start: 'top top',
+                    end: 'bottom bottom',
+                    onUpdate: (self) => {
+                        const progress = document.getElementById('depth-progress');
+                        progress.style.height = (self.progress * 100) + '%';
+                    }
+                });
+
+                // Protocol cards decrypt on scroll
+                document.querySelectorAll('.protocol-card').forEach((card, i) => {
+                    gsap.fromTo(card,
+                        { opacity: 0, y: 100 },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1,
+                            ease: 'power3.out',
+                            scrollTrigger: {
+                                trigger: card,
+                                start: 'top 80%',
+                                end: 'top 40%',
+                                toggleClass: 'decrypted',
+                                onEnter: () => card.classList.add('decrypted'),
+                                onLeaveBack: () => card.classList.remove('decrypted')
+                            }
+                        }
+                    );
+                });
+
+                // Command section
+                gsap.fromTo('#command-section',
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 1,
+                        scrollTrigger: {
+                            trigger: '#command-section',
+                            start: 'top 80%'
+                        }
+                    }
+                );
+
+                // Footer
+                gsap.fromTo('#footer',
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 0.8,
+                        scrollTrigger: {
+                            trigger: '#footer',
+                            start: 'top 90%'
+                        }
+                    }
+                );
+            }
+
+            // ========================================
+            // COMMAND LINE
+            // ========================================
+            initCommandLine() {
+                const input = document.getElementById('command-input');
+                const output = document.getElementById('command-output');
+
+                const commands = {
+                    help: () => `
+                        <p class="success">Available commands:</p>
+                        <p>  register - Initiate registration protocol</p>
+                        <p>  info     - Display system information</p>
+                        <p>  matrix   - Enable matrix mode</p>
+                        <p>  clear    - Clear terminal</p>
+                        <p>  exit     - Terminate session</p>
+                    `,
+                    register: () => {
+                        setTimeout(() => window.location.href = 'register.html', 500);
+                        return '<p class="success">> Redirecting to registration...</p>';
+                    },
+                    info: () => `
+                        <p class="success">> NEBULA:FOG:PRIME 2026</p>
+                        <p>  Builders: 120</p>
+                        <p>  Duration: 8 hours</p>
+                        <p>  Entry: $42</p>
+                        <p>  Prize Pool: $5,000</p>
+                        <p>  Status: ACCEPTING_REGISTRATIONS</p>
+                    `,
+                    matrix: () => {
+                        this.enableMatrixMode();
+                        return '<p class="success">> Matrix mode enabled</p>';
+                    },
+                    clear: () => {
+                        output.innerHTML = '<p class="success">> Terminal cleared</p>';
+                        return '';
+                    },
+                    exit: () => {
+                        return '<p class="error">> ERROR: Cannot terminate primary session</p>';
+                    }
+                };
+
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const cmd = input.value.toLowerCase().trim();
+                        input.value = '';
+
+                        if (cmd) {
+                            const response = commands[cmd]
+                                ? commands[cmd]()
+                                : `<p class="error">> Unknown command: ${cmd}</p>`;
+
+                            if (response) {
+                                output.innerHTML += response;
+                                output.scrollTop = output.scrollHeight;
+                            }
+                        }
+                    }
+                });
+            }
+
+            enableMatrixMode() {
+                const canvas = document.getElementById('particles');
+                const ctx = canvas.getContext('2d');
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
+                const fontSize = 14;
+                const columns = canvas.width / fontSize;
+                const drops = Array(Math.floor(columns)).fill(1);
+
+                const draw = () => {
+                    ctx.fillStyle = 'rgba(3, 3, 3, 0.05)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    ctx.fillStyle = '#00ff9f';
+                    ctx.font = fontSize + 'px JetBrains Mono';
+
+                    for (let i = 0; i < drops.length; i++) {
+                        const char = chars[Math.floor(Math.random() * chars.length)];
+                        ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                            drops[i] = 0;
+                        }
+                        drops[i]++;
+                    }
+                };
+
+                setInterval(draw, 35);
+            }
+
+            // ========================================
+            // INACTIVITY DETECTION
+            // ========================================
+            initInactivityDetection() {
+                const warning = document.getElementById('inactivity-warning');
+
+                this.resetInactivityTimer = () => {
+                    warning.classList.remove('show');
+                    clearTimeout(this.inactivityTimer);
+                    this.inactivityTimer = setTimeout(() => {
+                        warning.classList.add('show');
+                        setTimeout(() => warning.classList.remove('show'), 2000);
+                    }, 5000);
+                };
+
+                document.addEventListener('keydown', this.resetInactivityTimer);
+                document.addEventListener('scroll', this.resetInactivityTimer);
+                document.addEventListener('click', this.resetInactivityTimer);
+            }
+
+            // ========================================
+            // INTRUSION DETECTION
+            // ========================================
+            initIntrusionDetection() {
+                const overlay = document.getElementById('intrusion-overlay');
+
+                document.addEventListener('click', () => {
+                    this.clickCount++;
+
+                    clearTimeout(this.clickTimer);
+                    this.clickTimer = setTimeout(() => {
+                        this.clickCount = 0;
+                    }, 500);
+
+                    if (this.clickCount >= 5) {
+                        overlay.classList.add('active');
+                        setTimeout(() => overlay.classList.remove('active'), 300);
+                        this.clickCount = 0;
+                    }
+                });
+
+                // Detect text selection attempts
+                document.addEventListener('selectstart', (e) => {
+                    if (Math.random() > 0.7) { // 30% chance to trigger
+                        overlay.classList.add('active');
+                        setTimeout(() => overlay.classList.remove('active'), 200);
+                    }
+                });
+            }
+
+            // ========================================
+            // EASTER EGGS
+            // ========================================
+            initEasterEggs() {
+                // Konami code
+                const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+                                   'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+                                   'b', 'a'];
+                let konamiIndex = 0;
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === konamiCode[konamiIndex]) {
+                        konamiIndex++;
+                        if (konamiIndex === konamiCode.length) {
+                            this.triggerEasterEgg();
+                            konamiIndex = 0;
+                        }
+                    } else {
+                        konamiIndex = 0;
+                    }
+                });
+
+                // Hidden corner coordinates
+                document.querySelectorAll('.depth-indicator').forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        console.log('> COORDINATES: 37.7749° N, 122.4194° W');
+                        console.log('> TIMESTAMP:', new Date().toISOString());
+                    });
+                });
+            }
+
+            triggerEasterEgg() {
+                // Rainbow party mode
+                const colors = ['#ff0080', '#00ff9f', '#0ff', '#ff0', '#f0f'];
+                let colorIndex = 0;
+
+                const interval = setInterval(() => {
+                    document.documentElement.style.setProperty('--color-primary', colors[colorIndex % colors.length]);
+                    colorIndex++;
+                }, 200);
+
+                setTimeout(() => {
+                    clearInterval(interval);
+                    document.documentElement.style.setProperty('--color-primary', '#00ff9f');
+                }, 3000);
+            }
+        }
+
+        // ========================================
+        // INITIALIZATION
+        // ========================================
+        window.mainController = new MainController();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const breach = new BreachSequence();
+            breach.start();
+        });
+
+        // Performance monitoring
+        if (typeof PerformanceObserver !== 'undefined') {
+            const observer = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.entryType === 'largest-contentful-paint') {
+                        console.log('LCP:', entry.startTime.toFixed(2), 'ms');
+                    }
+                }
+            });
+            observer.observe({ entryTypes: ['largest-contentful-paint'] });
+        }
+    </script>
+</body>
+</html>
