@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Live Dashboard - NEBULA:FOG:PRIME 2026</title>
+    <meta name="description" content="Real-time event analytics and participant activity">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-primary: #00ffaa;
+            --neon-secondary: #ff0080;
+            --neon-tertiary: #8000ff;
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #666666;
+            --border-color: rgba(0, 255, 170, 0.3);
+            --glow-color: rgba(0, 255, 170, 0.5);
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+            cursor: none;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+        }
+
+        *:focus {
+            outline: 2px solid var(--neon-primary);
+            outline-offset: 2px;
+        }
+
+        /* Background Canvas */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--neon-primary);
+            text-decoration: none;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--neon-primary);
+            background: rgba(0, 255, 170, 0.1);
+            border: 1px solid rgba(0, 255, 170, 0.3);
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            padding: 6rem 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .dashboard-header.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dashboard-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            color: var(--neon-primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px var(--neon-primary);
+        }
+
+        .dashboard-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 0, 64, 0.2);
+            border: 1px solid #ff0040;
+            border-radius: 20px;
+            color: #ff0040;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .live-indicator::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #ff0040;
+            border-radius: 50%;
+            animation: blink 1s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-card {
+            background: rgba(10, 14, 26, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.5s ease;
+        }
+
+        .dashboard-card.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            color: var(--neon-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(10, 14, 26, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+
+        .stat-card.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--neon-primary);
+            margin-bottom: 0.5rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(0, 255, 170, 0.1);
+            border: 1px solid rgba(0, 255, 170, 0.3);
+            color: var(--neon-primary);
+        }
+
+        .stat-change.negative {
+            background: rgba(255, 0, 64, 0.1);
+            border-color: rgba(255, 0, 64, 0.3);
+            color: #ff0040;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .activity-feed::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .activity-feed::-webkit-scrollbar-track {
+            background: rgba(0, 255, 170, 0.1);
+            border-radius: 3px;
+        }
+
+        .activity-feed::-webkit-scrollbar-thumb {
+            background: var(--neon-primary);
+            border-radius: 3px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(0, 255, 170, 0.05);
+            border: 1px solid rgba(0, 255, 170, 0.1);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            animation: slideInLeft 0.5s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .activity-item:hover {
+            background: rgba(0, 255, 170, 0.1);
+            border-color: rgba(0, 255, 170, 0.3);
+        }
+
+        .activity-icon {
+            font-size: 1.2rem;
+            width: 2rem;
+            text-align: center;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .activity-user {
+            color: var(--neon-primary);
+            font-weight: bold;
+        }
+
+        .activity-challenge {
+            color: var(--neon-secondary);
+            font-weight: bold;
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 255, 170, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Real-time Updates */
+        .update-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-primary);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 4rem 1rem 2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .nav {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: rgba(0, 255, 170, 0.8);
+                --text-secondary: #ffffff;
+                --text-muted: #cccccc;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Canvas -->
+    <div class="bg-canvas">
+        <canvas id="particle-canvas"></canvas>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="nav-container" role="navigation" aria-label="Main navigation">
+        <div class="nav">
+            <a href="index.html" class="nav-logo" aria-label="NEBULA:FOG:PRIME Home">NEBULA:FOG:PRIME</a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-item" aria-label="Home">Home</a></li>
+                <li><a href="about.html" class="nav-item" aria-label="About">About</a></li>
+                <li><a href="challenges.html" class="nav-item" aria-label="Challenges">Challenges</a></li>
+                <li><a href="register.html" class="nav-item" aria-label="Register">Register</a></li>
+                <li><a href="schedule.html" class="nav-item" aria-label="Schedule">Schedule</a></li>
+                <li><a href="dashboard.html" class="nav-item active" aria-label="Dashboard">Live Dashboard</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Dashboard -->
+    <main class="dashboard">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Live Dashboard</h1>
+            <p class="dashboard-subtitle">
+                Real-time event analytics and participant activity during NEBULA:FOG:PRIME 2026
+            </p>
+            <div class="live-indicator">Live</div>
+        </div>
+        
+        <!-- Statistics Grid -->
+        <div class="stats-grid">
+            <div class="stat-card" data-animate>
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" id="total-participants">4,808</div>
+                <div class="stat-label">Total Participants</div>
+                <div class="stat-change" id="participants-change">+127 in last hour</div>
+            </div>
+            
+            <div class="stat-card" data-animate>
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" id="active-challenges">18</div>
+                <div class="stat-label">Active Challenges</div>
+                <div class="stat-change" id="challenges-change">2 completed</div>
+            </div>
+            
+            <div class="stat-card" data-animate>
+                <div class="stat-icon">⚡</div>
+                <div class="stat-value" id="submissions">1,247</div>
+                <div class="stat-label">Submissions</div>
+                <div class="stat-change" id="submissions-change">+89 in last hour</div>
+            </div>
+            
+            <div class="stat-card" data-animate>
+                <div class="stat-icon">🔥</div>
+                <div class="stat-value" id="completion-rate">87%</div>
+                <div class="stat-label">Completion Rate</div>
+                <div class="stat-change" id="completion-change">+5% today</div>
+            </div>
+            
+            <div class="stat-card" data-animate>
+                <div class="stat-icon">🌐</div>
+                <div class="stat-value" id="countries">47</div>
+                <div class="stat-label">Countries</div>
+                <div class="stat-change" id="countries-change">+3 today</div>
+            </div>
+            
+            <div class="stat-card" data-animate>
+                <div class="stat-icon">⏱️</div>
+                <div class="stat-value" id="time-remaining">42h 15m</div>
+                <div class="stat-label">Time Remaining</div>
+                <div class="stat-change" id="time-change">-1h since last check</div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Participant Activity Chart -->
+            <div class="dashboard-card" data-animate>
+                <div class="card-header">
+                    <h3 class="card-title">Participant Activity</h3>
+                    <div class="card-icon">📊</div>
+                    <div class="update-indicator"></div>
+                </div>
+                <div id="activity-chart" class="chart-container"></div>
+            </div>
+            
+            <!-- Challenge Progress -->
+            <div class="dashboard-card" data-animate>
+                <div class="card-header">
+                    <h3 class="card-title">Challenge Progress</h3>
+                    <div class="card-icon">🎯</div>
+                    <div class="update-indicator"></div>
+                </div>
+                <div id="progress-chart" class="chart-container"></div>
+            </div>
+            
+            <!-- Geographic Distribution -->
+            <div class="dashboard-card" data-animate>
+                <div class="card-header">
+                    <h3 class="card-title">Global Participation</h3>
+                    <div class="card-icon">🌍</div>
+                    <div class="update-indicator"></div>
+                </div>
+                <div id="geo-chart" class="chart-container"></div>
+            </div>
+            
+            <!-- Skill Distribution -->
+            <div class="dashboard-card" data-animate>
+                <div class="card-header">
+                    <h3 class="card-title">Skill Distribution</h3>
+                    <div class="card-icon">💡</div>
+                    <div class="update-indicator"></div>
+                </div>
+                <div id="skills-chart" class="chart-container"></div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="dashboard-card" data-animate>
+                <div class="card-header">
+                    <h3 class="card-title">Recent Activity</h3>
+                    <div class="card-icon">📈</div>
+                    <div class="update-indicator"></div>
+                </div>
+                <div id="activity-feed" class="activity-feed">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+            </div>
+            
+            <!-- Challenge Leaderboard -->
+            <div class="dashboard-card" data-animate>
+                <div class="card-header">
+                    <h3 class="card-title">Top Performers</h3>
+                    <div class="card-icon">🏆</div>
+                    <div class="update-indicator"></div>
+                </div>
+                <div id="leaderboard-chart" class="chart-container"></div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    
+    <!-- Dashboard Charts -->
+    <script>
+        class DashboardCharts {
+            constructor() {
+                this.charts = {};
+                this.data = {
+                    participants: 4808,
+                    submissions: 1247,
+                    challenges: 18,
+                    completionRate: 87,
+                    countries: 47,
+                    timeRemaining: '42h 15m'
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.createActivityChart();
+                this.createProgressChart();
+                this.createGeoChart();
+                this.createSkillsChart();
+                this.createActivityFeed();
+                this.createLeaderboardChart();
+                
+                // Start real-time updates
+                this.startRealTimeUpdates();
+                
+                // Animate cards
+                this.animateCards();
+            }
+            
+            createActivityChart() {
+                const chart = echarts.init(document.getElementById('activity-chart'));
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    title: {
+                        text: 'Hourly Activity',
+                        textStyle: {
+                            color: '#00ffaa',
+                            fontSize: 16,
+                            fontFamily: 'JetBrains Mono'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(10, 14, 26, 0.9)',
+                        borderColor: '#00ffaa',
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    legend: {
+                        data: ['Participants', 'Submissions'],
+                        textStyle: {
+                            color: '#cccccc',
+                            fontFamily: 'JetBrains Mono'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: this.generateHourlyLabels(),
+                        axisLine: {
+                            lineStyle: { color: '#00ffaa' }
+                        },
+                        axisLabel: {
+                            color: '#cccccc'
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLine: {
+                            lineStyle: { color: '#00ffaa' }
+                        },
+                        axisLabel: {
+                            color: '#cccccc'
+                        },
+                        splitLine: {
+                            lineStyle: { color: 'rgba(0, 255, 170, 0.2)' }
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Participants',
+                            type: 'line',
+                            smooth: true,
+                            data: this.generateHourlyData(4800, 5200),
+                            lineStyle: {
+                                color: '#00ffaa',
+                                width: 3
+                            },
+                            itemStyle: {
+                                color: '#00ffaa'
+                            },
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0, y: 0, x2: 0, y2: 1,
+                                    colorStops: [
+                                        { offset: 0, color: 'rgba(0, 255, 170, 0.3)' },
+                                        { offset: 1, color: 'rgba(0, 255, 170, 0.05)' }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            name: 'Submissions',
+                            type: 'line',
+                            smooth: true,
+                            data: this.generateHourlyData(800, 1500),
+                            lineStyle: {
+                                color: '#ff0080',
+                                width: 3
+                            },
+                            itemStyle: {
+                                color: '#ff0080'
+                            },
+                            areaStyle: {
+                                color: {
+                                    type: 'linear',
+                                    x: 0, y: 0, x2: 0, y2: 1,
+                                    colorStops: [
+                                        { offset: 0, color: 'rgba(255, 0, 128, 0.3)' },
+                                        { offset: 1, color: 'rgba(255, 0, 128, 0.05)' }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                };
+                
+                chart.setOption(option);
+                this.charts.activity = chart;
+            }
+            
+            createProgressChart() {
+                const chart = echarts.init(document.getElementById('progress-chart'));
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    title: {
+                        text: 'Challenge Completion',
+                        textStyle: {
+                            color: '#00ffaa',
+                            fontSize: 16,
+                            fontFamily: 'JetBrains Mono'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        backgroundColor: 'rgba(10, 14, 26, 0.9)',
+                        borderColor: '#00ffaa',
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            radius: ['40%', '70%'],
+                            center: ['50%', '60%'],
+                            data: [
+                                { value: 87, name: 'Completed', itemStyle: { color: '#00ffaa' } },
+                                { value: 8, name: 'In Progress', itemStyle: { color: '#ff0080' } },
+                                { value: 5, name: 'Not Started', itemStyle: { color: '#8000ff' } }
+                            ],
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+                            label: {
+                                color: '#ffffff',
+                                fontFamily: 'JetBrains Mono'
+                            },
+                            labelLine: {
+                                lineStyle: {
+                                    color: '#cccccc'
+                                }
+                            }
+                        }
+                    ]
+                };
+                
+                chart.setOption(option);
+                this.charts.progress = chart;
+            }
+            
+            createGeoChart() {
+                const chart = echarts.init(document.getElementById('geo-chart'));
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    title: {
+                        text: 'Participation by Region',
+                        textStyle: {
+                            color: '#00ffaa',
+                            fontSize: 16,
+                            fontFamily: 'JetBrains Mono'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        backgroundColor: 'rgba(10, 14, 26, 0.9)',
+                        borderColor: '#00ffaa',
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            radius: '60%',
+                            center: ['50%', '60%'],
+                            data: [
+                                { value: 1200, name: 'North America', itemStyle: { color: '#00ffaa' } },
+                                { value: 980, name: 'Europe', itemStyle: { color: '#ff0080' } },
+                                { value: 850, name: 'Asia', itemStyle: { color: '#8000ff' } },
+                                { value: 650, name: 'South America', itemStyle: { color: '#ffff00' } },
+                                { value: 420, name: 'Africa', itemStyle: { color: '#00ffff' } },
+                                { value: 708, name: 'Oceania', itemStyle: { color: '#ffaa00' } }
+                            ],
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+                            label: {
+                                color: '#ffffff',
+                                fontFamily: 'JetBrains Mono'
+                            }
+                        }
+                    ]
+                };
+                
+                chart.setOption(option);
+                this.charts.geo = chart;
+            }
+            
+            createSkillsChart() {
+                const chart = echarts.init(document.getElementById('skills-chart'));
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    title: {
+                        text: 'Participant Skills',
+                        textStyle: {
+                            color: '#00ffaa',
+                            fontSize: 16,
+                            fontFamily: 'JetBrains Mono'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(10, 14, 26, 0.9)',
+                        borderColor: '#00ffaa',
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    radar: {
+                        indicator: [
+                            { name: 'AI/ML', max: 100 },
+                            { name: 'Cybersecurity', max: 100 },
+                            { name: 'Blockchain', max: 100 },
+                            { name: 'IoT', max: 100 },
+                            { name: 'DevOps', max: 100 },
+                            { name: 'Frontend', max: 100 }
+                        ],
+                        axisName: {
+                            color: '#ffffff',
+                            fontFamily: 'JetBrains Mono'
+                        },
+                        splitLine: {
+                            lineStyle: { color: 'rgba(0, 255, 170, 0.2)' }
+                        },
+                        splitArea: {
+                            show: false
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'radar',
+                            data: [
+                                {
+                                    value: [85, 90, 70, 75, 80, 65],
+                                    name: 'Average Skills',
+                                    itemStyle: { color: '#00ffaa' },
+                                    areaStyle: { color: 'rgba(0, 255, 170, 0.3)' }
+                                }
+                            ]
+                        }
+                    ]
+                };
+                
+                chart.setOption(option);
+                this.charts.skills = chart;
+            }
+            
+            createActivityFeed() {
+                const feed = document.getElementById('activity-feed');
+                const activities = this.generateActivities();
+                
+                activities.forEach((activity, index) => {
+                    setTimeout(() => {
+                        const activityElement = document.createElement('div');
+                        activityElement.className = 'activity-item';
+                        activityElement.innerHTML = `
+                            <div class="activity-icon">${activity.icon}</div>
+                            <div class="activity-content">
+                                <div class="activity-text">
+                                    ${activity.user} ${activity.action} ${activity.target}
+                                </div>
+                                <div class="activity-time">${activity.time}</div>
+                            </div>
+                        `;
+                        feed.insertBefore(activityElement, feed.firstChild);
+                        
+                        // Remove old activities to keep feed manageable
+                        if (feed.children.length > 10) {
+                            feed.removeChild(feed.lastChild);
+                        }
+                    }, index * 200);
+                });
+            }
+            
+            createLeaderboardChart() {
+                const chart = echarts.init(document.getElementById('leaderboard-chart'));
+                
+                const option = {
+                    backgroundColor: 'transparent',
+                    title: {
+                        text: 'Top Teams',
+                        textStyle: {
+                            color: '#00ffaa',
+                            fontSize: 16,
+                            fontFamily: 'JetBrains Mono'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        backgroundColor: 'rgba(10, 14, 26, 0.9)',
+                        borderColor: '#00ffaa',
+                        textStyle: {
+                            color: '#ffffff'
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: ['Team Quantum', 'Neural Nexus', 'Crypto Collective', 'IoT Innovators', 'Social Engineers'],
+                        axisLine: {
+                            lineStyle: { color: '#00ffaa' }
+                        },
+                        axisLabel: {
+                            color: '#cccccc',
+                            rotate: 45
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLine: {
+                            lineStyle: { color: '#00ffaa' }
+                        },
+                        axisLabel: {
+                            color: '#cccccc'
+                        },
+                        splitLine: {
+                            lineStyle: { color: 'rgba(0, 255, 170, 0.2)' }
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'bar',
+                            data: [
+                                { value: 2850, itemStyle: { color: '#00ffaa' } },
+                                { value: 2620, itemStyle: { color: '#ff0080' } },
+                                { value: 2380, itemStyle: { color: '#8000ff' } },
+                                { value: 2150, itemStyle: { color: '#ffff00' } },
+                                { value: 1920, itemStyle: { color: '#00ffff' } }
+                            ],
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowColor: 'rgba(0, 255, 170, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+                
+                chart.setOption(option);
+                this.charts.leaderboard = chart;
+            }
+            
+            generateHourlyLabels() {
+                const labels = [];
+                const now = new Date();
+                for (let i = 23; i >= 0; i--) {
+                    const time = new Date(now.getTime() - (i * 60 * 60 * 1000));
+                    labels.push(time.getHours().toString().padStart(2, '0') + ':00');
+                }
+                return labels;
+            }
+            
+            generateHourlyData(min, max) {
+                const data = [];
+                for (let i = 0; i < 24; i++) {
+                    data.push(Math.floor(Math.random() * (max - min) + min));
+                }
+                return data;
+            }
+            
+            generateActivities() {
+                const activities = [
+                    { icon: '🎉', user: 'Team Quantum', action: 'completed', target: 'Quantum Cryptography', time: '2 minutes ago' },
+                    { icon: '🔥', user: 'Neural Nexus', action: 'achieved', target: '1000 points', time: '5 minutes ago' },
+                    { icon: '⚡', user: 'Crypto Collective', action: 'submitted', target: 'Zero-Knowledge Proof', time: '8 minutes ago' },
+                    { icon: '🚀', user: 'IoT Innovators', action: 'joined', target: 'Device Authentication', time: '12 minutes ago' },
+                    { icon: '🎯', user: 'Social Engineers', action: 'completed', target: 'Behavioral Analysis', time: '15 minutes ago' },
+                    { icon: '💡', user: 'Team Matrix', action: 'achieved', target: '500 points', time: '18 minutes ago' },
+                    { icon: '🔥', user: 'Quantum Leap', action: 'submitted', target: 'Neural Network Security', time: '22 minutes ago' },
+                    { icon: '⚡', user: 'Cyber Phantoms', action: 'completed', target: 'Privacy Smart Contracts', time: '25 minutes ago' }
+                ];
+                return activities;
+            }
+            
+            startRealTimeUpdates() {
+                // Update statistics every 30 seconds
+                setInterval(() => {
+                    this.updateStatistics();
+                }, 30000);
+                
+                // Update charts every 60 seconds
+                setInterval(() => {
+                    this.updateCharts();
+                }, 60000);
+                
+                // Add new activity every 45 seconds
+                setInterval(() => {
+                    this.addNewActivity();
+                }, 45000);
+            }
+            
+            updateStatistics() {
+                // Simulate real-time data changes
+                this.data.participants += Math.floor(Math.random() * 10 - 2);
+                this.data.submissions += Math.floor(Math.random() * 5);
+                
+                // Update DOM
+                document.getElementById('total-participants').textContent = this.data.participants.toLocaleString();
+                document.getElementById('submissions').textContent = this.data.submissions.toLocaleString();
+            }
+            
+            updateCharts() {
+                // Update activity chart with new data
+                if (this.charts.activity) {
+                    const newData = this.generateHourlyData(4800, 5200);
+                    const newSubmissions = this.generateHourlyData(800, 1500);
+                    
+                    this.charts.activity.setOption({
+                        series: [
+                            { data: newData },
+                            { data: newSubmissions }
+                        ]
+                    });
+                }
+            }
+            
+            addNewActivity() {
+                const activities = [
+                    { icon: '🎉', user: 'New Team', action: 'completed', target: 'Challenge', time: 'just now' },
+                    { icon: '🔥', user: 'Participant', action: 'achieved', target: 'High Score', time: 'just now' },
+                    { icon: '⚡', user: 'Team', action: 'submitted', target: 'Solution', time: 'just now' }
+                ];
+                
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                const feed = document.getElementById('activity-feed');
+                
+                const activityElement = document.createElement('div');
+                activityElement.className = 'activity-item';
+                activityElement.innerHTML = `
+                    <div class="activity-icon">${activity.icon}</div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            ${activity.user} ${activity.action} ${activity.target}
+                        </div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                `;
+                
+                feed.insertBefore(activityElement, feed.firstChild);
+                
+                // Remove old activities
+                if (feed.children.length > 10) {
+                    feed.removeChild(feed.lastChild);
+                }
+            }
+            
+            animateCards() {
+                const observerOptions = {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('animate-in');
+                            }, index * 100);
+                        }
+                    });
+                }, observerOptions);
+
+                document.querySelectorAll('[data-animate], .dashboard-card, .stat-card').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            new DashboardCharts();
+        });
+    </script>
+    
+    <!-- Performance Monitoring -->
+    <script>
+        // Monitor dashboard performance
+        document.addEventListener('DOMContentLoaded', () => {
+            let startTime = performance.now();
+            let chartRenderTime = 0;
+            
+            // Track chart rendering performance
+            const originalSetOption = echarts.Chart.prototype.setOption;
+            echarts.Chart.prototype.setOption = function(option, notMerge, lazyUpdate) {
+                const renderStart = performance.now();
+                const result = originalSetOption.call(this, option, notMerge, lazyUpdate);
+                const renderEnd = performance.now();
+                chartRenderTime += (renderEnd - renderStart);
+                return result;
+            };
+            
+            // Log performance metrics
+            window.addEventListener('load', () => {
+                const loadTime = performance.now() - startTime;
+                console.log(`Dashboard loaded in ${loadTime.toFixed(2)}ms`);
+                console.log(`Chart rendering time: ${chartRenderTime.toFixed(2)}ms`);
+                
+                // Track memory usage if available
+                if (performance.memory) {
+                    console.log(`Memory usage: ${Math.round(performance.memory.usedJSHeapSize / 1048576)}MB`);
+                }
+            });
+            
+            // Track resize events
+            window.addEventListener('resize', () => {
+                const resizeStart = performance.now();
+                // Charts will automatically resize
+                setTimeout(() => {
+                    const resizeTime = performance.now() - resizeStart;
+                    if (resizeTime > 16) { // Log if slower than 1 frame
+                        console.log(`Resize took ${resizeTime.toFixed(2)}ms`);
+                    }
+                }, 0);
+            });
+        });
+    </script>
+</body>
+</html>
