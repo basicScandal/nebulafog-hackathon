@@ -10,6 +10,7 @@ class CyberpunkInterface {
         this.commandHistory = [];
         this.historyIndex = -1;
         this.init();
+        this.startBootSequence();
     }
 
     init() {
@@ -21,6 +22,8 @@ class CyberpunkInterface {
         this.setupMobileNav();
         this.setupClickCircles();
         this.setupProtocolCards();
+        this.setupInfiltrationEffects();
+        this.setupHiddenTerminal();
         this.setupErrorHandling();
         this.isLoaded = true;
         document.body.classList.add('loaded');
@@ -47,6 +50,9 @@ class CyberpunkInterface {
             this.cursor.x = e.clientX;
             this.cursor.y = e.clientY;
             this.cachedElements.cursor.style.transform = `translate(${this.cursor.x}px, ${this.cursor.y}px)`;
+
+            // Move vertical scanline
+            document.documentElement.style.setProperty('--scan-x', `${e.clientX}px`);
         });
 
         document.addEventListener('mousedown', () => {
@@ -149,7 +155,7 @@ class CyberpunkInterface {
             // Draw particle with glow
             ctx.beginPath();
             ctx.arc(particle.x, particle.y, pulseSize, 0, Math.PI * 2);
-            
+
             // Create gradient for glow effect
             const gradient = ctx.createRadialGradient(
                 particle.x, particle.y, 0,
@@ -158,7 +164,7 @@ class CyberpunkInterface {
             gradient.addColorStop(0, particle.color);
             gradient.addColorStop(0.5, particle.color + '80');
             gradient.addColorStop(1, particle.color + '00');
-            
+
             ctx.fillStyle = gradient;
             ctx.fill();
 
@@ -260,7 +266,7 @@ class CyberpunkInterface {
     }
 
     handleTerminalKeydown(e) {
-        switch(e.key) {
+        switch (e.key) {
             case 'Enter':
                 e.preventDefault();
                 this.executeTerminalCommand();
@@ -298,12 +304,12 @@ class CyberpunkInterface {
             return;
         }
 
-        const matches = this.suggestions.filter(cmd => 
+        const matches = this.suggestions.filter(cmd =>
             cmd.startsWith(input.toLowerCase())
         );
 
         if (matches.length > 0) {
-            this.suggestionsContainer.innerHTML = matches.map(cmd => 
+            this.suggestionsContainer.innerHTML = matches.map(cmd =>
                 `<span class="suggestion" onclick="window.cyberpunkInterface.executeSuggestion('${cmd}')">${cmd}</span>`
             ).join('');
         } else {
@@ -322,7 +328,7 @@ class CyberpunkInterface {
 
         this.addToTerminalHistory(command);
         this.displayCommand(command);
-        
+
         const parts = command.split(' ');
         const cmd = parts[0].toLowerCase();
         const args = parts.slice(1);
@@ -377,7 +383,7 @@ class CyberpunkInterface {
         const input = this.terminalInput.value.trim();
         if (!input) return;
 
-        const matches = this.suggestions.filter(cmd => 
+        const matches = this.suggestions.filter(cmd =>
             cmd.startsWith(input.toLowerCase())
         );
 
@@ -395,6 +401,21 @@ class CyberpunkInterface {
     clearTerminalInput() {
         this.terminalInput.value = '';
         this.suggestionsContainer.innerHTML = '';
+    }
+
+    // Terminal Welcome Message
+    displayWelcomeMessage() {
+        const welcomeMessage = `
+            <div class="terminal-status-line">
+                <span class="status-prefix">[STATUS]</span>
+                <span class="status-text">120 BUILDERS // 8 HOURS // SHOW & TELL</span>
+            </div>
+            <div class="terminal-welcome">
+                <p class="welcome-tagline">No spectators. Everyone builds.</p>
+                <p class="welcome-info">Type <span class="cmd-highlight">'help'</span> for commands</p>
+            </div>
+        `;
+        this.displayOutput(welcomeMessage);
     }
 
     // Terminal Command Implementations
@@ -588,32 +609,145 @@ class CyberpunkInterface {
         this.displayOutput(systemInfo);
     }
 
-    displayWelcomeMessage() {
-        this.displayOutput(`
-            <div class="welcome-message">
-                <div class="ascii-art">
-                    ███╗   ██╗███████╗███████╗██████╗ ███████╗██╗   ██╗███████╗
-                    ████╗  ██║██╔════╝██╔════╝██╔══██╗██╔════╝██║   ██║██╔════╝
-                    ██╔██╗ ██║█████╗  █████╗  ██████╔╝█████╗  ██║   ██║█████╗  
-                    ██║╚██╗██║██╔══╝  ██╔══╝  ██╔══██╗██╔══╝  ╚██╗ ██╔╝██╔══╝  
-                    ██║ ╚████║███████╗███████╗██║  ██║███████╗ ╚████╔╝ ███████╗
-                    ╚═╝  ╚═══╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝
-                </div>
-                <div class="welcome-text">
-                    <h2>Welcome to NEBULA:FOG:PRIME 2026</h2>
-                    <p>The ultimate convergence of AI consciousness and cybersecurity</p>
-                    <p>in the shadows of the digital underground.</p>
-                    <br>
-                    <p>Type <strong>'help'</strong> to see available commands</p>
-                    <p>Type <strong>'challenges'</strong> to browse hackathon challenges</p>
-                    <p>Type <strong>'register'</strong> for registration information</p>
-                    <br>
-                    <p class="system-info">System initialized. Neural interface active.</p>
-                    <p class="system-info">Quantum matrices aligned. Reality protocols loaded.</p>
-                    <p class="system-info">Ready for digital transcendence.</p>
-                </div>
-            </div>
-        `);
+    setupInfiltrationEffects() {
+        // Random glitch trigger
+        setInterval(() => {
+            if (this.isLoaded && Math.random() > 0.99) {
+                this.triggerGlobalGlitch();
+            }
+        }, 3000);
+
+        // Shortcut trigger (` or ~)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '`' || e.key === '~') {
+                this.toggleHiddenTerminal();
+            }
+        });
+    }
+
+    setupHiddenTerminal() {
+        const closeBtn = document.getElementById('close-hidden-terminal');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.toggleHiddenTerminal());
+        }
+    }
+
+    toggleHiddenTerminal() {
+        const terminal = document.getElementById('hidden-terminal');
+        if (!terminal) return;
+
+        const isActive = terminal.classList.toggle('active');
+
+        if (isActive) {
+            this.triggerGlobalGlitch();
+            this.populateHiddenTerminal();
+        }
+    }
+
+    populateHiddenTerminal() {
+        const content = document.getElementById('hidden-terminal-content');
+        if (!content) return;
+
+        content.innerHTML = '';
+        const msgs = [
+            'CORE_DUMP: EXTRACTING...',
+            'MEMORY_LEAK_DETECTED: OFFSET_0xFA32',
+            'OVERRIDING_AUTH_LAYER: [##########] 100%',
+            'DECRYPTING_PRIVATE_KEYS: FOUND 4',
+            'SENSITIVE_DATA_EXPOSED: logs/passwords.txt',
+            'HACKING_IN_PROGRESS: DO NOT DISCONNECT',
+            'ROOT_ACCESS: GRANTED',
+            'WELCOME_TO_THE_SHADOWS'
+        ];
+
+        msgs.forEach((msg, i) => {
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.className = 'terminal-msg';
+                div.textContent = `> ${msg}`;
+                content.appendChild(div);
+                content.scrollTop = content.scrollHeight;
+            }, i * 400);
+        });
+    }
+
+    triggerGlobalGlitch() {
+        document.body.classList.add('glitching');
+
+        // Intensify 3D background if available
+        if (window.digitalVoid) {
+            const originalColor = window.digitalVoid.particlesMaterial.color.getHex();
+            window.digitalVoid.particlesMaterial.color.setHex(0xff0055);
+            setTimeout(() => {
+                window.digitalVoid.particlesMaterial.color.setHex(originalColor);
+            }, 200);
+        }
+
+        setTimeout(() => {
+            document.body.classList.remove('glitching');
+        }, 300);
+    }
+
+    decryptText(element, finalValue, duration = 1000) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
+        const length = finalValue.length;
+        let iteration = 0;
+
+        const interval = setInterval(() => {
+            element.textContent = finalValue.split('')
+                .map((char, index) => {
+                    if (index < iteration) return finalValue[index];
+                    return chars[Math.floor(Math.random() * chars.length)];
+                })
+                .join('');
+
+            if (iteration >= length) clearInterval(interval);
+            iteration += 1; // Faster decryption
+        }, 30);
+    }
+
+    startBootSequence() {
+        const bootLogs = document.getElementById('boot-logs');
+        if (!bootLogs) return;
+
+        const logs = [
+            'CORE_INIT: OK',
+            'SENSORS_ONLINE: ACTIVE',
+            'NEURAL_LINK: ESTABLISHED',
+            'BYPASSING_FIREWALL: SUCCESS',
+            'ENCRYPTING_SESSION: 256-BIT',
+            'DATA_STREAM: BUFFERING',
+            'REMOTE_ACCESS: GRANTED',
+            'UPLINK_STABLE: 900TB/S',
+            'SYSTEM_READY: NEBULA_FOG'
+        ];
+
+        let index = 0;
+        const interval = setInterval(() => {
+            if (index < logs.length) {
+                const line = document.createElement('div');
+                line.className = 'boot-log-line';
+                line.textContent = `> ${logs[index]}`;
+                bootLogs.appendChild(line);
+
+                // Auto-scroll if logs exceed height
+                if (bootLogs.children.length > 5) {
+                    bootLogs.removeChild(bootLogs.firstChild);
+                }
+
+                index++;
+            } else {
+                clearInterval(interval);
+                // Hide loading screen after boot logs finish
+                setTimeout(() => {
+                    const loadingScreen = document.getElementById('loading-screen');
+                    if (loadingScreen) {
+                        loadingScreen.classList.add('hidden');
+                        this.isLoaded = true;
+                    }
+                }, 500);
+            }
+        }, 150);
     }
 
     setupScrollAnimations() {
@@ -626,7 +760,7 @@ class CyberpunkInterface {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animate-in');
-                    
+
                     // Add staggered animation for child elements
                     const children = entry.target.querySelectorAll('.protocol-card, .timeline-item, .challenge-card, .faq-item');
                     children.forEach((child, index) => {
@@ -651,7 +785,7 @@ class CyberpunkInterface {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 const target = item.getAttribute('href');
-                
+
                 if (target.startsWith('#')) {
                     const section = document.querySelector(target);
                     if (section) {
@@ -691,7 +825,7 @@ class CyberpunkInterface {
     navigateToPage(url) {
         // Add loading state
         document.body.classList.add('page-loading');
-        
+
         // Simulate page transition
         setTimeout(() => {
             window.location.href = url;
@@ -709,9 +843,9 @@ class CyberpunkInterface {
             circle.className = 'click-circle';
             circle.style.left = e.clientX + 'px';
             circle.style.top = e.clientY + 'px';
-            
+
             document.body.appendChild(circle);
-            
+
             // Remove circle after animation completes
             setTimeout(() => {
                 if (circle.parentNode) {
@@ -723,7 +857,7 @@ class CyberpunkInterface {
 
     setupProtocolCards() {
         const cards = this.cachedElements.protocolCards;
-        
+
         cards.forEach(card => {
             // Add keyboard accessibility
             card.setAttribute('tabindex', '0');
@@ -791,7 +925,7 @@ class CyberpunkInterface {
     showCardDetails(card) {
         const title = card.querySelector('.card-title')?.textContent || 'Card Details';
         const description = card.querySelector('.card-description')?.textContent || 'No description available.';
-        
+
         // Create modal (simplified implementation)
         const modal = document.createElement('div');
         modal.className = 'card-modal';
@@ -806,14 +940,14 @@ class CyberpunkInterface {
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
-        
+
         // Close modal handlers
         modal.querySelector('.modal-close').addEventListener('click', () => {
             document.body.removeChild(modal);
         });
-        
+
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 document.body.removeChild(modal);
@@ -851,7 +985,7 @@ class CyberpunkInterface {
     validateForm(form) {
         const requiredFields = form.querySelectorAll('[required]');
         let isValid = true;
-        
+
         requiredFields.forEach(field => {
             if (!field.value.trim()) {
                 isValid = false;
@@ -877,9 +1011,9 @@ class CyberpunkInterface {
                 <button class="error-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
             </div>
         `;
-        
+
         document.body.appendChild(errorDiv);
-        
+
         // Auto-remove after 5 seconds
         setTimeout(() => {
             if (errorDiv.parentNode) {
@@ -904,13 +1038,13 @@ class CyberpunkInterface {
     // Glitch effect for text
     glitchText(element) {
         if (!element) return;
-        
+
         const originalText = element.textContent;
         const glitchChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-        
+
         let glitchCount = 0;
         const maxGlitches = 10;
-        
+
         const glitchInterval = setInterval(() => {
             if (glitchCount < maxGlitches) {
                 let glitchedText = '';
@@ -933,7 +1067,7 @@ class CyberpunkInterface {
     // Enhanced scroll animations with stagger
     animateOnScroll() {
         const elements = document.querySelectorAll('[data-animate]');
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
@@ -1001,7 +1135,7 @@ class ProtocolCards {
             card.style.transform = 'translateY(-10px) scale(1.02)';
             card.style.boxShadow = '0 20px 40px rgba(0, 255, 170, 0.3)';
             card.style.borderColor = 'var(--neon-primary)';
-            
+
             // Add glow effect
             card.style.filter = 'brightness(1.2)';
         } else {
@@ -1055,7 +1189,7 @@ class FAQAccordion {
     toggleFAQ(question) {
         const answer = question.nextElementSibling;
         const isExpanded = question.getAttribute('aria-expanded') === 'true';
-        
+
         // Close all other FAQ items
         this.questions.forEach(otherQuestion => {
             if (otherQuestion !== question) {
@@ -1063,11 +1197,11 @@ class FAQAccordion {
                 otherQuestion.nextElementSibling.classList.remove('active');
             }
         });
-        
+
         // Toggle current FAQ item
         question.setAttribute('aria-expanded', !isExpanded);
         answer.classList.toggle('active');
-        
+
         // Enhanced animation
         if (!isExpanded) {
             answer.style.maxHeight = '1000px'; // QA fix: increased from 200px
@@ -1097,7 +1231,7 @@ class ScrollAnimations {
                     // Staggered animation
                     setTimeout(() => {
                         entry.target.classList.add('animate-in');
-                        
+
                         // Animate children with delay
                         const children = entry.target.querySelectorAll('.protocol-card, .timeline-item, .challenge-card, .faq-item');
                         children.forEach((child, childIndex) => {
@@ -1120,19 +1254,19 @@ class ScrollAnimations {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize main interface
     const cyberpunkInterface = new CyberpunkInterface();
-    
+
     // Store reference globally for terminal callbacks
     window.cyberpunkInterface = cyberpunkInterface;
-    
+
     // Initialize components
     new ProtocolCards();
     new FAQAccordion();
     new ScrollAnimations();
-    
+
     // Add loading animation
     setTimeout(() => {
         document.body.classList.add('loaded');
-        
+
         // Trigger welcome animation
         const welcomeElements = document.querySelectorAll('.welcome-message > *');
         welcomeElements.forEach((el, index) => {
@@ -1141,7 +1275,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }, index * 200);
         });
     }, 500);
-    
+
     // Add smooth page transitions
     document.body.classList.add('page-ready');
 });

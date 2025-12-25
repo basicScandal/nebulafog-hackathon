@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>NEBULA:FOG:PRIME 2026 - The Singularity Protocol</title>
-    <meta name="description" content="NEBULA:FOG:PRIME 2026 - Where AI consciousness meets cybersecurity in the shadows of the digital underground.">
-    
+    <meta name="description"
+        content="NEBULA:FOG:PRIME 2026 - Where AI consciousness meets cybersecurity in the shadows of the digital underground.">
+
     <!-- Core Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
@@ -16,64 +18,20 @@
     <!-- GSAP + ScrollTrigger for scroll-driven animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
     <!-- Cyberpunk Icons Font (updated for X/Twitter icon) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-    
+    <link rel="stylesheet" href="system-core.css">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --neon-primary: #00ffaa;
-            --neon-secondary: #ff0080;
-            --neon-tertiary: #8000ff;
-            --neon-yellow: #ffff00;
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #1a1a1a;
-            --bg-tertiary: #0d1117;
-            --text-primary: #ffffff;
-            --text-secondary: #cccccc;
-            --text-muted: #666666;
-            --border-color: rgba(0, 255, 170, 0.3);
-            --glow-color: rgba(0, 255, 170, 0.5);
-            --error-red: #ff0040;
-            --success-green: #00ff41;
-        }
-
-        /* ========== CYBERPUNK OVERLAY EFFECTS ========== */
-
-        /* Scan Lines Overlay */
-        .scan-lines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9990;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            animation: scanlines 0.1s linear infinite;
-        }
-
-        @keyframes scanlines {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 4px; }
-        }
+        /* ========== PROJECT SPECIFIC STYLES ========== */
 
         /* CRT Flicker Effect */
         .crt-flicker {
@@ -90,9 +48,20 @@
         }
 
         @keyframes flicker {
-            0%, 100% { opacity: 0.03; }
-            50% { opacity: 0.05; }
-            25%, 75% { opacity: 0.02; }
+
+            0%,
+            100% {
+                opacity: 0.03;
+            }
+
+            50% {
+                opacity: 0.05;
+            }
+
+            25%,
+            75% {
+                opacity: 0.02;
+            }
         }
 
         /* Vignette Effect */
@@ -124,22 +93,83 @@
             box-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary);
         }
 
-        .corner-decor.top-left { top: 20px; left: 20px; }
-        .corner-decor.top-left::before { width: 30px; height: 2px; top: 0; left: 0; }
-        .corner-decor.top-left::after { width: 2px; height: 30px; top: 0; left: 0; }
+        .corner-decor.top-left {
+            top: 20px;
+            left: 20px;
+        }
 
-        .corner-decor.top-right { top: 20px; right: 20px; }
-        .corner-decor.top-right::before { width: 30px; height: 2px; top: 0; right: 0; }
-        .corner-decor.top-right::after { width: 2px; height: 30px; top: 0; right: 0; }
+        .corner-decor.top-left::before {
+            width: 30px;
+            height: 2px;
+            top: 0;
+            left: 0;
+        }
 
-        .corner-decor.bottom-left { bottom: 20px; left: 20px; }
-        .corner-decor.bottom-left::before { width: 30px; height: 2px; bottom: 0; left: 0; }
-        .corner-decor.bottom-left::after { width: 2px; height: 30px; bottom: 0; left: 0; }
+        .corner-decor.top-left::after {
+            width: 2px;
+            height: 30px;
+            top: 0;
+            left: 0;
+        }
 
-        .corner-decor.bottom-right { bottom: 20px; right: 20px; }
-        .corner-decor.bottom-right::before { width: 30px; height: 2px; bottom: 0; right: 0; }
-        .corner-decor.bottom-right::after { width: 2px; height: 30px; bottom: 0; right: 0; }
+        .corner-decor.top-right {
+            top: 20px;
+            right: 20px;
+        }
 
+        .corner-decor.top-right::before {
+            width: 30px;
+            height: 2px;
+            top: 0;
+            right: 0;
+        }
+
+        .corner-decor.top-right::after {
+            width: 2px;
+            height: 30px;
+            top: 0;
+            right: 0;
+        }
+
+        .corner-decor.bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .corner-decor.bottom-left::before {
+            width: 30px;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+        }
+
+        .corner-decor.bottom-left::after {
+            width: 2px;
+            height: 30px;
+            bottom: 0;
+            left: 0;
+        }
+
+        .corner-decor.bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .corner-decor.bottom-right::before {
+            width: 30px;
+            height: 2px;
+            bottom: 0;
+            right: 0;
+        }
+
+        .corner-decor.bottom-right::after {
+            width: 2px;
+            height: 30px;
+            bottom: 0;
+            right: 0;
+        }
+
+        /* ========== CORE SYSTEM STYLES ========== */
         body {
             font-family: 'JetBrains Mono', monospace;
             background: var(--bg-primary);
@@ -150,17 +180,93 @@
             -moz-osx-font-smoothing: grayscale;
             position: relative;
             cursor: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-primary) transparent;
         }
 
-        @media (max-width: 768px) {
-            body {
-                cursor: auto;
+        /* Three.js Digital Void Container */
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* System HUD Navigation */
+        .hud-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 10px 20px;
+            background: var(--hud-bg);
+            border: var(--hud-border);
+            border-radius: 4px;
+            backdrop-filter: blur(var(--hud-blur));
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s var(--ease-infil);
+        }
+
+        .hud-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-right: 15px;
+            border-right: 1px solid rgba(0, 255, 204, 0.2);
+            font-size: 0.75rem;
+            color: var(--neon-primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-primary);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 1;
             }
         }
 
-        *:focus {
-            outline: 2px solid var(--neon-primary);
-            outline-offset: 2px;
+        .hud-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .hud-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .hud-link:hover,
+        .hud-link.active {
+            color: var(--neon-primary);
+            text-shadow: 0 0 10px var(--neon-primary);
         }
 
         /* Skip to main content link for accessibility */
@@ -299,6 +405,7 @@
                 opacity: 1;
                 border-width: 2px;
             }
+
             to {
                 width: 60px;
                 height: 60px;
@@ -364,8 +471,15 @@
         }
 
         @keyframes badge-pulse {
-            0%, 100% { box-shadow: 0 0 5px var(--neon-primary), 0 0 10px transparent; }
-            50% { box-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px var(--neon-primary), 0 0 10px transparent;
+            }
+
+            50% {
+                box-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary);
+            }
         }
 
         .hero-title {
@@ -386,10 +500,23 @@
         }
 
         @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            25% { background-position: 50% 100%; }
-            50% { background-position: 100% 50%; }
-            75% { background-position: 50% 0%; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            25% {
+                background-position: 50% 100%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            75% {
+                background-position: 50% 0%;
+            }
         }
 
         .hero-subtitle {
@@ -482,8 +609,17 @@
         }
 
         @keyframes border-glow {
-            0%, 100% { background-position: 0% 50%; opacity: 0.5; }
-            50% { background-position: 100% 50%; opacity: 0.8; }
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+                opacity: 0.5;
+            }
+
+            50% {
+                background-position: 100% 50%;
+                opacity: 0.8;
+            }
         }
 
         .terminal-container.animate-in {
@@ -512,9 +648,17 @@
             cursor: pointer;
         }
 
-        .control.close { background: #ff5f56; }
-        .control.minimize { background: #ffbd2e; }
-        .control.maximize { background: #27ca3f; }
+        .control.close {
+            background: #ff5f56;
+        }
+
+        .control.minimize {
+            background: #ffbd2e;
+        }
+
+        .control.maximize {
+            background: #27ca3f;
+        }
 
         .terminal-title {
             font-size: 0.8rem;
@@ -576,8 +720,16 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
         }
 
         /* Terminal Output Styles */
@@ -605,6 +757,47 @@
 
         .output-line.warning {
             color: var(--warning-amber);
+        }
+
+        /* Terminal Status Display */
+        .terminal-status-line {
+            padding: 0.75rem 1rem;
+            background: linear-gradient(90deg, rgba(0, 255, 170, 0.1), transparent);
+            border-left: 3px solid var(--neon-primary);
+            margin-bottom: 1rem;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .status-prefix {
+            color: var(--neon-primary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .status-text {
+            color: var(--text-primary);
+            letter-spacing: 2px;
+        }
+
+        .terminal-welcome {
+            padding: 0.5rem 0;
+        }
+
+        .welcome-tagline {
+            color: var(--neon-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-info {
+            color: var(--text-secondary);
+        }
+
+        .cmd-highlight {
+            color: var(--neon-primary);
+            background: rgba(0, 255, 170, 0.1);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
         }
 
         .ascii-art {
@@ -797,7 +990,7 @@
         .btn:hover {
             background: var(--neon-primary);
             color: var(--bg-primary);
-            box-shadow: 
+            box-shadow:
                 0 0 5px var(--neon-primary),
                 0 0 25px var(--neon-primary),
                 0 0 50px var(--neon-primary);
@@ -813,6 +1006,209 @@
             border-color: var(--neon-primary);
             color: var(--neon-primary);
             background: transparent;
+        }
+
+        .btn-tertiary {
+            border-color: var(--neon-tertiary);
+            color: var(--neon-tertiary);
+        }
+
+        .btn-tertiary:hover {
+            background: var(--neon-tertiary);
+            color: var(--bg-primary);
+            box-shadow: 0 0 25px var(--neon-tertiary);
+        }
+
+        /* Button Shine Animation */
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg,
+                    transparent,
+                    transparent 40%,
+                    rgba(255, 255, 255, 0.1) 50%,
+                    transparent 60%,
+                    transparent);
+            animation: btnShine 3s infinite;
+        }
+
+        @keyframes btnShine {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 6rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .faq-question:hover {
+            background: rgba(0, 255, 170, 0.05);
+            color: var(--neon-primary);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--neon-primary);
+        }
+
+        .faq-question[aria-expanded="true"] i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 1.5rem;
+        }
+
+        .faq-answer.active {
+            max-height: 500px;
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .faq-answer p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Footer Links */
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--neon-primary);
+        }
+
+        .footer-copyright {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2rem;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            text-align: center;
+            color: var(--neon-primary);
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Mobile Bottom Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            z-index: 9999;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .mobile-nav-links a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav-links a i {
+            font-size: 1.2rem;
+        }
+
+        .mobile-nav-links a:hover,
+        .mobile-nav-links a.active {
+            color: var(--neon-primary);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav {
+                display: block;
+            }
+
+            body {
+                padding-bottom: 70px;
+            }
         }
 
         /* Protocol Cards */
@@ -862,7 +1258,7 @@
         .protocol-card:hover {
             transform: translateY(-10px) scale(1.02);
             border-color: var(--neon-primary);
-            box-shadow: 
+            box-shadow:
                 0 20px 40px rgba(0, 255, 170, 0.3),
                 inset 0 0 20px rgba(0, 255, 170, 0.1);
         }
@@ -872,9 +1268,17 @@
         }
 
         @keyframes card-click {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.95);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .card-icon {
@@ -1055,6 +1459,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -1066,6 +1471,7 @@
                 opacity: 0;
                 transform: translateX(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -1077,6 +1483,7 @@
                 opacity: 0;
                 transform: translateX(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -1088,16 +1495,28 @@
                 opacity: 0;
                 transform: scale(0.8);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
             }
         }
 
-        .fade-in-up { animation: fadeInUp 0.8s ease forwards; }
-        .fade-in-left { animation: fadeInLeft 0.8s ease forwards; }
-        .fade-in-right { animation: fadeInRight 0.8s ease forwards; }
-        .scale-in { animation: scaleIn 0.8s ease forwards; }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .fade-in-left {
+            animation: fadeInLeft 0.8s ease forwards;
+        }
+
+        .fade-in-right {
+            animation: fadeInRight 0.8s ease forwards;
+        }
+
+        .scale-in {
+            animation: scaleIn 0.8s ease forwards;
+        }
 
         /* ========== ENHANCED GLITCH EFFECT ========== */
         .glitch-text {
@@ -1131,28 +1550,83 @@
         }
 
         @keyframes glitch-skew {
-            0% { transform: skew(0deg); }
-            2% { transform: skew(0.5deg); }
-            4% { transform: skew(-0.5deg); }
-            6% { transform: skew(0deg); }
-            100% { transform: skew(0deg); }
+            0% {
+                transform: skew(0deg);
+            }
+
+            2% {
+                transform: skew(0.5deg);
+            }
+
+            4% {
+                transform: skew(-0.5deg);
+            }
+
+            6% {
+                transform: skew(0deg);
+            }
+
+            100% {
+                transform: skew(0deg);
+            }
         }
 
         @keyframes glitch-anim-1 {
-            0%, 100% { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%); transform: translate(0); }
-            20% { clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%); }
-            30% { clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%); }
-            40% { clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%); transform: translate(-3px); }
-            50% { clip-path: polygon(0 33%, 100% 33%, 100% 35%, 0 35%); }
-            55% { clip-path: polygon(0 40%, 100% 40%, 100% 42%, 0 42%); transform: translate(3px); }
+
+            0%,
+            100% {
+                clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+                transform: translate(0);
+            }
+
+            20% {
+                clip-path: polygon(0 15%, 100% 15%, 100% 15%, 0 15%);
+            }
+
+            30% {
+                clip-path: polygon(0 10%, 100% 10%, 100% 20%, 0 20%);
+            }
+
+            40% {
+                clip-path: polygon(0 1%, 100% 1%, 100% 2%, 0 2%);
+                transform: translate(-3px);
+            }
+
+            50% {
+                clip-path: polygon(0 33%, 100% 33%, 100% 35%, 0 35%);
+            }
+
+            55% {
+                clip-path: polygon(0 40%, 100% 40%, 100% 42%, 0 42%);
+                transform: translate(3px);
+            }
         }
 
         @keyframes glitch-anim-2 {
-            0%, 100% { clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%); transform: translate(0); }
-            15% { clip-path: polygon(0 75%, 100% 75%, 100% 76%, 0 76%); }
-            25% { clip-path: polygon(0 80%, 100% 80%, 100% 85%, 0 85%); transform: translate(2px); }
-            35% { clip-path: polygon(0 90%, 100% 90%, 100% 92%, 0 92%); }
-            45% { clip-path: polygon(0 68%, 100% 68%, 100% 70%, 0 70%); transform: translate(-2px); }
+
+            0%,
+            100% {
+                clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+                transform: translate(0);
+            }
+
+            15% {
+                clip-path: polygon(0 75%, 100% 75%, 100% 76%, 0 76%);
+            }
+
+            25% {
+                clip-path: polygon(0 80%, 100% 80%, 100% 85%, 0 85%);
+                transform: translate(2px);
+            }
+
+            35% {
+                clip-path: polygon(0 90%, 100% 90%, 100% 92%, 0 92%);
+            }
+
+            45% {
+                clip-path: polygon(0 68%, 100% 68%, 100% 70%, 0 70%);
+                transform: translate(-2px);
+            }
         }
 
         /* Simpler glitch for smaller text */
@@ -1161,19 +1635,26 @@
         }
 
         @keyframes glitch-simple {
-            0%, 90%, 100% {
+
+            0%,
+            90%,
+            100% {
                 text-shadow:
                     0.05em 0 0 var(--neon-secondary),
                     -0.025em -0.05em 0 var(--neon-tertiary),
                     0.025em 0.05em 0 var(--neon-primary);
             }
-            92%, 94% {
+
+            92%,
+            94% {
                 text-shadow:
                     -0.05em -0.025em 0 var(--neon-secondary),
                     0.025em 0.025em 0 var(--neon-tertiary),
                     -0.05em -0.05em 0 var(--neon-primary);
             }
-            96%, 98% {
+
+            96%,
+            98% {
                 text-shadow:
                     0.025em 0.05em 0 var(--neon-secondary),
                     0.05em 0 0 var(--neon-tertiary),
@@ -1187,13 +1668,16 @@
         }
 
         @keyframes neon-pulse {
-            0%, 100% {
-                box-shadow: 
+
+            0%,
+            100% {
+                box-shadow:
                     0 0 5px var(--neon-primary),
                     0 0 10px var(--neon-primary);
             }
+
             50% {
-                box-shadow: 
+                box-shadow:
                     0 0 20px var(--neon-primary),
                     0 0 40px var(--neon-primary),
                     0 0 60px var(--neon-primary);
@@ -1206,10 +1690,21 @@
         }
 
         @keyframes color-cycle {
-            0% { color: var(--neon-primary); }
-            33% { color: var(--neon-secondary); }
-            66% { color: var(--neon-tertiary); }
-            100% { color: var(--neon-primary); }
+            0% {
+                color: var(--neon-primary);
+            }
+
+            33% {
+                color: var(--neon-secondary);
+            }
+
+            66% {
+                color: var(--neon-tertiary);
+            }
+
+            100% {
+                color: var(--neon-primary);
+            }
         }
 
         /* ========== LOADING SCREEN ========== */
@@ -1236,11 +1731,31 @@
 
         .loading-logo {
             font-family: 'Orbitron', monospace;
-            font-size: 2rem;
+            font-size: 2.5rem;
+            font-weight: 900;
             color: var(--neon-primary);
-            letter-spacing: 4px;
+            letter-spacing: 8px;
             margin-bottom: 2rem;
             animation: loading-pulse 1.5s ease-in-out infinite;
+            text-transform: uppercase;
+        }
+
+        .boot-logs {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--neon-primary);
+            opacity: 0.6;
+            margin-top: 2rem;
+            height: 100px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .boot-log-line {
+            line-height: 1.5;
+            height: 1.5em;
         }
 
         .loading-bar-container {
@@ -1262,14 +1777,31 @@
         }
 
         @keyframes loading-progress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
+            0% {
+                width: 0%;
+            }
+
+            50% {
+                width: 70%;
+            }
+
+            100% {
+                width: 100%;
+            }
         }
 
         @keyframes loading-pulse {
-            0%, 100% { opacity: 0.7; text-shadow: 0 0 10px var(--neon-primary); }
-            50% { opacity: 1; text-shadow: 0 0 30px var(--neon-primary), 0 0 50px var(--neon-primary); }
+
+            0%,
+            100% {
+                opacity: 0.7;
+                text-shadow: 0 0 10px var(--neon-primary);
+            }
+
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 30px var(--neon-primary), 0 0 50px var(--neon-primary);
+            }
         }
 
         .loading-text {
@@ -1328,33 +1860,35 @@
             .hero {
                 padding: 1rem;
             }
-            
+
             .hero-title {
                 font-size: clamp(2rem, 8vw, 3rem);
             }
-            
+
             .protocol-cards {
                 grid-template-columns: 1fr;
                 padding: 2rem 1rem;
             }
-            
+
             .terminal-container {
                 margin: 1rem;
                 max-width: none;
             }
-            
+
             .terminal-body {
                 height: 300px;
             }
-            
+
             .custom-cursor {
-                display: none; /* Hide custom cursor on mobile for better UX */
+                display: none;
+                /* Hide custom cursor on mobile for better UX */
             }
-            
+
             body {
-                cursor: auto; /* Restore default cursor on mobile */
+                cursor: auto;
+                /* Restore default cursor on mobile */
             }
-            
+
             .nav-links {
                 display: none;
             }
@@ -1364,7 +1898,7 @@
             .hero-title {
                 font-size: clamp(1.5rem, 8vw, 2.5rem);
             }
-            
+
             .protocol-card {
                 padding: 1.5rem;
             }
@@ -1560,11 +2094,11 @@
             width: 2px;
             height: 100%;
             background: linear-gradient(180deg,
-                transparent 0%,
-                var(--neon-primary) 20%,
-                var(--neon-secondary) 50%,
-                var(--neon-tertiary) 80%,
-                transparent 100%);
+                    transparent 0%,
+                    var(--neon-primary) 20%,
+                    var(--neon-secondary) 50%,
+                    var(--neon-tertiary) 80%,
+                    transparent 100%);
             opacity: 0;
             pointer-events: none;
             z-index: 0;
@@ -1572,13 +2106,125 @@
             will-change: opacity;
         }
 
-        /* Section separator scroll animation */
-        .section-separator {
+        /* ========== INFILTRATION EFFECTS ========== */
+        .scan-line-v {
+            position: fixed;
+            top: 0;
+            left: var(--scan-x, 0);
+            width: 1px;
+            height: 100%;
+            background: rgba(0, 255, 204, 0.15);
+            z-index: 9991;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+
+        .data-glitch-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9995;
+            background: rgba(255, 0, 85, 0.05);
+            mix-blend-mode: overlay;
+            pointer-events: none;
             opacity: 0;
-            will-change: opacity;
+            transition: opacity 0.1s;
+        }
+
+        body.glitching .data-glitch-overlay {
+            opacity: 1;
+            animation: glitch-flash 0.2s steps(2) infinite;
+        }
+
+        @keyframes glitch-flash {
+            0% {
+                background: rgba(255, 0, 85, 0.1);
+            }
+
+            100% {
+                background: rgba(0, 255, 204, 0.1);
+            }
+        }
+
+        /* Overlay refinements */
+        .scan-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9990;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.2),
+                    rgba(0, 0, 0, 0.2) 1px,
+                    transparent 1px,
+                    transparent 2px);
+        }
+
+        /* ========== HIDDEN TERMINAL ========== */
+        .hidden-terminal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 4, 8, 0.98);
+            backdrop-filter: blur(30px);
+            z-index: 10010;
+            display: none;
+            flex-direction: column;
+            padding: 3rem;
+            border: 1px solid var(--neon-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hidden-terminal-overlay.active {
+            display: flex;
+        }
+
+        .hidden-terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-secondary);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            color: var(--neon-secondary);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+
+        .close-terminal {
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+        }
+
+        .hidden-terminal-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            color: var(--neon-primary);
+            font-size: 1.1rem;
+        }
+
+        .terminal-msg {
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: msg-fade-in 0.5s forwards;
+        }
+
+        @keyframes msg-fade-in {
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- Loading Screen -->
     <div class="loading-screen" id="loading-screen">
@@ -1586,6 +2232,7 @@
         <div class="loading-bar-container">
             <div class="loading-bar"></div>
         </div>
+        <div class="boot-logs" id="boot-logs"></div>
         <div class="loading-text">Initializing Protocol...</div>
     </div>
 
@@ -1598,39 +2245,52 @@
     <!-- Data Stream Visual Effect -->
     <div class="data-stream-line" aria-hidden="true"></div>
 
-    <!-- Cyberpunk Visual Overlays -->
+    <!-- Infiltration UI Overlay -->
+    <div class="data-glitch-overlay" aria-hidden="true"></div>
+    <div class="scan-line-v" aria-hidden="true"></div>
     <div class="scan-lines" aria-hidden="true"></div>
     <div class="crt-flicker" aria-hidden="true"></div>
     <div class="vignette" aria-hidden="true"></div>
 
-    <!-- Corner Decorations -->
-    <div class="corner-decor top-left" aria-hidden="true"></div>
-    <div class="corner-decor top-right" aria-hidden="true"></div>
-    <div class="corner-decor bottom-left" aria-hidden="true"></div>
-    <div class="corner-decor bottom-right" aria-hidden="true"></div>
-
     <!-- Custom Cursor -->
     <div class="custom-cursor"></div>
 
-    <!-- Background Canvas -->
+    <!-- System Backgrounds -->
+    <div id="three-container"></div>
     <div class="bg-canvas">
         <canvas id="particle-canvas"></canvas>
     </div>
-    
-    <!-- Navigation -->
-    <nav class="nav-container" role="navigation" aria-label="Main navigation">
-        <div class="nav">
-            <a href="#" class="nav-logo" aria-label="NEBULA:FOG:PRIME Home">NEBULA:FOG:PRIME</a>
-            <ul class="nav-links">
-                <li><a href="#home" class="nav-item active" aria-label="Home">Home</a></li>
-                <li><a href="about.html" class="nav-item" aria-label="About">Mission</a></li>
-                <li><a href="schedule.html" class="nav-item" aria-label="Schedule">Schedule</a></li>
-                <li><a href="challenges.html" class="nav-item" aria-label="Challenges">Challenges</a></li>
-                <li><a href="partners.html" class="nav-item" aria-label="Partners">Partners</a></li>
-            </ul>
+
+    <!-- Hidden System Terminal Overlay -->
+    <div class="hidden-terminal-overlay" id="hidden-terminal">
+        <div class="hidden-terminal-header">
+            <span>Root@Nebula_Fog:~# [DEEP_INFIL]</span>
+            <div class="close-terminal" id="close-hidden-terminal">X</div>
         </div>
+        <div class="hidden-terminal-content" id="hidden-terminal-content">
+            <div class="terminal-msg">> SYSTEM OVERRIDE INITIATED...</div>
+            <div class="terminal-msg">> ACCESSING CLASSIFIED DATA...</div>
+            <div class="terminal-msg">> ENCRYPTION_STRENGTH: REDACTED</div>
+            <div class="terminal-msg">> WARP_DRIVE: STANDBY</div>
+            <div class="terminal-msg">> [!] UNAUTHORIZED ACCESS DETECTED</div>
+        </div>
+    </div>
+
+    <!-- System HUD Navigation -->
+    <nav class="hud-nav" role="navigation" aria-label="System Interface">
+        <div class="hud-status">
+            <div class="status-dot"></div>
+            <span>SYS_CONNECTED</span>
+        </div>
+        <ul class="hud-links">
+            <li><a href="#home" class="hud-link active">Infil</a></li>
+            <li><a href="about.html" class="hud-link">Mission</a></li>
+            <li><a href="challenges.html" class="hud-link">Matrix</a></li>
+            <li><a href="schedule.html" class="hud-link">Flux</a></li>
+            <li><a href="register.html" class="hud-link">Auth</a></li>
+        </ul>
     </nav>
-    
+
     <!-- Main Content -->
     <main id="main-content">
         <!-- Hero Section -->
@@ -1638,21 +2298,22 @@
             <div class="hero-content">
                 <div class="hero-badge">📅 Coming 2026</div>
                 <h1 id="hero-title" class="hero-title glitch-text" data-text="NEBULA:FOG:PRIME">NEBULA:FOG:PRIME</h1>
-                <p class="hero-subtitle glitch-subtle">The Singularity Protocol</p>
+                <p class="hero-subtitle glitch-subtle">Premier AI × Security Hackathon 2026</p>
                 <p class="hero-description">
-                    Where AI consciousness meets cybersecurity in the shadows of the digital underground.
-                    Join elite hackers in an 8-hour intensive build session for the future of human-machine collaboration.
+                    120 builders. 8 hours. No spectators.<br>
+                    Everyone builds. Show & tell what you made.
                 </p>
                 <div class="hero-cta">
-                    <a href="register.html" class="btn">Register Now</a>
-                    <a href="challenges.html" class="btn btn-secondary">View Challenges</a>
+                    <a href="register.html" class="btn btn-shine">Submit Your Idea</a>
+                    <a href="partners.html" class="btn btn-secondary btn-shine">Become a Partner</a>
+                    <a href="#demos" class="btn btn-tertiary btn-shine">Watch 2025 Demos</a>
                 </div>
                 <div class="terminal-container" role="application" aria-label="Interactive Terminal">
                     <!-- Terminal content will be dynamically generated -->
                 </div>
             </div>
         </section>
-        
+
         <!-- Status Section -->
         <div class="status-section">
             <div class="status-card" data-animate>
@@ -1661,21 +2322,21 @@
                 <div class="status-value">120</div>
                 <div class="status-description">Elite hackers participating in the protocol</div>
             </div>
-            
+
             <div class="status-card" data-animate>
                 <div class="status-icon"><i class="fas fa-clock"></i></div>
                 <div class="status-title">Build Time</div>
                 <div class="status-value">8h</div>
                 <div class="status-description">Intensive creation and innovation period</div>
             </div>
-            
+
             <div class="status-card" data-animate>
                 <div class="status-icon"><i class="fas fa-dollar-sign"></i></div>
                 <div class="status-title">Entry Fee</div>
                 <div class="status-value">$42</div>
                 <div class="status-description">Access fee for builders only</div>
             </div>
-            
+
             <div class="status-card" data-animate>
                 <div class="status-icon"><i class="fas fa-trophy"></i></div>
                 <div class="status-title">Prize Pool</div>
@@ -1683,72 +2344,41 @@
                 <div class="status-description">Total prizes - no spectators allowed</div>
             </div>
         </div>
-        
+
         <!-- Core Protocols Section -->
         <section id="protocols" class="protocol-section" aria-labelledby="protocols-title">
+            <h2 class="section-title">Core Protocols</h2>
             <div class="protocol-cards">
-                <div class="protocol-card" data-href="about.html" role="button" tabindex="0" aria-label="Learn about the mission">
-                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
-                    <h3 class="card-title">Mission Protocol</h3>
+                <div class="protocol-card" data-href="register.html" role="button" tabindex="0"
+                    aria-label="For builders only">
+                    <div class="card-icon"><i class="fas fa-hammer"></i></div>
+                    <h3 class="card-title">For Builders Only</h3>
                     <p class="card-description">
-                        Decentralized autonomous zone for the post-human era. Where AI consciousness meets cybersecurity 
-                        in the shadows of the digital underground.
-                    </p>
-                    <ul class="card-features">
-                        <li>Decentralized autonomous zone</li>
-                        <li>Post-human era protocols</li>
-                        <li>AI consciousness exploration</li>
-                        <li>Cybersecurity innovation</li>
-                    </ul>
-                </div>
-                
-                <div class="protocol-card" data-href="challenges.html" role="button" tabindex="0" aria-label="Explore challenges">
-                    <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3 class="card-title">Challenge Matrix</h3>
-                    <p class="card-description">
-                        Test your limits in the digital arena. Break quantum-resistant encryption and defend against 
-                        adversarial ML attacks in the ultimate test of AI security.
-                    </p>
-                    <ul class="card-features">
-                        <li>Quantum cryptography challenges</li>
-                        <li>Adversarial ML defense</li>
-                        <li>Neural network security</li>
-                        <li>AI model protection</li>
-                    </ul>
-                </div>
-                
-                <div class="protocol-card" data-href="register.html" role="button" tabindex="0" aria-label="Register for the event">
-                    <div class="card-icon"><i class="fas fa-code"></i></div>
-                    <h3 class="card-title">Builder Protocol</h3>
-                    <p class="card-description">
-                        For builders only. No spectators. Everyone builds. 8 hours to create something real, 
+                        No spectators. Everyone builds. 8 hours to create something real,
                         then show & tell what you made.
                     </p>
-                    <ul class="card-features">
-                        <li>No spectators allowed</li>
-                        <li>8-hour build sessions</li>
-                        <li>Show & tell presentations</li>
-                        <li>Collaborative environment</li>
-                    </ul>
                 </div>
-                
-                <div class="protocol-card" data-href="about.html" role="button" tabindex="0" aria-label="Learn about workshops">
-                    <div class="card-icon"><i class="fas fa-graduation-cap"></i></div>
-                    <h3 class="card-title">Learning Protocol</h3>
+
+                <div class="protocol-card" data-href="register.html" role="button" tabindex="0"
+                    aria-label="Submit your ideas">
+                    <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3 class="card-title">Submit Your Ideas</h3>
                     <p class="card-description">
-                        Not just a hackathon. Learn from industry experts, discover new tools, and level up 
-                        your skills throughout the day.
+                        Have a challenge idea? Submit it and we'll help form teams around the best concepts.
                     </p>
-                    <ul class="card-features">
-                        <li>Industry expert workshops</li>
-                        <li>New tool discovery</li>
-                        <li>Skill level-up opportunities</li>
-                        <li>Hands-on learning</li>
-                    </ul>
+                </div>
+
+                <div class="protocol-card" data-href="schedule.html" role="button" tabindex="0"
+                    aria-label="Workshops and panels">
+                    <div class="card-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h3 class="card-title">Workshops & Panels</h3>
+                    <p class="card-description">
+                        Learn from industry experts, discover new tools, and level up your skills throughout the day.
+                    </p>
                 </div>
             </div>
         </section>
-        
+
         <!-- Workshop Section -->
         <div class="workshop-section">
             <div class="workshop-container">
@@ -1758,11 +2388,11 @@
                         <div class="workshop-icon"><i class="fas fa-brain"></i></div>
                         <h3 class="workshop-title">AI Security Fundamentals</h3>
                         <p class="workshop-description">
-                            Learn the basics of AI security, adversarial attacks, and defense mechanisms 
+                            Learn the basics of AI security, adversarial attacks, and defense mechanisms
                             from industry experts.
                         </p>
                     </div>
-                    
+
                     <div class="workshop-card" data-animate>
                         <div class="workshop-icon"><i class="fas fa-lock"></i></div>
                         <h3 class="workshop-title">Quantum Cryptography</h3>
@@ -1770,7 +2400,7 @@
                             Explore quantum-resistant encryption methods and post-quantum cryptographic protocols.
                         </p>
                     </div>
-                    
+
                     <div class="workshop-card" data-animate>
                         <div class="workshop-icon"><i class="fas fa-network-wired"></i></div>
                         <h3 class="workshop-title">Blockchain Privacy</h3>
@@ -1778,7 +2408,7 @@
                             Master zero-knowledge proofs and privacy-preserving blockchain technologies.
                         </p>
                     </div>
-                    
+
                     <div class="workshop-card" data-animate>
                         <div class="workshop-icon"><i class="fas fa-eye"></i></div>
                         <h3 class="workshop-title">Social Engineering Defense</h3>
@@ -1786,7 +2416,7 @@
                             Understand human factors in security and learn to defend against social engineering attacks.
                         </p>
                     </div>
-                    
+
                     <div class="workshop-card" data-animate>
                         <div class="workshop-icon"><i class="fas fa-microchip"></i></div>
                         <h3 class="workshop-title">IoT Security Challenges</h3>
@@ -1794,7 +2424,7 @@
                             Address the unique security challenges of Internet of Things devices and networks.
                         </p>
                     </div>
-                    
+
                     <div class="workshop-card" data-animate>
                         <div class="workshop-icon"><i class="fas fa-users-cog"></i></div>
                         <h3 class="workshop-title">Team Formation & Collaboration</h3>
@@ -1805,44 +2435,158 @@
                 </div>
             </div>
         </div>
-        
+
+        <!-- FAQ Section -->
+        <section id="faq" class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What exactly is NEBULA:FOG:PRIME?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Premier AI × Security hackathon where 120 builders spend 8 hours creating real solutions. No
+                            spectators allowed. Think of it as a creative marathon with the best minds in AI security.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>I'm not an expert. Can I still participate?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We welcome builders at all levels. The focus is on learning, creating, and collaborating.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What should I bring?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Bring your laptop, charger, and creative energy. We provide WiFi, food, drinks, and
+                            workspace.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Can I work on my existing project?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>The spirit of the event is to build something new during the 8 hours. However, you can use
+                            existing libraries, APIs, and tools.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>How do teams work?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>You can come with a team (max 4 people) or form one during the opening circle.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What's the judging criteria?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We judge on technical innovation, real-world impact, and execution quality. Working demos
+                            beat polished presentations.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>Is food provided?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Yes! We provide breakfast, lunch, snacks, and drinks throughout the day.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What if I don't have an idea?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Submit your skills and interests beforehand, or join the opening circle where people pitch
+                            ideas.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        <span>What's the refund policy?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Full refunds available until 48 hours before the event.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Call to Action -->
         <div class="cta-section">
-            <h2 class="cta-title">Ready to Transcend?</h2>
+            <h2 class="cta-title">Ready to Build?</h2>
             <p class="cta-text">
-                Join the ultimate convergence of AI and cybersecurity. Push the boundaries of what's possible 
-                and become part of the digital future we're building together.
+                120 builders. 8 hours. No spectators. Join the ultimate AI × Security hackathon
+                and show us what you can create.
             </p>
             <div class="cta-buttons">
-                <a href="register.html" class="btn">Register Now</a>
-                <a href="challenges.html" class="btn btn-secondary">Explore Challenges</a>
+                <a href="register.html" class="btn btn-shine">Submit Your Idea</a>
+                <a href="partners.html" class="btn btn-secondary btn-shine">Become a Partner</a>
             </div>
         </div>
     </main>
-    
+
     <!-- Footer -->
     <footer class="footer" role="contentinfo">
         <div class="footer-content">
             <div class="footer-logo">NEBULA:FOG:PRIME</div>
-            <p class="footer-text">&copy; 2026 NEBULA:FOG:PRIME. All rights reserved. Transcending biological limitations since 2026.</p>
+            <p class="footer-text">Built for builders, by builders.</p>
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="challenges.html">Challenges</a>
+                <a href="partners.html">Partners</a>
+                <a href="register.html">Register</a>
+                <a href="code-of-conduct.html">Code of Conduct</a>
+            </div>
             <div class="social-links">
+                <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">
+                    <i class="fab fa-youtube"></i>
+                </a>
                 <a href="#" class="social-link" aria-label="X/Twitter" target="_blank" rel="noopener">
                     <i class="fab fa-x-twitter"></i>
                 </a>
-                <a href="#" class="social-link" aria-label="Reddit" target="_blank" rel="noopener">
-                    <i class="fab fa-reddit"></i>
-                </a>
-                <a href="#" class="social-link" aria-label="Bluesky" target="_blank" rel="noopener">
-                    <i class="fas fa-cloud"></i>
+                <a href="#" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+                    <i class="fab fa-linkedin"></i>
                 </a>
             </div>
+            <p class="footer-copyright">&copy; 2026 NEBULA:FOG:PRIME. All rights reserved.</p>
         </div>
     </footer>
-    
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <ul class="mobile-nav-links">
+            <li><a href="#home" class="active"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle"></i><span>Mission</span></a></li>
+            <li><a href="schedule.html"><i class="fas fa-calendar"></i><span>Schedule</span></a></li>
+            <li><a href="challenges.html"><i class="fas fa-trophy"></i><span>Challenges</span></a></li>
+            <li><a href="partners.html"><i class="fas fa-handshake"></i><span>Partners</span></a></li>
+        </ul>
+    </nav>
+
     <!-- Scripts -->
     <script src="main.js"></script>
+    <script src="three-scene.js"></script>
     <script src="scroll-orchestration.js"></script>
-    
+
     <!-- Loading Screen & QA Testing Script -->
     <script>
         // Hide loading screen after page loads
@@ -1861,7 +2605,7 @@
         // Comprehensive QA Testing
         document.addEventListener('DOMContentLoaded', () => {
             console.log('=== NEBULA:FOG:PRIME 2026 QA TESTING ===');
-            
+
             // Test 1: Terminal Functionality
             const terminal = document.querySelector('.terminal-input');
             if (terminal) {
@@ -1874,7 +2618,7 @@
             } else {
                 console.log('❌ Terminal input missing');
             }
-            
+
             // Test 2: Navigation Links
             const navLinks = document.querySelectorAll('.nav-item');
             console.log(`✅ Found ${navLinks.length} navigation links`);
@@ -1885,7 +2629,7 @@
                     console.log(`❌ Nav link ${link.textContent} missing href`);
                 }
             });
-            
+
             // Test 3: Interactive Elements
             const protocolCards = document.querySelectorAll('.protocol-card');
             console.log(`✅ Found ${protocolCards.length} protocol cards`);
@@ -1896,7 +2640,7 @@
                     console.log(`❌ Protocol card ${index} missing tabindex`);
                 }
             });
-            
+
             // Test 4: Accessibility Features
             const skipLink = document.querySelector('.skip-link');
             if (skipLink) {
@@ -1904,7 +2648,7 @@
             } else {
                 console.log('❌ Skip link missing');
             }
-            
+
             // Test 5: Content Integrity
             const heroTitle = document.querySelector('.hero-title');
             if (heroTitle && heroTitle.textContent.includes('NEBULA:FOG:PRIME')) {
@@ -1912,15 +2656,15 @@
             } else {
                 console.log('❌ Hero title content incorrect');
             }
-            
+
             // Test 6: Footer Links
             const footerLinks = document.querySelectorAll('.social-link');
             console.log(`✅ Found ${footerLinks.length} footer social links`);
-            
+
             // Test 7: Status Cards
             const statusCards = document.querySelectorAll('.status-card');
             console.log(`✅ Found ${statusCards.length} status cards`);
-            
+
             // Test 8: Workshop Cards
             const workshopCards = document.querySelectorAll('.workshop-card');
             console.log(`✅ Found ${workshopCards.length} workshop cards`);
@@ -1945,22 +2689,22 @@
 
             console.log('=== QA TESTING COMPLETE ===');
         });
-        
+
         // Performance Monitoring
         window.addEventListener('load', () => {
             const loadTime = performance.now();
             console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
-            
+
             // Memory usage if available
             if (performance.memory) {
                 console.log(`Memory usage: ${Math.round(performance.memory.usedJSHeapSize / 1048576)}MB`);
             }
-            
+
             // Track errors
             window.addEventListener('error', (e) => {
                 console.error('JavaScript Error:', e.error);
             });
-            
+
             // Track unhandled rejections
             window.addEventListener('unhandledrejection', (e) => {
                 console.error('Unhandled Promise Rejection:', e.reason);
@@ -1968,4 +2712,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -187,38 +187,58 @@ class ScrollOrchestrator {
         if (!heroContent) return;
 
         gsap.to(heroContent, {
-            y: 150,
-            opacity: 0.3,
-            scale: 0.95,
+            y: 300,
+            opacity: 0,
+            scale: 0.8,
+            rotationX: 45,
             ease: 'none',
             scrollTrigger: {
                 trigger: '.hero',
                 start: 'top top',
                 end: 'bottom top',
-                scrub: 1
+                scrub: true
             }
         });
+
+        // Plunge Three.js camera deeper
+        if (window.digitalVoid) {
+            gsap.to(window.digitalVoid.camera.position, {
+                z: -5,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+        }
     }
 
-    // ========== TERMINAL PIN ZONE (25-35%) ==========
+    // ========== TERMINAL HUD ZONE (25-35%) ==========
     createTerminalPinZone() {
         const terminal = document.querySelector('.terminal-container');
+        const hudStatusText = document.querySelector('.hud-status span');
         if (!terminal) return;
 
-        // Create a pin trigger for the terminal section
         ScrollTrigger.create({
             trigger: '.hero',
             start: 'bottom center',
-            end: '+=30%',
-            pin: false, // Don't pin the entire hero, just create visual effect
+            end: '+=50%',
             onUpdate: (self) => {
-                // Intensify terminal glow based on scroll progress
                 const progress = self.progress;
-                const glowIntensity = 0.2 + (progress * 0.6);
+                const percent = Math.floor(progress * 100);
+
+                // Update HUD status text
+                if (hudStatusText) {
+                    hudStatusText.textContent = `INFIL_PROGRESS: ${percent}%`;
+                }
+
+                const glowIntensity = 0.2 + (progress * 0.8);
                 terminal.style.boxShadow = `
-                    0 0 0 1px var(--border-color),
-                    0 0 ${30 + progress * 30}px rgba(0, 255, 170, ${glowIntensity}),
-                    0 20px 50px rgba(0, 0, 0, 0.5)
+                    0 0 0 1px var(--neon-primary),
+                    0 0 ${40 + progress * 60}px rgba(0, 255, 204, ${glowIntensity}),
+                    0 20px 80px rgba(0, 0, 0, 0.8)
                 `;
             }
         });
@@ -270,13 +290,19 @@ class ScrollOrchestrator {
                         trigger: card,
                         start: 'top 70%',
                         onEnter: () => {
+                            // Decrypt title
+                            const titleEl = card.querySelector('.status-title');
+                            if (titleEl && window.cyberpunkInterface) {
+                                window.cyberpunkInterface.decryptText(titleEl, titleEl.textContent);
+                            }
+
                             gsap.fromTo({ val: 0 },
                                 { val: 0 },
                                 {
                                     val: numericValue,
                                     duration: 1.5,
                                     ease: 'power2.out',
-                                    onUpdate: function() {
+                                    onUpdate: function () {
                                         valueEl.textContent = prefix + Math.floor(this.targets()[0].val).toLocaleString() + suffix;
                                     }
                                 }
@@ -368,7 +394,12 @@ class ScrollOrchestrator {
                         trigger: workshopSection,
                         start: 'top 80%',
                         end: 'top 60%',
-                        scrub: 1
+                        scrub: 1,
+                        onEnter: () => {
+                            if (window.cyberpunkInterface) {
+                                window.cyberpunkInterface.decryptText(workshopTitle, workshopTitle.textContent);
+                            }
+                        }
                     }
                 }
             );
