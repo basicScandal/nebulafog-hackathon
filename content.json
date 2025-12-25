@@ -1,0 +1,498 @@
+{
+  "common": {
+    "navigation": {
+      "logo": "NEBULA:FOG:PRIME",
+      "links": [
+        { "label": "Home", "href": "index.html" },
+        { "label": "Mission", "href": "about.html" },
+        { "label": "Schedule", "href": "schedule.html" },
+        { "label": "Challenges", "href": "challenges.html" },
+        { "label": "Partners", "href": "partners.html" }
+      ]
+    },
+    "footer": {
+      "logo": "NEBULA:FOG:PRIME",
+      "copyright": "&copy; 2026 NEBULA:FOG:PRIME. All rights reserved. Transcending biological limitations since 2026.",
+      "socialLinks": [
+        { "name": "X/Twitter", "icon": "fab fa-x-twitter", "href": "#" },
+        { "name": "Reddit", "icon": "fab fa-reddit", "href": "#" },
+        { "name": "Bluesky", "icon": "fas fa-cloud", "href": "#" }
+      ]
+    },
+    "loading": {
+      "logo": "NEBULA:FOG",
+      "text": "Initializing Protocol..."
+    }
+  },
+  "home": {
+    "hero": {
+      "badge": "📅 Coming 2026",
+      "title": "NEBULA:FOG:PRIME",
+      "subtitle": "The Singularity Protocol",
+      "description": "Where AI consciousness meets cybersecurity in the shadows of the digital underground. Join elite hackers in an 8-hour intensive build session for the future of human-machine collaboration.",
+      "cta": [
+        { "text": "Register Now", "href": "register.html", "primary": true },
+        { "text": "View Challenges", "href": "challenges.html", "primary": false }
+      ]
+    },
+    "statusCards": [
+      {
+        "icon": "fas fa-users",
+        "title": "Builders",
+        "value": "120",
+        "description": "Elite hackers participating in the protocol"
+      },
+      {
+        "icon": "fas fa-clock",
+        "title": "Build Time",
+        "value": "8h",
+        "description": "Intensive creation and innovation period"
+      },
+      {
+        "icon": "fas fa-dollar-sign",
+        "title": "Entry Fee",
+        "value": "$42",
+        "description": "Access fee for builders only"
+      },
+      {
+        "icon": "fas fa-trophy",
+        "title": "Prize Pool",
+        "value": "$5,000",
+        "description": "Total prizes - no spectators allowed"
+      }
+    ],
+    "protocolCards": [
+      {
+        "icon": "fas fa-rocket",
+        "title": "Mission Protocol",
+        "description": "Decentralized autonomous zone for the post-human era. Where AI consciousness meets cybersecurity in the shadows of the digital underground.",
+        "features": [
+          "Decentralized autonomous zone",
+          "Post-human era protocols",
+          "AI consciousness exploration",
+          "Cybersecurity innovation"
+        ],
+        "href": "about.html"
+      },
+      {
+        "icon": "fas fa-shield-alt",
+        "title": "Challenge Matrix",
+        "description": "Test your limits in the digital arena. Break quantum-resistant encryption and defend against adversarial ML attacks in the ultimate test of AI security.",
+        "features": [
+          "Quantum cryptography challenges",
+          "Adversarial ML defense",
+          "Neural network security",
+          "AI model protection"
+        ],
+        "href": "challenges.html"
+      },
+      {
+        "icon": "fas fa-code",
+        "title": "Builder Protocol",
+        "description": "For builders only. No spectators. Everyone builds. 8 hours to create something real, then show & tell what you made.",
+        "features": [
+          "No spectators allowed",
+          "8-hour build sessions",
+          "Show & tell presentations",
+          "Collaborative environment"
+        ],
+        "href": "register.html"
+      },
+      {
+        "icon": "fas fa-graduation-cap",
+        "title": "Learning Protocol",
+        "description": "Not just a hackathon. Learn from industry experts, discover new tools, and level up your skills throughout the day.",
+        "features": [
+          "Industry expert workshops",
+          "New tool discovery",
+          "Skill level-up opportunities",
+          "Hands-on learning"
+        ],
+        "href": "about.html"
+      }
+    ],
+    "workshops": [
+      {
+        "icon": "fas fa-brain",
+        "title": "AI Security Fundamentals",
+        "description": "Learn the basics of AI security, adversarial attacks, and defense mechanisms from industry experts."
+      },
+      {
+        "icon": "fas fa-lock",
+        "title": "Quantum Cryptography",
+        "description": "Explore quantum-resistant encryption methods and post-quantum cryptographic protocols."
+      },
+      {
+        "icon": "fas fa-network-wired",
+        "title": "Blockchain Privacy",
+        "description": "Master zero-knowledge proofs and privacy-preserving blockchain technologies."
+      },
+      {
+        "icon": "fas fa-eye",
+        "title": "Social Engineering Defense",
+        "description": "Understand human factors in security and learn to defend against social engineering attacks."
+      },
+      {
+        "icon": "fas fa-microchip",
+        "title": "IoT Security Challenges",
+        "description": "Address the unique security challenges of Internet of Things devices and networks."
+      },
+      {
+        "icon": "fas fa-users-cog",
+        "title": "Team Formation & Collaboration",
+        "description": "Learn effective team formation strategies and collaboration techniques for hackathons."
+      }
+    ],
+    "cta": {
+      "title": "Ready to Transcend?",
+      "text": "Join the ultimate convergence of AI and cybersecurity. Push the boundaries of what's possible and become part of the digital future we're building together.",
+      "buttons": [
+        { "text": "Register Now", "href": "register.html", "primary": true },
+        { "text": "Explore Challenges", "href": "challenges.html", "primary": false }
+      ]
+    }
+  },
+  "challenges": {
+    "header": {
+      "title": "Challenge Matrix",
+      "subtitle": "Navigate the digital labyrinth and test your limits in the ultimate convergence of AI and cybersecurity. Each challenge is a gateway to transcendence."
+    },
+    "filters": [
+      { "label": "All Challenges", "value": "all" },
+      { "label": "AI Security", "value": "ai" },
+      { "label": "Blockchain", "value": "blockchain" },
+      { "label": "IoT Security", "value": "iot" },
+      { "label": "Social Engineering", "value": "social" }
+    ],
+    "categories": [
+      {
+        "id": "ai",
+        "icon": "🤖",
+        "title": "AI Security Matrix",
+        "difficulty": "hard",
+        "description": "Break quantum-resistant encryption and defend against adversarial ML attacks in the ultimate test of AI security.",
+        "challengeCount": 5,
+        "totalPoints": "1000+",
+        "challenges": [
+          { "name": "Quantum Cryptography Break", "points": 1000 },
+          { "name": "Adversarial ML Defense", "points": 750 },
+          { "name": "Neural Network Security", "points": 500 },
+          { "name": "AI Model Protection", "points": 400 },
+          { "name": "Machine Learning Privacy", "points": 350 }
+        ],
+        "stats": {
+          "participants": 1337,
+          "completion": "89%"
+        }
+      },
+      {
+        "id": "blockchain",
+        "icon": "⛓️",
+        "title": "Blockchain Privacy",
+        "difficulty": "hard",
+        "description": "Master zero-knowledge proofs and build privacy-preserving blockchain solutions for the decentralized future.",
+        "challengeCount": 4,
+        "totalPoints": "1200+",
+        "challenges": [
+          { "name": "Zero-Knowledge Proof System", "points": 1200 },
+          { "name": "Privacy-Preserving Smart Contracts", "points": 800 },
+          { "name": "Decentralized Identity Protocol", "points": 600 },
+          { "name": "Cryptographic Protocol Design", "points": 450 }
+        ],
+        "stats": {
+          "participants": 892,
+          "completion": "76%"
+        }
+      },
+      {
+        "id": "iot",
+        "icon": "🌐",
+        "title": "IoT Security Grid",
+        "difficulty": "medium",
+        "description": "Secure the Internet of Things with advanced threat detection and device authentication protocols.",
+        "challengeCount": 6,
+        "totalPoints": "900+",
+        "challenges": [
+          { "name": "Device Authentication Protocol", "points": 300 },
+          { "name": "Network Security Framework", "points": 250 },
+          { "name": "Threat Detection System", "points": 200 },
+          { "name": "Edge Computing Security", "points": 175 },
+          { "name": "IoT Firmware Analysis", "points": 150 },
+          { "name": "Wireless Protocol Security", "points": 125 }
+        ],
+        "stats": {
+          "participants": 1156,
+          "completion": "92%"
+        }
+      },
+      {
+        "id": "social",
+        "icon": "🎭",
+        "title": "Social Engineering",
+        "difficulty": "easy",
+        "description": "Detect and prevent social engineering attacks using AI-powered behavioral analysis and human factors.",
+        "challengeCount": 5,
+        "totalPoints": "600+",
+        "challenges": [
+          { "name": "Behavioral Analysis System", "points": 200 },
+          { "name": "Human Factor Security", "points": 150 },
+          { "name": "AI-Powered Detection", "points": 125 },
+          { "name": "Security Awareness Training", "points": 100 },
+          { "name": "Phishing Detection AI", "points": 75 }
+        ],
+        "stats": {
+          "participants": 1423,
+          "completion": "95%"
+        }
+      }
+    ],
+    "stats": [
+      { "icon": "🏆", "value": "$100K+", "label": "Prize Pool" },
+      { "icon": "👥", "value": "4808", "label": "Total Participants" },
+      { "icon": "🔥", "value": "20", "label": "Challenges" },
+      { "icon": "⚡", "value": "48h", "label": "Duration" },
+      { "icon": "🌟", "value": "3650", "label": "Total Points" },
+      { "icon": "🎯", "value": "87%", "label": "Avg Completion" }
+    ]
+  },
+  "dashboard": {
+    "header": {
+      "title": "Live Dashboard",
+      "subtitle": "Real-time event analytics and participant activity during NEBULA:FOG:PRIME 2026",
+      "liveIndicator": "Live"
+    },
+    "stats": [
+      { "id": "total-participants", "icon": "👥", "value": "4,808", "label": "Total Participants", "change": "+127 in last hour" },
+      { "id": "active-challenges", "icon": "🏆", "value": "18", "label": "Active Challenges", "change": "2 completed" },
+      { "id": "submissions", "icon": "⚡", "value": "1,247", "label": "Submissions", "change": "+89 in last hour" },
+      { "id": "completion-rate", "icon": "🔥", "value": "87%", "label": "Completion Rate", "change": "+5% today" },
+      { "id": "countries", "icon": "🌐", "value": "47", "label": "Countries", "change": "+3 today" },
+      { "id": "time-remaining", "icon": "⏱️", "value": "42h 15m", "label": "Time Remaining", "change": "-1h since last check" }
+    ],
+    "charts": {
+      "activity": { "title": "Participant Activity", "icon": "📊" },
+      "progress": { "title": "Challenge Progress", "icon": "🎯" },
+      "geo": { "title": "Global Participation", "icon": "🌍" },
+      "skills": { "title": "Skill Distribution", "icon": "💡" },
+      "activity_feed": { "title": "Recent Activity", "icon": "📈" },
+      "leaderboard": { "title": "Top Performers", "icon": "🏆" }
+    }
+  },
+  "register": {
+    "header": {
+      "title": "Join the Protocol",
+      "subtitle": "Transcend biological limitations and become part of the ultimate AI x Security convergence. Registration includes access to all challenges, workshops, mentorship, and the chance to win from a $100,000+ prize pool."
+    },
+    "form": {
+      "successMessage": "Registration Successful! Welcome to NEBULA:FOG:PRIME 2026. Check your email for confirmation and next steps.",
+      "submitButton": "Join the Protocol",
+      "fields": {
+        "firstName": { "label": "First Name", "placeholder": "Enter your first name", "required": true },
+        "lastName": { "label": "Last Name", "placeholder": "Enter your last name", "required": true },
+        "email": { "label": "Email Address", "placeholder": "your.email@example.com", "required": true },
+        "phone": { "label": "Phone Number", "placeholder": "+1 (555) 123-4567", "required": false },
+        "experience": {
+          "label": "Experience Level",
+          "required": true,
+          "options": [
+            { "value": "", "text": "Select your experience level" },
+            { "value": "beginner", "text": "Beginner (0-2 years)" },
+            { "value": "intermediate", "text": "Intermediate (2-5 years)" },
+            { "value": "advanced", "text": "Advanced (5+ years)" },
+            { "value": "expert", "text": "Expert (10+ years)" }
+          ]
+        },
+        "role": {
+          "label": "Primary Role",
+          "required": true,
+          "options": [
+            { "value": "", "text": "Select your primary role" },
+            { "value": "developer", "text": "Developer/Engineer" },
+            { "value": "security", "text": "Security Researcher" },
+            { "value": "data-scientist", "text": "Data Scientist/ML Engineer" },
+            { "value": "student", "text": "Student" },
+            { "value": "researcher", "text": "Academic Researcher" },
+            { "value": "other", "text": "Other" }
+          ]
+        },
+        "skills": { "label": "Technical Skills", "placeholder": "List your technical skills, programming languages, frameworks, and tools you're proficient with...", "required": true },
+        "interests": { "label": "Challenge Interests", "placeholder": "Which challenge categories interest you most? (AI Security, Blockchain Privacy, IoT Security, Social Engineering)", "required": false },
+        "teamSize": {
+          "label": "Team Size",
+          "options": [
+            { "value": "1", "text": "Solo (1 person)" },
+            { "value": "2", "text": "2 people" },
+            { "value": "3", "text": "3 people" },
+            { "value": "4", "text": "4 people" }
+          ]
+        },
+        "teamName": { "label": "Team Name", "placeholder": "Your team name (optional)", "required": false },
+        "teammates": { "label": "Teammate Information", "placeholder": "If you have teammates, provide their names and email addresses. If you're looking for teammates, mention that here.", "required": false },
+        "motivation": { "label": "Why do you want to participate?", "placeholder": "Tell us why you want to participate in NEBULA:FOG:PRIME 2026. What do you hope to achieve?", "required": true },
+        "dietary": { "label": "Dietary Restrictions/Allergies", "placeholder": "Any dietary restrictions or allergies we should know about?", "required": false },
+        "codeOfConduct": { "label": "I agree to abide by the Code of Conduct and event rules.", "required": true },
+        "dataPrivacy": { "label": "I consent to the collection and processing of my personal data for event organization and communication purposes.", "required": true },
+        "marketing": { "label": "I would like to receive updates about future NEBULA:FOG:PRIME events and related opportunities.", "required": false }
+      }
+    },
+    "benefits": {
+      "title": "Registration Includes",
+      "items": [
+        "Access to all challenge categories",
+        "Technical workshops and mentorship",
+        "Team formation assistance",
+        "Cloud credits and development tools",
+        "Networking with industry experts",
+        "Certificate of participation",
+        "Career opportunities with partners",
+        "Swag and exclusive merchandise"
+      ]
+    }
+  },
+  "about": {
+    "header": {
+      "title": "Mission Protocol",
+      "subtitle": "Decentralized autonomous zone for the post-human era. Where AI consciousness meets cybersecurity in the shadows of the digital underground."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "text": "NEBULA:FOG:PRIME 2026 represents the ultimate convergence of artificial intelligence and cybersecurity, creating a decentralized autonomous zone where elite hackers, researchers, and innovators collaborate to solve the most pressing challenges of our digital future. We are building the foundation for post-human cybersecurity, where human creativity and machine intelligence work in symbiosis.",
+      "highlights": [
+        {
+          "icon": "🤖",
+          "title": "AI x Security",
+          "description": "Exploring the intersection of artificial intelligence and cybersecurity, developing next-generation defense mechanisms and attack vectors."
+        },
+        {
+          "icon": "⛓️",
+          "title": "Decentralized Future",
+          "description": "Building privacy-preserving solutions for a decentralized world, where individuals control their own digital destiny."
+        },
+        {
+          "icon": "🌐",
+          "title": "Global Collaboration",
+          "description": "Uniting the world's brightest minds across borders and disciplines to solve humanity's greatest digital challenges."
+        },
+        {
+          "icon": "🚀",
+          "title": "Future Innovation",
+          "description": "Pioneering breakthrough technologies that will define the next decade of cybersecurity and artificial intelligence."
+        }
+      ]
+    },
+    "eventDetails": [
+      {
+        "title": "Date & Duration",
+        "content": "February 15-17, 2026",
+        "subtitle": "48 hours of intensive hacking and innovation",
+        "items": [
+          "Opening Ceremony: Feb 15, 09:00 UTC",
+          "Challenge Release: Feb 15, 10:00 UTC",
+          "Submission Deadline: Feb 17, 18:00 UTC",
+          "Awards Ceremony: Feb 18, 14:00 UTC"
+        ]
+      },
+      {
+        "title": "Format & Location",
+        "content": "Fully virtual and decentralized",
+        "subtitle": "Participate from anywhere in the world",
+        "items": [
+          "24/7 online platform access",
+          "Real-time collaboration tools",
+          "Global mentorship network",
+          "Virtual reality integration"
+        ]
+      },
+      {
+        "title": "Prizes & Recognition",
+        "content": "$100,000+ total prize pool",
+        "subtitle": "Multiple award categories",
+        "items": [
+          "Grand Prize: $25,000",
+          "Category Winners: $10,000 each",
+          "Innovation Awards: $5,000 each",
+          "Mentorship & incubation opportunities"
+        ]
+      }
+    ],
+    "challengeCategories": [
+      {
+        "title": "AI Security Matrix",
+        "description": "Quantum cryptography, adversarial ML defense, neural network security, and AI model protection challenges."
+      },
+      {
+        "title": "Blockchain Privacy",
+        "description": "Zero-knowledge proofs, privacy-preserving smart contracts, decentralized identity, and cryptographic protocols."
+      },
+      {
+        "title": "IoT Security Grid",
+        "description": "Device authentication, network security frameworks, threat detection, and edge computing security."
+      },
+      {
+        "title": "Social Engineering",
+        "description": "Behavioral analysis, human factor security, AI-powered detection, and security awareness training."
+      }
+    ],
+    "timeline": [
+      {
+        "date": "Jan 2026",
+        "title": "Registration Opens",
+        "description": "Early registration begins with exclusive benefits for the first 500 participants."
+      },
+      {
+        "date": "Feb 15",
+        "title": "Challenge Release",
+        "description": "All challenges are released simultaneously across all categories. Teams can start working immediately."
+      },
+      {
+        "date": "Feb 16",
+        "title": "Mid-point Check-in",
+        "description": "Optional checkpoint for teams to showcase progress and receive mentorship from industry experts."
+      },
+      {
+        "date": "Feb 17",
+        "title": "Submission Deadline",
+        "description": "Final deadline for all submissions. Teams must submit their solutions and documentation."
+      },
+      {
+        "date": "Feb 18",
+        "title": "Awards Ceremony",
+        "description": "Grand finale with awards presentation, winner showcases, and networking opportunities."
+      }
+    ],
+    "team": [
+      {
+        "avatar": "👨‍💻",
+        "name": "Dr. Alex Chen",
+        "role": "Lead Organizer",
+        "bio": "AI Security Researcher with 10+ years experience in quantum cryptography and adversarial ML."
+      },
+      {
+        "avatar": "👩‍💻",
+        "name": "Sarah Rodriguez",
+        "role": "Technical Director",
+        "bio": "Blockchain security expert specializing in zero-knowledge proofs and privacy-preserving protocols."
+      },
+      {
+        "avatar": "👨‍💻",
+        "name": "Marcus Johnson",
+        "role": "Operations Lead",
+        "bio": "Veteran hackathon organizer with expertise in IoT security and large-scale event management."
+      },
+      {
+        "avatar": "👩‍💻",
+        "name": "Dr. Priya Patel",
+        "role": "Mentorship Director",
+        "bio": "Social engineering researcher and cybersecurity educator with focus on human factors in security."
+      }
+    ],
+    "cta": {
+      "title": "Ready to Transcend?",
+      "text": "Join the ultimate convergence of AI and cybersecurity. Push the boundaries of what's possible and become part of the digital future we're building together.",
+      "buttons": [
+        { "text": "Register Now", "href": "register.html", "primary": true },
+        { "text": "Explore Challenges", "href": "challenges.html", "primary": false }
+      ]
+    }
+  }
+}
