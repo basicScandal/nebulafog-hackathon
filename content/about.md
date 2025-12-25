@@ -1,14 +1,9 @@
 # About NEBULA:FOG:PRIME
 
-## Tagline
+## Mission
 Join the Bay Area's most innovative AI x Security hackathon. Build, break, and defend the future of secure AI systems with fellow enthusiasts.
 
-## Mission Statement
-A planetary-scale response to the USIA (Unintended Sovereign Intelligence Act). Defend the boundaries of human agency in the shadows of the digital underground.
-
----
-
-## Feature Pillars
+## Features
 
 ### AI Security
 Build and break AI systems to understand their vulnerabilities and defenses.
@@ -30,18 +25,8 @@ Winners will receive cutting-edge technology prizes including Apple Vision Pro, 
 ---
 
 ## Event Stats
-- **hacking_hours**: 8+
-- **challenge_tracks**: 3
-- **elite_hackers**: 80+
-
----
-
-## Registration Backgrounds
-These are the specialization options for registration:
-- Penetration Tester
-- Security Researcher
-- ML/AI Engineer
-- Cryptographer
-- Reverse Engineer
-- Network Security
-- Custom
+| Metric | Value |
+|--------|-------|
+| Hours of Hacking | 8+ |
+| Challenge Tracks | 3 |
+| Elite Hackers | 80+ |

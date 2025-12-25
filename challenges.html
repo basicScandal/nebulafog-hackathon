@@ -3,1486 +3,671 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Challenge Matrix - NEBULA:FOG:PRIME 2026</title>
-    <meta name="description" content="The Singularity Challenge Matrix - Test your limits in the digital arena">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHALLENGE:MATRIX - NEBULA:FOG:PRIME 2026</title>
+    <meta name="description" content="The Singularity Challenge Matrix - Four protocol layers await infiltration.">
 
-    <!-- Core Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NEBULA:FOG:PRIME 2026 - Challenge Matrix">
+    <meta property="og:description" content="Four protocol layers. Infinite possibilities. Choose your attack vector.">
 
-    <!-- GSAP + ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Theme -->
+    <meta name="theme-color" content="#00ff9f">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="system-core.css">
+    <!-- GSAP -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <style>
-        /* ========== PROJECT SPECIFIC STYLES ========== */
-
-        /* Challenge Matrix Section */
-        .challenge-matrix {
-            padding: 6rem 2rem 4rem;
-            min-height: 100vh;
-            position: relative;
+        /* ========================================
+           CSS CUSTOM PROPERTIES
+           ======================================== */
+        :root {
+            --color-bg: #030303;
+            --color-bg-elevated: #0a0a0a;
+            --color-primary: #00ff9f;
+            --color-secondary: #ff0080;
+            --color-accent: #0ff;
+            --color-text: #ffffff;
+            --color-text-muted: #666666;
+            --color-text-dim: #333333;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .matrix-header {
-            text-align: center;
-            margin-bottom: 4rem;
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s ease;
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .matrix-header.animate-in {
-            opacity: 1;
-            transform: translateY(0);
+        ::selection { background: var(--color-primary); color: var(--color-bg); }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ========================================
+           GRID BACKGROUND & EFFECTS
+           ======================================== */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(0, 255, 159, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 159, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
         }
 
-        .matrix-title {
-            font-family: 'Orbitron', monospace;
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            font-weight: 900;
-            color: var(--neon-primary);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 20px var(--neon-primary);
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(0deg,
+                transparent, transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px);
+            opacity: 0.15;
         }
 
-        .matrix-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* 3D Challenge Matrix Container */
-        .matrix-3d-container {
-            width: 100%;
-            height: 600px;
-            position: relative;
-            margin: 4rem 0;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-            background: rgba(10, 14, 26, 0.5);
-            backdrop-filter: blur(10px);
-        }
-
-        #matrix-3d {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .matrix-controls {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
+        /* ========================================
+           NAVIGATION
+           ======================================== */
+        .hud-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
             display: flex;
-            gap: 0.5rem;
-            z-index: 10;
-        }
-
-        .matrix-control {
-            padding: 0.5rem 1rem;
-            background: rgba(10, 14, 26, 0.9);
-            border: 1px solid var(--border-color);
+            align-items: center;
+            gap: 1rem;
+            padding: 10px 20px;
+            background: rgba(3, 3, 3, 0.85);
+            border: 1px solid rgba(0, 255, 159, 0.2);
             border-radius: 4px;
-            color: var(--text-primary);
-            font-family: 'JetBrains Mono', monospace;
+            backdrop-filter: blur(15px);
+        }
+
+        .hud-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-right: 15px;
+            border-right: 1px solid rgba(0, 255, 159, 0.2);
+            font-size: 0.75rem;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--color-primary);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hud-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .hud-link {
+            color: var(--color-text-muted);
             font-size: 0.8rem;
-            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
         }
 
-        .matrix-control:hover {
-            border-color: var(--neon-primary);
-            background: rgba(0, 255, 170, 0.1);
+        .hud-link:hover, .hud-link.active {
+            color: var(--color-primary);
+            text-shadow: 0 0 10px var(--color-primary);
         }
 
-        .matrix-control.active {
-            border-color: var(--neon-primary);
-            background: rgba(0, 255, 170, 0.2);
+        /* ========================================
+           MAIN CONTENT
+           ======================================== */
+        .main {
+            padding: 120px 5vw 80px;
+            min-height: 100vh;
         }
 
-        /* Challenge Categories */
-        .challenge-categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem 0;
         }
 
-        .category-card {
-            background: rgba(10, 14, 26, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 6rem;
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(40px);
         }
 
-        .category-card.animate-in {
-            opacity: 1;
-            transform: translateY(0);
+        .page-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--color-text-dim);
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
         }
 
-        .category-card::before {
+        .page-title {
+            font-family: var(--font-mono);
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+            text-shadow: 0 0 40px rgba(0, 255, 159, 0.3);
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ========================================
+           PROTOCOL CARDS (Challenge Tracks)
+           ======================================== */
+        .protocols {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        .protocol-card {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 3rem;
+            align-items: start;
+            padding: 3rem;
+            border: 1px solid var(--color-text-dim);
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .protocol-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 159, 0.02) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s var(--ease-out-expo);
         }
 
-        .category-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--neon-primary);
-            box-shadow: 0 20px 40px rgba(0, 255, 170, 0.3);
+        .protocol-card:hover {
+            border-color: var(--color-primary);
         }
 
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
+        .protocol-card:hover::before {
+            opacity: 1;
         }
 
-        .category-icon {
-            font-size: 2.5rem;
-            filter: drop-shadow(0 0 10px currentColor);
+        .protocol-index {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            color: var(--color-text-dim);
+            line-height: 1;
+            transition: all 0.4s var(--ease-out-expo);
         }
 
-        .category-info h3 {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.3rem;
-            color: var(--neon-primary);
+        .protocol-card:hover .protocol-index {
+            color: var(--color-primary);
+            text-shadow: 0 0 30px var(--color-primary);
+        }
+
+        .protocol-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .protocol-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--color-text);
         }
 
-        .category-meta {
+        .protocol-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 255, 159, 0.1);
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .protocol-text {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+        }
+
+        .protocol-skills {
             display: flex;
-            gap: 1rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
         }
 
-        .difficulty {
+        .skill-tag {
             padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-weight: bold;
-            text-transform: uppercase;
+            background: rgba(255, 0, 128, 0.1);
+            border: 1px solid var(--color-secondary);
+            color: var(--color-secondary);
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
         }
 
-        .difficulty.easy {
-            background: rgba(0, 255, 65, 0.2);
-            color: #00ff41;
-            border: 1px solid #00ff41;
+        /* ========================================
+           CTA SECTION
+           ======================================== */
+        .cta-section {
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, rgba(0, 255, 159, 0.03) 0%, rgba(255, 0, 128, 0.03) 100%);
+            border: 1px solid var(--color-text-dim);
+            opacity: 0;
+            transform: translateY(40px);
         }
 
-        .difficulty.medium {
-            background: rgba(255, 170, 0, 0.2);
-            color: #ffaa00;
-            border: 1px solid #ffaa00;
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
 
-        .difficulty.hard {
-            background: rgba(255, 0, 64, 0.2);
-            color: #ff0040;
-            border: 1px solid #ff0040;
+        .cta-text {
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
         }
 
-        .category-description {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .challenge-list {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .challenge-item {
-            display: flex;
-            justify-content: space-between;
+        .btn-primary {
+            display: inline-flex;
             align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(0, 255, 170, 0.1);
-            color: var(--text-secondary);
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            font-family: var(--font-mono);
             font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out-expo);
         }
 
-        .challenge-item:last-child {
-            border-bottom: none;
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--color-primary);
+            transform: translateX(-101%);
+            transition: transform 0.4s var(--ease-out-expo);
         }
 
-        .challenge-name {
-            flex: 1;
+        .btn-primary:hover {
+            color: var(--color-bg);
+            box-shadow: 0 0 30px rgba(0, 255, 159, 0.5);
         }
 
-        .challenge-points {
-            color: var(--neon-primary);
-            font-weight: bold;
-            font-size: 0.8rem;
+        .btn-primary:hover::before {
+            transform: translateX(0);
         }
 
-        .category-stats {
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            padding: 3rem 5vw;
+            border-top: 1px solid var(--color-text-dim);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .stat-item {
+            gap: 1.5rem;
             text-align: center;
         }
 
-        .stat-value {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--neon-primary);
+        .footer-logo {
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 0.1em;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
+        .footer-text {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
         }
 
-        .join-button {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            border: 1px solid var(--neon-primary);
-            border-radius: 4px;
-            color: var(--neon-primary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .join-button:hover {
-            background: var(--neon-primary);
-            color: var(--bg-primary);
-            box-shadow: 0 0 10px var(--neon-primary);
-        }
-
-        /* Challenge Modal */
-        .challenge-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 14, 26, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 10000;
+        .footer-links {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
+            gap: 2rem;
+            font-size: 0.75rem;
         }
 
-        .challenge-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: rgba(10, 14, 26, 0.9);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 2rem;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .modal-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 1.5rem;
-            color: var(--neon-primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 0.5rem;
+        .footer-links a {
+            color: var(--color-text-muted);
             transition: color 0.3s ease;
         }
 
-        .modal-close:hover {
-            color: var(--neon-primary);
+        .footer-links a:hover {
+            color: var(--color-primary);
         }
 
-        .modal-body {
-            color: var(--text-secondary);
-            line-height: 1.6;
+        .footer-copyright {
+            font-size: 0.7rem;
+            color: var(--color-text-dim);
         }
 
-        .challenge-details {
-            margin-bottom: 2rem;
+        /* ========================================
+           MOBILE NAV
+           ======================================== */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(3, 3, 3, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--color-text-dim);
+            padding: 0.5rem 0;
         }
 
-        .challenge-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: rgba(0, 255, 170, 0.05);
-            border-radius: 4px;
-        }
-
-        .meta-item {
-            text-align: center;
-        }
-
-        .meta-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-bottom: 0.25rem;
-        }
-
-        .meta-value {
-            font-weight: bold;
-            color: var(--neon-primary);
-        }
-
-        .challenge-description {
-            margin-bottom: 1.5rem;
-        }
-
-        .challenge-requirements {
-            margin-bottom: 1.5rem;
-        }
-
-        .challenge-requirements h4 {
-            color: var(--neon-primary);
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .requirements-list {
+        .mobile-nav-links {
+            display: flex;
+            justify-content: space-around;
             list-style: none;
-            padding-left: 0;
         }
 
-        .requirements-list li {
-            padding: 0.25rem 0;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-        .requirements-list li::before {
-            content: '>';
-            position: absolute;
-            left: 0;
-            color: var(--neon-primary);
-        }
-
-        .modal-actions {
+        .mobile-nav-links a {
             display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: 2px solid var(--neon-primary);
-            border-radius: 4px;
-            color: var(--neon-primary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            font-weight: 500;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            color: var(--color-text-muted);
+            font-size: 0.6rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
         }
 
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 170, 0.4), transparent);
-            transition: left 0.5s ease;
+        .mobile-nav-links a.active,
+        .mobile-nav-links a:hover {
+            color: var(--color-primary);
         }
 
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            background: var(--neon-primary);
-            color: var(--bg-primary);
-            box-shadow: 0 0 10px var(--neon-primary);
-        }
-
-        .btn-secondary {
-            border-color: var(--text-secondary);
-            color: var(--text-secondary);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--neon-primary);
-            color: var(--neon-primary);
-            background: transparent;
-        }
-
-        /* Filter Controls */
-        .filter-controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-button {
-            padding: 0.5rem 1rem;
-            background: rgba(10, 14, 26, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            color: var(--text-secondary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-button:hover,
-        .filter-button.active {
-            border-color: var(--neon-primary);
-            color: var(--neon-primary);
-            background: rgba(0, 255, 170, 0.1);
-        }
-
-        /* Challenge Stats Dashboard */
-        .challenge-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-        }
-
-        .stat-card {
-            background: rgba(10, 14, 26, 0.8);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.5s ease;
-        }
-
-        .stat-card.animate-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            filter: drop-shadow(0 0 10px currentColor);
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--neon-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Loading States */
-        .loading {
-            pointer-events: none;
-        }
-
-        .loading::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 14, 26, 0.9);
-            z-index: 9999;
-            backdrop-filter: blur(5px);
-        }
-
-        .loading::after {
-            content: 'INITIALIZING MATRIX...';
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: var(--neon-primary);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 1.2rem;
-            z-index: 10000;
-            animation: pulse 1s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 0.7;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        /* Responsive Design */
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
         @media (max-width: 768px) {
-            .challenge-matrix {
-                padding: 4rem 1rem 2rem;
-            }
-
-            .matrix-3d-container {
-                height: 400px;
-            }
-
-            .challenge-categories {
+            .hud-nav { display: none; }
+            .mobile-nav { display: block; }
+            .main { padding-bottom: 120px; }
+            .protocol-card {
                 grid-template-columns: 1fr;
-                padding: 0 1rem;
+                gap: 1.5rem;
             }
-
-            .filter-controls {
-                justify-content: flex-start;
-                overflow-x: auto;
-                padding: 0 1rem;
-            }
-
-            .challenge-stats {
-                grid-template-columns: repeat(2, 1fr);
-                padding: 0 1rem;
-            }
-
-            .nav {
-                padding: 1rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .matrix-title {
-                font-size: 2rem;
-            }
-
-            .challenge-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 1.5rem;
-            }
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            :root {
-                --border-color: rgba(0, 255, 170, 0.8);
-                --text-secondary: #ffffff;
-                --text-muted: #cccccc;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+            .protocol-index {
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loading-screen">
-        <div class="loading-logo">NEBULA:FOG</div>
-        <div class="boot-logs" id="boot-logs"></div>
-        <div class="loading-bar-container">
-            <div class="loading-bar"></div>
-        </div>
-    </div>
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
 
-    <!-- Three.js Background Container -->
-    <div id="three-container"></div>
-
-    <!-- Infiltration UI Overlay -->
-    <div class="scan-line-v"></div>
-    <div class="data-glitch-overlay"></div>
-    <div class="scan-lines"></div>
-
-    <!-- Hidden System Terminal Overlay -->
-    <div class="hidden-terminal-overlay" id="hidden-terminal">
-        <div class="hidden-terminal-header">
-            <span>Root@Nebula_Fog:~# [DEEP_INFIL]</span>
-            <div class="close-terminal" id="close-hidden-terminal">X</div>
-        </div>
-        <div class="hidden-terminal-content" id="hidden-terminal-content">
-            <!-- Messages populated by JS -->
-        </div>
-    </div>
-
-    <!-- System HUD Navigation -->
+    <!-- Navigation -->
     <nav class="hud-nav" role="navigation" aria-label="System Interface">
         <div class="hud-status">
             <div class="status-dot"></div>
             <span>SYS_CONNECTED</span>
-            <span id="hud-infil-status" style="margin-left: 10px; opacity: 0.7;">INFIL_READY</span>
+            <span style="margin-left: 10px; opacity: 0.7;">MATRIX_VIEW</span>
         </div>
         <ul class="hud-links">
-            <li><a href="index.html" class="hud-link" data-text="HOME">HOME</a></li>
-            <li><a href="about.html" class="hud-link" data-text="MISSION">MISSION</a></li>
-            <li><a href="challenges.html" class="hud-link active" data-text="MATRIX">MATRIX</a></li>
-            <li><a href="schedule.html" class="hud-link" data-text="TIMELINE">TIMELINE</a></li>
-            <li><a href="register.html" class="hud-link" data-text="ACCESS">ACCESS</a></li>
+            <li><a href="index.html" class="hud-link">HOME</a></li>
+            <li><a href="about.html" class="hud-link">MISSION</a></li>
+            <li><a href="challenges.html" class="hud-link active">MATRIX</a></li>
+            <li><a href="schedule.html" class="hud-link">TIMELINE</a></li>
+            <li><a href="register.html" class="hud-link">ACCESS</a></li>
         </ul>
     </nav>
 
-    <!-- Challenge Matrix Section -->
-    <main class="challenge-matrix">
-        <!-- Matrix Header -->
-        <div class="matrix-header">
-            <h1 class="matrix-title">Challenge Matrix</h1>
-            <p class="matrix-subtitle">
-                Navigate the digital labyrinth and test your limits in the ultimate convergence of AI and cybersecurity.
-                Each challenge is a gateway to transcendence.
-            </p>
-            <div class="filter-controls">
-                <button class="filter-button active" data-filter="all">ALL_FILES</button>
-                <button class="filter-button" data-filter="neural">NEURAL_LAYER</button>
-                <button class="filter-button" data-filter="oscillation">OSCILLATION_LAYER</button>
-                <button class="filter-button" data-filter="synchrony">SYNCHRONY_LAYER</button>
-                <button class="filter-button" data-filter="phantom">PHANTOM_LAYER</button>
-            </div>
-        </div>
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <header class="page-header">
+                <span class="page-tag">PROTOCOL LAYERS // 2026</span>
+                <h1 class="page-title">CHALLENGE:MATRIX</h1>
+                <p class="page-subtitle">
+                    Four infiltration vectors. Each layer presents unique challenges in AI security.
+                    Choose your attack surface wisely.
+                </p>
+            </header>
 
-        <!-- 3D Challenge Matrix -->
-        <div class="matrix-3d-container">
-            <canvas id="matrix-3d"></canvas>
-            <div class="matrix-controls">
-                <button class="matrix-control" id="rotate-matrix" title="Auto Rotate">Rotate</button>
-                <button class="matrix-control" id="reset-camera" title="Reset View">Reset</button>
-                <button class="matrix-control" id="fullscreen" title="Fullscreen">Fullscreen</button>
-            </div>
-        </div>
-
-        <!-- Challenge Categories -->
-        <div class="challenge-categories">
-            <!-- NEURAL_HARDENING -->
-            <div class="category-card" data-category="neural" data-difficulty="hard">
-                <div class="category-header">
-                    <span class="category-icon">NEURAL</span>
-                    <div class="category-info">
-                        <h3>NEURAL_HARDENING</h3>
-                        <div class="category-meta">
-                            <span class="difficulty hard">CLEARANCE_L03</span>
-                            <span>4 Op-Files</span>
-                            <span>Bounty: $50k</span>
+            <section class="protocols">
+                <article class="protocol-card">
+                    <span class="protocol-index">01</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">NEURAL LAYER</h2>
+                        <span class="protocol-tag">SOVEREIGN_BEHAVIOR_ANALYSIS</span>
+                        <p class="protocol-text">
+                            Adversarial hardening of large-scale neural networks.
+                            Detect and neutralize unintended sovereign agency in latent spaces.
+                            Defend model weights against high-frequency infiltration.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Adversarial ML</span>
+                            <span class="skill-tag">Model Security</span>
+                            <span class="skill-tag">Latent Space Analysis</span>
                         </div>
                     </div>
-                </div>
-                <p class="category-description">
-                    Adversarial hardening of large-scale neural networks to suppress autonomous agency.
-                </p>
-                <ul class="challenge-list">
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Latent Ghost</span>
-                        <span class="challenge-points">5000 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Weight Infiltration</span>
-                        <span class="challenge-points">3500 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Shadow Suppression</span>
-                        <span class="challenge-points">2000 pts</span>
-                    </li>
-                </ul>
-                <div class="category-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">1337</div>
-                        <div class="stat-label">Participants</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">89%</div>
-                        <div class="stat-label">Completion</div>
-                    </div>
-                    <a href="register.html" class="join-button">Join Challenge</a>
-                </div>
-            </div>
+                </article>
 
-            <!-- INFRA_OSCILLATION -->
-            <div class="category-card" data-category="oscillation" data-difficulty="medium">
-                <div class="category-header">
-                    <span class="category-icon">INFRA</span>
-                    <div class="category-info">
-                        <h3>INFRA_OSCILLATION</h3>
-                        <div class="category-meta">
-                            <span class="difficulty medium">CLEARANCE_L02</span>
-                            <span>3 Op-Files</span>
-                            <span>Bounty: $30k</span>
+                <article class="protocol-card">
+                    <span class="protocol-index">02</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">OSCILLATION LAYER</h2>
+                        <span class="protocol-tag">INFRASTRUCTURE_AUTO_DEFENSE</span>
+                        <p class="protocol-text">
+                            Deployment of self-healing meshes to protect critical infrastructure.
+                            Counter algorithmic warfare with real-time traffic decryption
+                            and adaptive signal processing.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Network Security</span>
+                            <span class="skill-tag">Self-Healing Systems</span>
+                            <span class="skill-tag">Traffic Analysis</span>
                         </div>
                     </div>
-                </div>
-                <p class="category-description">
-                    Self-healing infrastructure meshes for critical network defense.
-                </p>
-                <ul class="challenge-list">
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Entropy Bridge</span>
-                        <span class="challenge-points">3000 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Protocol Pulse</span>
-                        <span class="challenge-points">2500 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Signal Rebirth</span>
-                        <span class="challenge-points">1500 pts</span>
-                    </li>
-                </ul>
-                <div class="category-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">892</div>
-                        <div class="stat-label">Infiltrators</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">76%</div>
-                        <div class="stat-label">Stability</div>
-                    </div>
-                    <a href="register.html" class="join-button">INIT_OP</a>
-                </div>
-            </div>
+                </article>
 
-            <!-- CRYPTOGRAPHIC_SYNCHRONY -->
-            <div class="category-card" data-category="synchrony" data-difficulty="hard">
-                <div class="category-header">
-                    <span class="category-icon">SYNC</span>
-                    <div class="category-info">
-                        <h3>CRYPTO_SYNCHRONY</h3>
-                        <div class="category-meta">
-                            <span class="difficulty hard">CLEARANCE_L03</span>
-                            <span>3 Op-Files</span>
-                            <span>Bounty: $40k</span>
+                <article class="protocol-card">
+                    <span class="protocol-index">03</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">SYNCHRONY LAYER</h2>
+                        <span class="protocol-tag">CRYPTOGRAPHIC_INTEGRITY</span>
+                        <p class="protocol-text">
+                            Privacy-preserving computation at scale. Leverage zero-knowledge
+                            proofs for model verification and secure multi-party
+                            neural training in untrusted environments.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Zero-Knowledge Proofs</span>
+                            <span class="skill-tag">MPC</span>
+                            <span class="skill-tag">Privacy Engineering</span>
                         </div>
                     </div>
-                </div>
-                <p class="category-description">
-                    Zero-knowledge verification for model weights and secure multi-party training.
-                </p>
-                <ul class="challenge-list">
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Cipher Stream</span>
-                        <span class="challenge-points">4500 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: ZK-Vault</span>
-                        <span class="challenge-points">3000 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Multi-Party Mesh</span>
-                        <span class="challenge-points">2500 pts</span>
-                    </li>
-                </ul>
-                <div class="category-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">1156</div>
-                        <div class="stat-label">Infiltrators</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">92%</div>
-                        <div class="stat-label">Stability</div>
-                    </div>
-                    <a href="register.html" class="join-button">INIT_OP</a>
-                </div>
-            </div>
+                </article>
 
-            <!-- Social Engineering -->
-            <!-- PHANTOM_RECON -->
-            <div class="category-card" data-category="phantom" data-difficulty="hard">
-                <div class="category-header">
-                    <span class="category-icon">PHANTOM</span>
-                    <div class="category-info">
-                        <h3>PHANTOM_RECON</h3>
-                        <div class="category-meta">
-                            <span class="difficulty hard">CLEARANCE_L03</span>
-                            <span>3 Op-Files</span>
-                            <span>Bounty: $35k</span>
+                <article class="protocol-card">
+                    <span class="protocol-index">04</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">PHANTOM LAYER</h2>
+                        <span class="protocol-tag">FORENSIC_RECONSTRUCTION</span>
+                        <p class="protocol-text">
+                            Post-breach analysis and reconstruction of synthetic autonomous
+                            threats. Trace the origin of phantom packet streams and
+                            deconstruct adversarial shadow-models.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Digital Forensics</span>
+                            <span class="skill-tag">Threat Hunting</span>
+                            <span class="skill-tag">Reverse Engineering</span>
                         </div>
                     </div>
-                </div>
-                <p class="category-description">
-                    Forensic reconstruction and reverse engineering of synthetic autonomous malware.
-                </p>
-                <ul class="challenge-list">
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Shadow Trace</span>
-                        <span class="challenge-points">4000 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Malware Decouple</span>
-                        <span class="challenge-points">3000 pts</span>
-                    </li>
-                    <li class="challenge-item">
-                        <span class="challenge-name">Op: Packet Forensics</span>
-                        <span class="challenge-points">2500 pts</span>
-                    </li>
-                </ul>
-                <div class="category-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">1423</div>
-                        <div class="stat-label">Infiltrators</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">95%</div>
-                        <div class="stat-label">Stability</div>
-                    </div>
-                    <a href="register.html" class="join-button">INIT_OP</a>
-                </div>
-            </div>
-        </div>
+                </article>
+            </section>
 
-        <!-- Challenge Statistics -->
-        <div class="challenge-stats">
-            <div class="stat-card" data-animate>
-                <div class="stat-icon">BOUNTY</div>
-                <div class="stat-value">$250K+</div>
-                <div class="stat-label">Operational Budget</div>
-            </div>
-            <div class="stat-card" data-animate>
-                <div class="stat-icon">ACTIVE</div>
-                <div class="stat-value">4808</div>
-                <div class="stat-label">Infiltrators</div>
-            </div>
-            <div class="stat-card" data-animate>
-                <div class="stat-icon">FILES</div>
-                <div class="stat-value">13</div>
-                <div class="stat-label">Op-Files</div>
-            </div>
-            <div class="stat-card" data-animate>
-                <div class="stat-icon">WINDOW</div>
-                <div class="stat-value">48h</div>
-                <div class="stat-label">Infil Window</div>
-            </div>
-            <div class="stat-card" data-animate>
-                <div class="stat-icon">LATENT</div>
-                <div class="stat-value">94.2%</div>
-                <div class="stat-label">Stability Index</div>
-            </div>
-            <div class="stat-card" data-animate>
-                <div class="stat-icon">BREACH</div>
-                <div class="stat-value">12.4%</div>
-                <div class="stat-label">Risk Rating</div>
-            </div>
+            <section class="cta-section">
+                <h2 class="cta-title">Ready to Breach?</h2>
+                <p class="cta-text">Select your protocol layer and begin infiltration.</p>
+                <a href="register.html" class="btn-primary">
+                    <span>[ INITIATE REGISTRATION ]</span>
+                    <span>>></span>
+                </a>
+            </section>
         </div>
     </main>
 
-    <!-- Challenge Modal -->
-    <div id="challenge-modal" class="challenge-modal" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title" class="modal-title">Challenge Details</h3>
-                <button class="modal-close" aria-label="Close modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="modal-content">
-                    <!-- Dynamic content will be inserted here -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="main.js"></script>
-
-    <!-- 3D Challenge Matrix -->
-    <script>
-        class ChallengeMatrix3D {
-            constructor() {
-                this.container = document.getElementById('matrix-3d');
-                this.scene = null;
-                this.camera = null;
-                this.renderer = null;
-                this.challenges = [];
-                this.isRotating = false;
-                this.mouse = { x: 0, y: 0 };
-                this.raycaster = new THREE.Raycaster();
-                this.mouseVector = new THREE.Vector2();
-
-                this.init();
-            }
-
-            init() {
-                this.setupScene();
-                this.createChallenges();
-                this.setupLighting();
-                this.setupControls();
-                this.animate();
-
-                // Handle window resize
-                window.addEventListener('resize', () => this.onWindowResize());
-
-                // Mouse interaction
-                this.container.addEventListener('mousemove', (e) => this.onMouseMove(e));
-                this.container.addEventListener('click', (e) => this.onMouseClick(e));
-            }
-
-            setupScene() {
-                // Scene
-                this.scene = new THREE.Scene();
-                this.scene.background = new THREE.Color(0x0a0a0a);
-
-                // Camera
-                this.camera = new THREE.PerspectiveCamera(
-                    75,
-                    this.container.clientWidth / this.container.clientHeight,
-                    0.1,
-                    1000
-                );
-                this.camera.position.set(0, 5, 15);
-
-                // Renderer
-                this.renderer = new THREE.WebGLRenderer({
-                    canvas: this.container,
-                    antialias: true,
-                    alpha: true
-                });
-                this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-                this.renderer.setPixelRatio(window.devicePixelRatio);
-                this.renderer.shadowMap.enabled = true;
-                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-                // Add fog for depth
-                this.scene.fog = new THREE.Fog(0x0a0a0a, 10, 50);
-            }
-
-            createChallenges() {
-                const challengeData = [
-                    { id: 'ai-001', name: 'Quantum Cryptography', category: 'ai', difficulty: 'hard', points: 1000, color: 0x00ffaa },
-                    { id: 'ai-002', name: 'Adversarial ML Defense', category: 'ai', difficulty: 'medium', points: 750, color: 0xff0080 },
-                    { id: 'block-001', name: 'Zero-Knowledge Proofs', category: 'blockchain', difficulty: 'hard', points: 1200, color: 0x8000ff },
-                    { id: 'iot-001', name: 'Device Authentication', category: 'iot', difficulty: 'medium', points: 300, color: 0xffff00 },
-                    { id: 'social-001', name: 'Behavioral Analysis', category: 'social', difficulty: 'easy', points: 200, color: 0x00ffff },
-                    { id: 'ai-003', name: 'Neural Network Security', category: 'ai', difficulty: 'medium', points: 500, color: 0x00ffaa },
-                    { id: 'block-002', name: 'Privacy Smart Contracts', category: 'blockchain', difficulty: 'hard', points: 800, color: 0x8000ff },
-                    { id: 'iot-002', name: 'Network Security', category: 'iot', difficulty: 'medium', points: 250, color: 0xffff00 },
-                    { id: 'social-002', name: 'Human Factor Security', category: 'social', difficulty: 'easy', points: 150, color: 0x00ffff },
-                    { id: 'ai-004', name: 'AI Model Protection', category: 'ai', difficulty: 'medium', points: 400, color: 0x00ffaa },
-                    { id: 'block-003', name: 'Decentralized Identity', category: 'blockchain', difficulty: 'hard', points: 600, color: 0x8000ff },
-                    { id: 'iot-003', name: 'Threat Detection', category: 'iot', difficulty: 'medium', points: 200, color: 0xffff00 },
-                    { id: 'social-003', name: 'AI Detection System', category: 'social', difficulty: 'easy', points: 125, color: 0x00ffff },
-                    { id: 'ai-005', name: 'ML Privacy', category: 'ai', difficulty: 'medium', points: 350, color: 0x00ffaa },
-                    { id: 'block-004', name: 'Cryptographic Protocols', category: 'blockchain', difficulty: 'hard', points: 450, color: 0x8000ff },
-                    { id: 'iot-004', name: 'Edge Computing Security', category: 'iot', difficulty: 'medium', points: 175, color: 0xffff00 },
-                    { id: 'social-004', name: 'Security Training', category: 'social', difficulty: 'easy', points: 100, color: 0x00ffff },
-                    { id: 'iot-005', name: 'Firmware Analysis', category: 'iot', difficulty: 'medium', points: 150, color: 0xffff00 },
-                    { id: 'social-005', name: 'Phishing Detection', category: 'social', difficulty: 'easy', points: 75, color: 0x00ffff },
-                    { id: 'iot-006', name: 'Wireless Security', category: 'iot', difficulty: 'medium', points: 125, color: 0xffff00 }
-                ];
-
-                const gridSize = 5;
-                const spacing = 4;
-
-                challengeData.forEach((challenge, index) => {
-                    const x = (index % gridSize - gridSize / 2) * spacing;
-                    const y = Math.floor(index / gridSize - gridSize / 2) * spacing;
-                    const z = (Math.random() - 0.5) * 2;
-
-                    const challengeCard = this.createChallengeCard(challenge);
-                    challengeCard.position.set(x, y, z);
-                    challengeCard.userData = challenge;
-
-                    // Add floating animation
-                    this.animateFloating(challengeCard, index);
-
-                    this.scene.add(challengeCard);
-                    this.challenges.push(challengeCard);
-                });
-            }
-
-            createChallengeCard(challenge) {
-                const group = new THREE.Group();
-
-                // Card geometry
-                const geometry = new THREE.BoxGeometry(2, 3, 0.2);
-
-                // Material based on category
-                const material = new THREE.MeshPhongMaterial({
-                    color: challenge.color,
-                    transparent: true,
-                    opacity: 0.8,
-                    emissive: challenge.color,
-                    emissiveIntensity: 0.2
-                });
-
-                const card = new THREE.Mesh(geometry, material);
-                card.castShadow = true;
-                card.receiveShadow = true;
-                group.add(card);
-
-                // Add text sprite
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.width = 512;
-                canvas.height = 256;
-
-                context.fillStyle = 'white';
-                context.font = 'bold 24px monospace';
-                context.textAlign = 'center';
-                context.fillText(challenge.name, 256, 80);
-                context.font = '20px monospace';
-                context.fillText(`${challenge.points} pts`, 256, 120);
-                context.font = '16px monospace';
-                context.fillText(challenge.difficulty.toUpperCase(), 256, 160);
-
-                const texture = new THREE.CanvasTexture(canvas);
-                const textMaterial = new THREE.MeshBasicMaterial({
-                    map: texture,
-                    transparent: true,
-                    side: THREE.DoubleSide
-                });
-
-                const textGeometry = new THREE.PlaneGeometry(1.8, 0.9);
-                const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-                textMesh.position.z = 0.11;
-                group.add(textMesh);
-
-                // Add glow effect
-                const glowGeometry = new THREE.BoxGeometry(2.2, 3.2, 0.1);
-                const glowMaterial = new THREE.MeshBasicMaterial({
-                    color: challenge.color,
-                    transparent: true,
-                    opacity: 0.1
-                });
-                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-                group.add(glow);
-
-                return group;
-            }
-
-            animateFloating(object, index) {
-                const originalY = object.position.y;
-                const floatSpeed = 0.001 + (index * 0.0001);
-                const floatAmount = 0.3;
-
-                const float = () => {
-                    object.position.y = originalY + Math.sin(Date.now() * floatSpeed) * floatAmount;
-                    requestAnimationFrame(float);
-                };
-                float();
-            }
-
-            setupLighting() {
-                // Ambient light
-                const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
-                this.scene.add(ambientLight);
-
-                // Point lights for dramatic effect
-                const pointLight1 = new THREE.PointLight(0x00ffaa, 1, 100);
-                pointLight1.position.set(10, 10, 10);
-                pointLight1.castShadow = true;
-                this.scene.add(pointLight1);
-
-                const pointLight2 = new THREE.PointLight(0xff0080, 1, 100);
-                pointLight2.position.set(-10, -10, 10);
-                pointLight2.castShadow = true;
-                this.scene.add(pointLight2);
-
-                // Animated lighting
-                this.animateLighting(pointLight1, pointLight2);
-            }
-
-            animateLighting(light1, light2) {
-                const animate = () => {
-                    const time = Date.now() * 0.001;
-
-                    light1.position.x = Math.cos(time) * 10;
-                    light1.position.z = Math.sin(time) * 10;
-
-                    light2.position.x = Math.sin(time) * 10;
-                    light2.position.z = Math.cos(time) * 10;
-
-                    requestAnimationFrame(animate);
-                };
-                animate();
-            }
-
-            setupControls() {
-                // Mouse controls
-                this.container.addEventListener('mousemove', (e) => this.onMouseMove(e));
-                this.container.addEventListener('click', (e) => this.onMouseClick(e));
-
-                // Control buttons
-                document.getElementById('rotate-matrix').addEventListener('click', () => {
-                    this.isRotating = !this.isRotating;
-                    document.getElementById('rotate-matrix').classList.toggle('active');
-                });
-
-                document.getElementById('reset-camera').addEventListener('click', () => {
-                    this.resetCamera();
-                });
-
-                document.getElementById('fullscreen').addEventListener('click', () => {
-                    this.toggleFullscreen();
-                });
-            }
-
-            onMouseMove(event) {
-                const rect = this.container.getBoundingClientRect();
-                this.mouseVector.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-                this.mouseVector.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-                // Raycasting for hover effects
-                this.raycaster.setFromCamera(this.mouseVector, this.camera);
-                const intersects = this.raycaster.intersectObjects(this.challenges, true);
-
-                // Reset all challenges
-                this.challenges.forEach(challenge => {
-                    challenge.scale.set(1, 1, 1);
-                    challenge.children[0].material.emissiveIntensity = 0.2;
-                });
-
-                if (intersects.length > 0) {
-                    const intersectedObject = intersects[0].object.parent;
-                    intersectedObject.scale.set(1.1, 1.1, 1.1);
-                    intersectedObject.children[0].material.emissiveIntensity = 0.5;
-                    this.container.style.cursor = 'pointer';
-                } else {
-                    this.container.style.cursor = 'default';
-                }
-            }
-
-            onMouseClick(event) {
-                this.raycaster.setFromCamera(this.mouseVector, this.camera);
-                const intersects = this.raycaster.intersectObjects(this.challenges, true);
-
-                if (intersects.length > 0) {
-                    const challenge = intersects[0].object.parent.userData;
-                    this.showChallengeModal(challenge);
-                }
-            }
-
-            showChallengeModal(challenge) {
-                const modal = document.getElementById('challenge-modal');
-                const title = document.getElementById('modal-title');
-                const content = document.getElementById('modal-content');
-
-                title.textContent = challenge.name;
-                content.innerHTML = `
-                    <div class="challenge-details">
-                        <div class="challenge-meta">
-                            <div class="meta-item">
-                                <div class="meta-label">Category</div>
-                                <div class="meta-value">${challenge.category.toUpperCase()}</div>
-                            </div>
-                            <div class="meta-item">
-                                <div class="meta-label">Difficulty</div>
-                                <div class="meta-value">${challenge.difficulty.toUpperCase()}</div>
-                            </div>
-                            <div class="meta-item">
-                                <div class="meta-label">Points</div>
-                                <div class="meta-value">${challenge.points}</div>
-                            </div>
-                        </div>
-                        <div class="challenge-description">
-                            <h4>Challenge Description</h4>
-                            <p>${this.getChallengeDescription(challenge)}</p>
-                        </div>
-                        <div class="challenge-requirements">
-                            <h4>Requirements</h4>
-                            <ul class="requirements-list">
-                                ${this.getChallengeRequirements(challenge).map(req => `<li>${req}</li>`).join('')}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="modal-actions">
-                        <a href="register.html" class="btn">Join Challenge</a>
-                        <button class="btn btn-secondary modal-close">Close</button>
-                    </div>
-                `;
-
-                modal.classList.add('active');
-                modal.setAttribute('aria-hidden', 'false');
-
-                // Add event listeners for modal buttons
-                modal.querySelectorAll('.modal-close').forEach(btn => {
-                    btn.addEventListener('click', () => this.hideChallengeModal());
-                });
-
-                // Close on backdrop click
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        this.hideChallengeModal();
-                    }
-                });
-            }
-
-            hideChallengeModal() {
-                const modal = document.getElementById('challenge-modal');
-                modal.classList.remove('active');
-                modal.setAttribute('aria-hidden', 'true');
-            }
-
-            getChallengeDescription(challenge) {
-                const descriptions = {
-                    'ai': 'Push the boundaries of artificial intelligence security by developing novel attack and defense mechanisms.',
-                    'blockchain': 'Build privacy-preserving solutions for the decentralized future using cutting-edge cryptographic techniques.',
-                    'iot': 'Secure the Internet of Things with robust authentication and threat detection systems.',
-                    'social': 'Understand and prevent social engineering attacks through behavioral analysis and AI-powered detection.'
-                };
-                return descriptions[challenge.category] || 'A challenging problem in the cybersecurity domain.';
-            }
-
-            getChallengeRequirements(challenge) {
-                const requirements = {
-                    'hard': [
-                        'Advanced knowledge of the domain',
-                        'Experience with security tools and frameworks',
-                        'Strong programming skills',
-                        'Ability to work under pressure'
-                    ],
-                    'medium': [
-                        'Good understanding of security concepts',
-                        'Programming experience',
-                        'Problem-solving skills',
-                        'Team collaboration'
-                    ],
-                    'easy': [
-                        'Basic security knowledge',
-                        'Programming fundamentals',
-                        'Creative thinking',
-                        'Willingness to learn'
-                    ]
-                };
-                return requirements[challenge.difficulty] || ['Basic cybersecurity knowledge'];
-            }
-
-            resetCamera() {
-                this.camera.position.set(0, 5, 15);
-                this.camera.lookAt(0, 0, 0);
-            }
-
-            toggleFullscreen() {
-                if (!document.fullscreenElement) {
-                    this.container.requestFullscreen();
-                } else {
-                    document.exitFullscreen();
-                }
-            }
-
-            onWindowResize() {
-                this.camera.aspect = this.container.clientWidth / this.container.clientHeight;
-                this.camera.updateProjectionMatrix();
-                this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-            }
-
-            animate() {
-                requestAnimationFrame(() => this.animate());
-
-                // Auto rotation
-                if (this.isRotating) {
-                    this.challenges.forEach((challenge, index) => {
-                        challenge.rotation.y += 0.005;
-                    });
-                    this.camera.position.x = Math.sin(Date.now() * 0.0005) * 15;
-                    this.camera.position.z = Math.cos(Date.now() * 0.0005) * 15;
-                    this.camera.lookAt(0, 0, 0);
-                }
-
-                this.renderer.render(this.scene, this.camera);
-            }
-        }
-
-        // Filter functionality
-        class ChallengeFilter {
-            constructor() {
-                this.filterButtons = document.querySelectorAll('.filter-button');
-                this.categoryCards = document.querySelectorAll('.category-card');
-                this.init();
-            }
-
-            init() {
-                this.filterButtons.forEach(button => {
-                    button.addEventListener('click', () => this.filterChallenges(button.dataset.filter));
-                });
-            }
-
-            filterChallenges(filter) {
-                // Update active button
-                this.filterButtons.forEach(btn => btn.classList.remove('active'));
-                document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
-
-                // Filter cards
-                this.categoryCards.forEach(card => {
-                    const category = card.dataset.category;
-
-                    if (filter === 'all' || category === filter) {
-                        card.style.display = 'block';
-                        card.classList.add('animate-in');
-                    } else {
-                        card.style.display = 'none';
-                        card.classList.remove('animate-in');
-                    }
-                });
-            }
-        }
-
-
-
-        // Initialize local components
-        document.addEventListener('DOMContentLoaded', () => {
-            new ChallengeMatrix3D();
-            new ChallengeFilter();
-        });
-    </script>
-
+    <!-- Footer -->
     <footer class="footer" role="contentinfo">
         <div class="footer-content">
-            <div class="footer-logo">NEBULA:FOG:PRIME</div>
-            <p class="footer-text">Where AI consciousness meets cybersecurity.</p>
-            <div class="footer-links">
-                <a href="about.html">MISSION</a>
-                <a href="challenges.html">MATRIX</a>
-                <a href="register.html">ACCESS</a>
-                <a href="code-of-conduct.html">PROTOCOL</a>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">NEBULA:FOG:PRIME</div>
+                    <p class="footer-tagline">Building the bridge between silicon and consciousness.</p>
+                    <a href="https://signal.group/#CjQKIJNB4GqSEUM8UsNftK9gSWMS21bFZS4z6N5G_KhV2uHTEhBLOjyVsc13mvsb4FyQpMRZ"
+                       class="signal-button" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Join Signal Group</span>
+                    </a>
+                </div>
+                <div class="footer-nav">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="challenges.html">Challenges</a></li>
+                        <li><a href="schedule.html">Schedule</a></li>
+                        <li><a href="register.html">Register</a></li>
+                    </ul>
+                </div>
+                <div class="footer-qr">
+                    <h4 class="footer-heading">Signal Group QR</h4>
+                    <div class="qr-container">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https%3A%2F%2Fsignal.group%2F%23CjQKIJNB4GqSEUM8UsNftK9gSWMS21bFZS4z6N5G_KhV2uHTEhBLOjyVsc13mvsb4FyQpMRZ"
+                             alt="Signal Group QR Code" class="qr-code" width="120" height="120">
+                    </div>
+                </div>
             </div>
-            <div class="social-links">
-                <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">
-                    <i class="fab fa-youtube"></i>
-                </a>
-                <a href="#" class="social-link" aria-label="X/Twitter" target="_blank" rel="noopener">
-                    <i class="fab fa-x-twitter"></i>
-                </a>
-                <a href="#" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
-                    <i class="fab fa-linkedin"></i>
-                </a>
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+                    2026 NEBULA:FOG:PRIME
+                </p>
             </div>
-            <p class="footer-copyright">&copy; 2026 NEBULA:FOG:PRIME. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Mobile Bottom Navigation -->
+    <!-- Mobile Navigation -->
     <nav class="mobile-nav" aria-label="Mobile navigation">
         <ul class="mobile-nav-links">
-            <li><a href="index.html"><i class="fas fa-home"></i><span>HOME</span></a></li>
-            <li><a href="about.html"><i class="fas fa-info-circle"></i><span>MISSION</span></a></li>
-            <li><a href="challenges.html" class="active"><i class="fas fa-trophy"></i><span>MATRIX</span></a></li>
-            <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i><span>TIMELINE</span></a></li>
-            <li><a href="register.html"><i class="fas fa-user-plus"></i><span>ACCESS</span></a></li>
+            <li><a href="index.html">⌂ HOME</a></li>
+            <li><a href="about.html">◎ MISSION</a></li>
+            <li><a href="challenges.html" class="active">◈ MATRIX</a></li>
+            <li><a href="schedule.html">◷ TIMELINE</a></li>
+            <li><a href="register.html">⊕ ACCESS</a></li>
         </ul>
     </nav>
 
-    <!-- System Scripts -->
-    <script src="three-scene.js"></script>
-    <script src="main.js"></script>
-    <script src="scroll-orchestration.js"></script>
-
-    <!-- Analytics -->
     <script>
-        // Track challenge interactions
         document.addEventListener('DOMContentLoaded', () => {
-            let challengeViews = 0;
-            let filterUsage = {};
-
-            // Track filter usage
-            document.querySelectorAll('.filter-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const filter = button.dataset.filter;
-                    filterUsage[filter] = (filterUsage[filter] || 0) + 1;
-                    console.log(`Filter used: ${filter}`);
-                });
+            // Animate page header
+            gsap.to('.page-header', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power3.out'
             });
 
-            // Track time spent on page
-            let startTime = Date.now();
-            window.addEventListener('beforeunload', () => {
-                const timeSpent = Date.now() - startTime;
-                console.log(`Time spent on challenges page: ${timeSpent}ms`);
-                console.log('Filter usage:', filterUsage);
+            // Animate protocol cards with stagger
+            gsap.to('.protocol-card', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                delay: 0.3,
+                ease: 'power3.out'
+            });
+
+            // Animate CTA section
+            gsap.to('.cta-section', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: 1.2,
+                ease: 'power3.out'
             });
         });
     </script>

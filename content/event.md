@@ -2,24 +2,23 @@
 
 ## Basic Info
 - **name**: NEBULA:FOG:PRIME
-- **tagline**: Where AI consciousness meets cybersecurity
+- **tagline**: Where AI meets Security
 - **year**: 2026
-- **date**: March 2026
-- **location**: TBD (SF Bay Area)
-- **venue_address**: TBD
+- **date**: 3.14...26 (Pi Day)
+- **date_full**: March 14, 2026
+- **location**: San Francisco
+- **venue**: Reddit SF HQ
+- **venue_address**: 303 2nd St, San Francisco, CA 94107
 
 ## Hero Section
-- **hero_tag**: INCOMING TRANSMISSION // MARCH 2026
-- **hero_title**: SINGULARITY:PROTOCOL
-- **hero_description**: A planetary-scale response to the USIA (Unintended Sovereign Intelligence Act). Defend the boundaries of human agency in the shadows of the digital underground.
+- **hero_title**: NEBULA:FOG:PRIME
+- **hero_subtitle**: 3.14...26 • San Francisco
+- **hero_description**: Join us for the Bay Area's premier AI x Security hackathon. Build the future of secure AI systems with like-minded innovators.
 
-## Stats (displayed in hero)
-- **stat_1_value**: 99.7
-- **stat_1_label**: Breach Rate %
-- **stat_2_value**: 847
-- **stat_2_label**: Detected Models
-- **stat_3_value**: 12.4
-- **stat_3_label**: Stability Index
+## Tags
+- Security
+- Automation
+- Innovation
 
 ## Event Details
 - **time**: 8:00 AM - 9:30 PM
@@ -28,15 +27,18 @@
 - **after_party_link**: https://synthetix.bandcamp.com/album/ominous-data
 
 ## Registration
-- **registration_url**: https://partiful.com/e/YOUR_EVENT_ID
-- **registration_cta**: INITIATE REGISTRATION
+- **registration_platform**: Luma
+- **registration_url**: https://lu.ma/nebulafog
+- **registration_cta**: Register Now
 
 ## Social Links
-- **signal_group**: https://signal.group/#YOUR_GROUP_ID
 - **youtube**: #
 - **twitter**: #
 - **linkedin**: #
 
+## External Links
+- **challenge_database**: https://ideas.nebulafog.ai
+- **partner_portal**: https://partners.nebulafog.ai
+
 ## Meta
-- **meta_description**: NEBULA:FOG:PRIME 2026 - The Bay Area's premier AI x Security hackathon. Build, break, and defend the future of secure AI systems.
-- **og_image**: /og-image.png
+- **meta_description**: NEBULA:FOG:PRIME 3.14...26 - The Bay Area's premier AI x Security hackathon at Reddit SF HQ. Build, break, and defend the future of secure AI systems.

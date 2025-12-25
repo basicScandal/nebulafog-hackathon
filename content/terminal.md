@@ -1,78 +1,61 @@
-# Terminal Boot Sequence & Commands
+# Terminal Configuration
 
-## Boot Sequence Lines
-These appear during the breach/loading sequence:
+## Version
+nebula_terminal_v1.0.0
 
+## Initial Boot Lines
 ```
-> Initializing breach protocol...
-> Scanning network interfaces...
-> [OK] Interface eth0 detected
-> Bypassing firewall...
-> [OK] Firewall compromised
-> Decrypting access tokens...
-> [OK] Token validated
-> Establishing secure connection...
-> [OK] Connection established
-> Granting system access...
-> ACCESS GRANTED_
-```
+> Initializing NEBULA:FOG:PRIME v1.0.0
+> Loading event parameters...
+> Date: 3.14...26 (Pi Day)
+> Location: Reddit SF HQ
+> Status: Initialization complete
 
----
+> The Year of Agents begins here.
+> Where AI meets Security.
 
-## Terminal Welcome Messages
-Shown after boot sequence in the command line section:
+> Select your neural pathway:
 
-```
-> Connection established.
-> Type 'help' for available commands.
-```
+  1. About the Event
+  2. View Challenges
+  3. Check Schedule
+  4. Partnership Options
+  5. Register on Luma
+  6. Join Signal Group
 
----
-
-## Available Commands
-
-### help
-Shows available commands:
-- help - Display available commands
-- challenges - View challenge tracks
-- register - Open registration
-- schedule - View event timeline
-- about - Learn about the event
-- clear - Clear terminal
-- matrix - Enter the matrix
-- secret - ???
-
-### challenges
-Opens the challenges page.
-
-### register
-Opens the registration page.
-
-### schedule
-Opens the schedule page.
-
-### about
-Opens the about page.
-
-### clear
-Clears the terminal output.
-
-### matrix
-Easter egg - triggers Matrix-style animation.
-
-### secret
-Easter egg - displays hidden message:
-```
-> SIGNAL INTERCEPTED
-> Coordinates: 37.7749° N, 122.4194° W
-> Status: AWAITING NEURAL SYNC
-> The fog remembers those who dare to enter...
+> Ready for input...
 ```
 
 ---
 
-## Konami Code Easter Egg
-↑ ↑ ↓ ↓ ← → ← → B A
+## Navigation Commands
+| Command | Action | Type |
+|---------|--------|------|
+| 1 | Navigate to About | Internal |
+| 2 | Navigate to Challenges | Internal |
+| 3 | Navigate to Schedule | Internal |
+| 4 | Navigate to Sponsors | Internal |
+| 5 | Open Luma Registration | External |
+| 6 | Open Signal Group | External |
 
-Triggers special animation with message:
-"CHEAT CODE ACCEPTED - INFINITE BANDWIDTH UNLOCKED"
+---
+
+## Navigation Map
+```json
+{
+  "1": "/about",
+  "2": "/challenges",
+  "3": "/schedule",
+  "4": "/sponsors",
+  "5": "https://lu.ma/nebulafog",
+  "6": "https://signal.group/#CjQKIJNB4GqSEUM8UsNftK9gSWMS21bFZS4z6N5G_KhV2uHTEhBLOjyVsc13mvsb4FyQpMRZ"
+}
+```
+
+---
+
+## Error Message
+Invalid command. Please enter a number between 1-6.
+
+## Help Text
+Click terminal or type a number (1-6) and press Enter to navigate

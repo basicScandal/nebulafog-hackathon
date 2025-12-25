@@ -1,81 +1,68 @@
 # Content Management Guide
 
-This directory contains all editable content for the NEBULA:FOG:PRIME 2026 website.
+This directory contains all editable content for the NEBULA:FOG:PRIME website.
+Content is synced from [nebulafog-prime](https://github.com/basicScandal/nebulafog-prime).
 
 ## File Structure
 
 ```
 content/
 ├── README.md          # This guide
+├── home.md            # Homepage content & navigation
 ├── event.md           # Core event configuration (dates, links, meta)
-├── protocols.md       # Challenge tracks / protocol cards
-├── schedule.md        # Event timeline
 ├── about.md           # About page content & features
-├── terminal.md        # Terminal sequences & commands
+├── challenges.md      # Challenge tracks info
+├── schedule.md        # Event timeline
+├── sponsors.md        # Partnership information
+├── register.md        # Registration page content
+├── terminal.md        # Terminal boot sequence & commands
 └── navigation.md      # Site navigation structure
 ```
 
+## Event Details (3.14...26 - Pi Day!)
+
+- **Date**: March 14, 2026 (3.14...26)
+- **Venue**: Reddit SF HQ, 303 2nd St, San Francisco, CA 94107
+- **Time**: 8:00 AM - 9:30 PM
+- **After-Party**: 9:30 PM onwards featuring Synthetix
+
+## Key URLs
+
+| Purpose | URL |
+|---------|-----|
+| Registration (Luma) | https://lu.ma/nebulafog |
+| Signal Group | https://signal.group/#CjQKIJNB4GqSEUM8UsNftK9gSWMS21bFZS4z6N5G_KhV2uHTEhBLOjyVsc13mvsb4FyQpMRZ |
+| Challenge Ideas | https://ideas.nebulafog.ai |
+| Partnership | https://partners.nebulafog.ai |
+| Afterparty Music | https://synthetix.bandcamp.com/album/ominous-data |
+
+## Social Links
+- YouTube: #
+- X/Twitter: #
+- LinkedIn: #
+
+## Challenge Tracks
+
+1. **Offensive Security** - Leverage AI for penetration testing and vulnerability discovery
+2. **Defensive Security** - Build automated threat detection and response systems
+3. **Privacy & Trust** - Enhance data protection and model security
+
 ## How to Edit Content
 
-### For 2026 Event Updates:
-
 1. **Update Event Details** → Edit `event.md`
-   - Change date, venue, registration URL
-   - Update social links
-   - Modify hero section text
-
-2. **Update Challenge Tracks** → Edit `protocols.md`
-   - Modify protocol names and descriptions
-   - Each protocol has an encrypted label and full description
-
+2. **Update Challenge Tracks** → Edit `challenges.md` or `protocols.md`
 3. **Update Schedule** → Edit `schedule.md`
-   - Add/remove/modify timeline items
-   - Each item has time, title, icon, and description
-
 4. **Update About Content** → Edit `about.md`
-   - Feature pillars, mission statement
-   - Registration background options
-
 5. **Update Terminal Commands** → Edit `terminal.md`
-   - Boot sequence messages
-   - Available commands and responses
 
-## Content Format
+## Syncing from Source
 
-Content files use a simple markdown format with YAML-like frontmatter for structured data.
+This content was extracted from the React components in [nebulafog-prime](https://github.com/basicScandal/nebulafog-prime):
 
-### Example Protocol Entry:
-```markdown
-## Protocol 01: NEURAL LAYER
-
-- **encrypted_label**: SOVEREIGN_BEHAVIOR_ANALYSIS
-- **description**: |
-    Your multi-line description here.
-    Can span multiple lines.
-```
-
-### Example Schedule Entry:
-```markdown
-## 08:00 - Arrival & Neural Initialization
-- **icon**: coffee
-- **description**: Check-in, breakfast, and morning refreshments
-```
-
-## Updating the Live Site
-
-After editing content files:
-
-1. The content is referenced directly in HTML files
-2. For major content changes, you may need to update the corresponding HTML
-3. Push changes to deploy: `git add . && git commit -m "Update content" && git push`
-
-## Icon Reference
-
-Available icons for schedule items:
-- coffee, brain, lightbulb, zap, pizza, award, music
-
-## Notes
-
-- Keep descriptions concise for mobile readability
-- Test all external links before publishing
-- Update meta descriptions in `event.md` for SEO
+- `src/pages/Home.tsx` → `home.md`
+- `src/pages/About.tsx` → `about.md`
+- `src/pages/Challenges.tsx` → `challenges.md`
+- `src/pages/Schedule.tsx` → `schedule.md`
+- `src/pages/Sponsors.tsx` → `sponsors.md`
+- `src/pages/Register.tsx` → `register.md`
+- `src/components/Terminal.tsx` → `terminal.md`
