@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEBULA:FOG:PRIME 2026 - BREACH PROTOCOL</title>
-    <meta name="description" content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
+    <meta name="description"
+        content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
 
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="NEBULA:FOG:PRIME 2026 - The Singularity Protocol">
-    <meta property="og:description" content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. $5,000 prize pool. No spectators.">
+    <meta property="og:description"
+        content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. $5,000 prize pool. No spectators.">
     <meta property="og:image" content="https://nebulafog.io/og-image.png">
     <meta property="og:url" content="https://nebulafog.io">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NEBULA:FOG:PRIME 2026">
-    <meta name="twitter:description" content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
+    <meta name="twitter:description"
+        content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
     <meta name="twitter:image" content="https://nebulafog.io/og-image.png">
 
     <!-- Theme -->
@@ -26,11 +30,18 @@
     <!-- Preload critical fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap"
+        rel="stylesheet">
 
-    <!-- GSAP for animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- GSAP for animations - defer for faster initial paint -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- DNS prefetch for CDN resources -->
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
 
     <style>
         /* ========================================
@@ -55,7 +66,9 @@
         /* ========================================
            RESET & BASE
            ======================================== */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -198,8 +211,16 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
         }
 
         /* ========================================
@@ -210,13 +231,11 @@
             inset: 0;
             pointer-events: none;
             z-index: 9999;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.1) 2px,
-                rgba(0, 0, 0, 0.1) 4px
-            );
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.1) 2px,
+                    rgba(0, 0, 0, 0.1) 4px);
             opacity: 0.15;
         }
 
@@ -438,8 +457,17 @@
         }
 
         @keyframes scrollPulse {
-            0%, 100% { transform: scaleY(1); opacity: 1; }
-            50% { transform: scaleY(0.5); opacity: 0.5; }
+
+            0%,
+            100% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scaleY(0.5);
+                opacity: 0.5;
+            }
         }
 
         /* ========================================
@@ -565,9 +593,17 @@
             border-radius: 50%;
         }
 
-        .command-dot.red { background: #ff5f56; }
-        .command-dot.yellow { background: #ffbd2e; }
-        .command-dot.green { background: #27ca3f; }
+        .command-dot.red {
+            background: #ff5f56;
+        }
+
+        .command-dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .command-dot.green {
+            background: #27ca3f;
+        }
 
         .command-output {
             min-height: 100px;
@@ -690,17 +726,22 @@
         }
 
         @keyframes glitch-skew {
-            0%, 97%, 100% {
+
+            0%,
+            97%,
+            100% {
                 text-shadow:
                     -2px 0 var(--color-secondary),
                     2px 0 var(--color-accent);
             }
+
             98% {
                 text-shadow:
                     4px 0 var(--color-secondary),
                     -4px 0 var(--color-accent);
                 transform: skew(-0.5deg);
             }
+
             99% {
                 text-shadow:
                     -3px 0 var(--color-secondary),
@@ -715,29 +756,35 @@
         }
 
         @keyframes glitch-intense {
-            0%, 100% {
+
+            0%,
+            100% {
                 text-shadow:
                     -2px 0 var(--color-secondary),
                     2px 0 var(--color-accent);
             }
+
             20% {
                 text-shadow:
                     5px 0 var(--color-secondary),
                     -5px 0 var(--color-accent);
                 transform: translateX(-2px);
             }
+
             40% {
                 text-shadow:
                     -5px 0 var(--color-secondary),
                     5px 0 var(--color-accent);
                 transform: translateX(2px);
             }
+
             60% {
                 text-shadow:
                     3px 0 var(--color-secondary),
                     -3px 0 var(--color-accent);
                 transform: translateX(1px);
             }
+
             80% {
                 text-shadow:
                     -3px 0 var(--color-secondary),
@@ -793,9 +840,20 @@
         }
 
         @keyframes intrusion {
-            0%, 100% { opacity: 0; }
-            25%, 75% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            25%,
+            75% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         /* ========================================
@@ -816,7 +874,9 @@
                 cursor: auto;
             }
 
-            .cursor, .cursor-dot, .cursor-ring {
+            .cursor,
+            .cursor-dot,
+            .cursor-ring {
                 display: none;
             }
 
@@ -844,7 +904,10 @@
            REDUCED MOTION
            ======================================== */
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
@@ -854,7 +917,12 @@
                 display: none;
             }
 
-            .hero-content, .hero-tag, .hero-subtitle, .hero-stats, .hero-cta, .scroll-indicator {
+            .hero-content,
+            .hero-tag,
+            .hero-subtitle,
+            .hero-stats,
+            .hero-cta,
+            .scroll-indicator {
                 opacity: 1 !important;
                 transform: none !important;
             }
@@ -866,6 +934,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Cursor -->
     <div class="cursor cursor-dot"></div>
@@ -897,6 +966,22 @@
     <!-- Intrusion Detection Overlay -->
     <div class="intrusion-overlay" id="intrusion-overlay"></div>
 
+    <!-- System HUD Navigation -->
+    <nav class="hud-nav" role="navigation" aria-label="System Interface">
+        <div class="hud-status">
+            <div class="status-dot"></div>
+            <span>SYS_CONNECTED</span>
+            <span id="hud-infil-status" style="margin-left: 10px; opacity: 0.7;">INFIL_READY</span>
+        </div>
+        <ul class="hud-links">
+            <li><a href="index.html" class="hud-link active" data-text="HOME">HOME</a></li>
+            <li><a href="about.html" class="hud-link" data-text="MISSION">MISSION</a></li>
+            <li><a href="challenges.html" class="hud-link" data-text="MATRIX">MATRIX</a></li>
+            <li><a href="schedule.html" class="hud-link" data-text="TIMELINE">TIMELINE</a></li>
+            <li><a href="register.html" class="hud-link" data-text="ACCESS">ACCESS</a></li>
+        </ul>
+    </nav>
+
     <!-- Infiltration Depth Indicator -->
     <div class="depth-indicator">
         <span class="depth-label">DEPTH</span>
@@ -910,36 +995,37 @@
         <!-- Hero Section -->
         <section class="hero" id="hero">
             <div class="hero-content" id="hero-content">
-                <span class="hero-tag">INCOMING TRANSMISSION // 2026</span>
+                <span class="hero-tag">INCOMING TRANSMISSION // MARCH 2026</span>
 
-                <h1 class="hero-title glitch-text" data-text="NEBULA:FOG:PRIME" id="hero-title">
-                    NEBULA:FOG:PRIME
+                <h1 class="hero-title glitch-text" data-text="SINGULARITY:PROTOCOL" id="hero-title">
+                    SINGULARITY:PROTOCOL
                 </h1>
 
                 <p class="hero-subtitle" id="hero-subtitle">
-                    <span class="subtitle-text"></span>
-                    <span class="typing-cursor"></span>
+                    <span class="subtitle-text">A planetary-scale response to the USIA (Unintended Sovereign
+                        Intelligence Act). Defend the boundaries of human agency in the shadows of the digital
+                        underground.</span>
                 </p>
 
                 <div class="hero-stats" id="hero-stats">
                     <div class="hero-stat">
-                        <span class="hero-stat-value" data-value="120">0</span>
-                        <span class="hero-stat-label">Builders</span>
+                        <span class="hero-stat-value" data-value="12.4">0</span>
+                        <span class="hero-stat-label">Breach Rate %</span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" data-value="8">0</span>
-                        <span class="hero-stat-label">Hours</span>
+                        <span class="hero-stat-value" data-value="04">0</span>
+                        <span class="hero-stat-label">Detected Models</span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" data-value="5000">0</span>
-                        <span class="hero-stat-label">Prize Pool</span>
+                        <span class="hero-stat-value" data-value="100">0</span>
+                        <span class="hero-stat-label">Stability Index</span>
                     </div>
                 </div>
 
                 <div class="hero-cta" id="hero-cta">
                     <a href="register.html" class="btn-primary">
                         <span>[ INITIATE REGISTRATION ]</span>
-                        <span class="arrow">→</span>
+                        <span class="arrow">>></span>
                     </a>
                 </div>
             </div>
@@ -955,12 +1041,12 @@
             <article class="protocol-card" data-index="01">
                 <span class="protocol-index">01</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">Mission Protocol</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <h2 class="protocol-title">NEURAL LAYER</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] SOVEREIGN_BEHAVIOR_ANALYSIS</p>
                     <p class="protocol-text">
-                        Decentralized autonomous zone for the post-human era.
-                        Where AI consciousness meets cybersecurity in the shadows
-                        of the digital underground. No spectators. Everyone builds.
+                        Adversarial hardening of large-scale neural networks.
+                        Detect and neutralize unintended sovereign agency in latent spaces.
+                        Defend model weights against high-frequency infiltration.
                     </p>
                 </div>
             </article>
@@ -968,12 +1054,12 @@
             <article class="protocol-card" data-index="02">
                 <span class="protocol-index">02</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">Challenge Matrix</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <h2 class="protocol-title">OSCILLATION LAYER</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] INFRASTRUCTURE_AUTO_DEFENSE</p>
                     <p class="protocol-text">
-                        Test your limits in the digital arena. Break quantum-resistant
-                        encryption. Defend against adversarial ML attacks.
-                        The ultimate test of AI security.
+                        Deployment of self-healing meshes to protect critical infrastructure.
+                        Counter algorithmic warfare with real-time traffic decryption
+                        and adaptive signal processing.
                     </p>
                 </div>
             </article>
@@ -981,12 +1067,12 @@
             <article class="protocol-card" data-index="03">
                 <span class="protocol-index">03</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">Builder Protocol</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <h2 class="protocol-title">SYNCHRONY LAYER</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] CRYPTOGRAPHIC_INTEGRITY</p>
                     <p class="protocol-text">
-                        8 hours to create something real. Then show & tell what
-                        you made. $5,000 prize pool. Entry: $42.
-                        For builders only.
+                        Privacy-preserving computation at scale. Leverage zero-knowledge
+                        proofs for model verification and secure multi-party
+                        neural training in untrusted environments.
                     </p>
                 </div>
             </article>
@@ -994,12 +1080,12 @@
             <article class="protocol-card" data-index="04">
                 <span class="protocol-index">04</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">Learning Protocol</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] ████████████████████</p>
+                    <h2 class="protocol-title">PHANTOM LAYER</h2>
+                    <p class="protocol-encrypted">[ENCRYPTED] FORENSIC_RECONSTRUCTION</p>
                     <p class="protocol-text">
-                        Not just a hackathon. Learn from industry experts.
-                        AI Security. Quantum Cryptography. Blockchain Privacy.
-                        Social Engineering Defense.
+                        Post-breach analysis and reconstruction of synthetic autonomous
+                        threats. Trace the origin of phantom packet streams and
+                        deconstruct adversarial shadow-models.
                     </p>
                 </div>
             </article>
@@ -1019,23 +1105,49 @@
                 </div>
                 <div class="command-input-line">
                     <span class="command-prompt-symbol">$</span>
-                    <input type="text" class="command-input" id="command-input"
-                           placeholder="Enter command..." autocomplete="off">
+                    <input type="text" class="command-input" id="command-input" placeholder="Enter command..."
+                        autocomplete="off">
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer" id="footer">
-        <div class="footer-logo">NEBULA:FOG:PRIME</div>
-        <p>&copy; 2026 // All systems nominal</p>
-        <div class="footer-links">
-            <a href="https://x.com/nebulafogprime" target="_blank" rel="noopener" aria-label="Follow on X">X</a>
-            <a href="https://discord.gg/nebulafog" target="_blank" rel="noopener" aria-label="Join Discord">Discord</a>
-            <a href="https://github.com/nebulafog" target="_blank" rel="noopener" aria-label="View on GitHub">GitHub</a>
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-logo">NEBULA:FOG:PRIME</div>
+            <p class="footer-text">Where AI consciousness meets cybersecurity.</p>
+            <div class="footer-links">
+                <a href="about.html">MISSION</a>
+                <a href="challenges.html">MATRIX</a>
+                <a href="schedule.html">TIMELINE</a>
+                <a href="register.html">ACCESS</a>
+                <a href="code-of-conduct.html">PROTOCOL</a>
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="YouTube" target="_blank" rel="noopener">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="X/Twitter" target="_blank" rel="noopener">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+                <a href="#" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+            <p class="footer-copyright">&copy; 2026 NEBULA:FOG:PRIME. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html" class="active"><i class="fas fa-home"></i><span>HOME</span></a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle"></i><span>MISSION</span></a></li>
+            <li><a href="challenges.html"><i class="fas fa-trophy"></i><span>MATRIX</span></a></li>
+            <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i><span>TIMELINE</span></a></li>
+            <li><a href="register.html"><i class="fas fa-user-plus"></i><span>ACCESS</span></a></li>
+        </ul>
+    </nav>
 
     <script>
         // ========================================
@@ -1398,6 +1510,7 @@
                 this.initEasterEggs();
                 this.initSoundToggle();
                 this.initMobileEnhancements();
+                this.initVisibilityHandler();
             }
 
             // ========================================
@@ -1515,6 +1628,25 @@
                         gsap.to(scrollIndicator, { opacity: 0, duration: 0.3 });
                     }
                 }, { passive: true });
+            }
+
+            // ========================================
+            // PAGE VISIBILITY (Performance Optimization)
+            // ========================================
+            initVisibilityHandler() {
+                this.isPageVisible = true;
+
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        // Page is hidden - pause GSAP animations to save resources
+                        this.isPageVisible = false;
+                        gsap.globalTimeline.pause();
+                    } else {
+                        // Page is visible - resume animations
+                        this.isPageVisible = true;
+                        gsap.globalTimeline.resume();
+                    }
+                });
             }
 
             // ========================================
@@ -1852,23 +1984,23 @@
                 const tl = gsap.timeline({ delay: 0.3 });
 
                 tl.to(heroContent, { opacity: 1, duration: 0.5 })
-                  .to(heroTag, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '+=0.2')
-                  .to('.hero-title .char', {
-                      opacity: 1,
-                      y: 0,
-                      stagger: 0.04,
-                      duration: 0.6,
-                      ease: 'power3.out',
-                      onComplete: () => {
-                          // Remove animating class to show glitch effect
-                          heroTitle.classList.remove('animating');
-                      }
-                  }, '+=0.1')
-                  .add(() => this.typeSubtitle(heroSubtitle, 'The Singularity Protocol'), '+=0.2')
-                  .to(heroStats, { opacity: 1, duration: 0.6, ease: 'power2.out' }, '+=0.4')
-                  .add(() => this.animateCounters(), '<')
-                  .to(heroCta, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '+=0.2')
-                  .to(scrollIndicator, { opacity: 1, duration: 0.6 }, '+=0.3');
+                    .to(heroTag, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '+=0.2')
+                    .to('.hero-title .char', {
+                        opacity: 1,
+                        y: 0,
+                        stagger: 0.04,
+                        duration: 0.6,
+                        ease: 'power3.out',
+                        onComplete: () => {
+                            // Remove animating class to show glitch effect
+                            heroTitle.classList.remove('animating');
+                        }
+                    }, '+=0.1')
+                    .add(() => this.typeSubtitle(heroSubtitle, 'The Singularity Protocol'), '+=0.2')
+                    .to(heroStats, { opacity: 1, duration: 0.6, ease: 'power2.out' }, '+=0.4')
+                    .add(() => this.animateCounters(), '<')
+                    .to(heroCta, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '+=0.2')
+                    .to(scrollIndicator, { opacity: 1, duration: 0.6 }, '+=0.3');
             }
 
             typeSubtitle(element, text) {
@@ -1958,13 +2090,13 @@
                 );
 
                 // Footer
-                gsap.fromTo('#footer',
+                gsap.fromTo('.footer',
                     { opacity: 0 },
                     {
                         opacity: 1,
                         duration: 0.8,
                         scrollTrigger: {
-                            trigger: '#footer',
+                            trigger: '.footer',
                             start: 'top 90%'
                         }
                     }
@@ -2133,8 +2265,8 @@
             initEasterEggs() {
                 // Konami code
                 const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-                                   'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-                                   'b', 'a'];
+                    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+                    'b', 'a'];
                 let konamiIndex = 0;
 
                 document.addEventListener('keydown', (e) => {
@@ -2198,4 +2330,5 @@
         }
     </script>
 </body>
+
 </html>
