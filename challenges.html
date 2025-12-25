@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHALLENGE:MATRIX - NEBULA:FOG:PRIME 2026</title>
+    <meta name="description" content="The Singularity Challenge Matrix - Four protocol layers await infiltration.">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NEBULA:FOG:PRIME 2026 - Challenge Matrix">
+    <meta property="og:description" content="Four protocol layers. Infinite possibilities. Choose your attack vector.">
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#00ff9f">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- GSAP -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* ========================================
+           CSS CUSTOM PROPERTIES
+           ======================================== */
+        :root {
+            --color-bg: #030303;
+            --color-bg-elevated: #0a0a0a;
+            --color-primary: #00ff9f;
+            --color-secondary: #ff0080;
+            --color-accent: #0ff;
+            --color-text: #ffffff;
+            --color-text-muted: #666666;
+            --color-text-dim: #333333;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--color-primary); color: var(--color-bg); }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ========================================
+           GRID BACKGROUND & EFFECTS
+           ======================================== */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(0, 255, 159, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 159, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(0deg,
+                transparent, transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px);
+            opacity: 0.15;
+        }
+
+        /* ========================================
+           NAVIGATION
+           ======================================== */
+        .hud-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 10px 20px;
+            background: rgba(3, 3, 3, 0.85);
+            border: 1px solid rgba(0, 255, 159, 0.2);
+            border-radius: 4px;
+            backdrop-filter: blur(15px);
+        }
+
+        .hud-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-right: 15px;
+            border-right: 1px solid rgba(0, 255, 159, 0.2);
+            font-size: 0.75rem;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--color-primary);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hud-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .hud-link {
+            color: var(--color-text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .hud-link:hover, .hud-link.active {
+            color: var(--color-primary);
+            text-shadow: 0 0 10px var(--color-primary);
+        }
+
+        /* ========================================
+           MAIN CONTENT
+           ======================================== */
+        .main {
+            padding: 120px 5vw 80px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .page-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--color-text-dim);
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-family: var(--font-mono);
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+            text-shadow: 0 0 40px rgba(0, 255, 159, 0.3);
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* ========================================
+           PROTOCOL CARDS (Challenge Tracks)
+           ======================================== */
+        .protocols {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        .protocol-card {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 3rem;
+            align-items: start;
+            padding: 3rem;
+            border: 1px solid var(--color-text-dim);
+            position: relative;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .protocol-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0, 255, 159, 0.02) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s var(--ease-out-expo);
+        }
+
+        .protocol-card:hover {
+            border-color: var(--color-primary);
+        }
+
+        .protocol-card:hover::before {
+            opacity: 1;
+        }
+
+        .protocol-index {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            color: var(--color-text-dim);
+            line-height: 1;
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .protocol-card:hover .protocol-index {
+            color: var(--color-primary);
+            text-shadow: 0 0 30px var(--color-primary);
+        }
+
+        .protocol-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .protocol-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        .protocol-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 255, 159, 0.1);
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .protocol-text {
+            font-size: 0.95rem;
+            color: var(--color-text-muted);
+            line-height: 1.8;
+        }
+
+        .protocol-skills {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .skill-tag {
+            padding: 0.25rem 0.5rem;
+            background: rgba(255, 0, 128, 0.1);
+            border: 1px solid var(--color-secondary);
+            color: var(--color-secondary);
+            font-size: 0.65rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* ========================================
+           CTA SECTION
+           ======================================== */
+        .cta-section {
+            text-align: center;
+            padding: 4rem;
+            background: linear-gradient(135deg, rgba(0, 255, 159, 0.03) 0%, rgba(255, 0, 128, 0.03) 100%);
+            border: 1px solid var(--color-text-dim);
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            color: var(--color-text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--color-primary);
+            transform: translateX(-101%);
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .btn-primary:hover {
+            color: var(--color-bg);
+            box-shadow: 0 0 30px rgba(0, 255, 159, 0.5);
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(0);
+        }
+
+        .btn-primary span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            padding: 3rem 5vw;
+            border-top: 1px solid var(--color-text-dim);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 0.1em;
+        }
+
+        .footer-text {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-copyright {
+            font-size: 0.7rem;
+            color: var(--color-text-dim);
+        }
+
+        /* ========================================
+           MOBILE NAV
+           ======================================== */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(3, 3, 3, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid var(--color-text-dim);
+            padding: 0.5rem 0;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+        }
+
+        .mobile-nav-links a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            color: var(--color-text-muted);
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav-links a.active,
+        .mobile-nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 768px) {
+            .hud-nav { display: none; }
+            .mobile-nav { display: block; }
+            .main { padding-bottom: 120px; }
+            .protocol-card {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .protocol-index {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
+
+    <!-- Navigation -->
+    <nav class="hud-nav" role="navigation" aria-label="System Interface">
+        <div class="hud-status">
+            <div class="status-dot"></div>
+            <span>SYS_CONNECTED</span>
+            <span style="margin-left: 10px; opacity: 0.7;">MATRIX_VIEW</span>
+        </div>
+        <ul class="hud-links">
+            <li><a href="index.html" class="hud-link">HOME</a></li>
+            <li><a href="about.html" class="hud-link">MISSION</a></li>
+            <li><a href="challenges.html" class="hud-link active">MATRIX</a></li>
+            <li><a href="schedule.html" class="hud-link">TIMELINE</a></li>
+            <li><a href="register.html" class="hud-link">ACCESS</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <header class="page-header">
+                <span class="page-tag">PROTOCOL LAYERS // 2026</span>
+                <h1 class="page-title">CHALLENGE:MATRIX</h1>
+                <p class="page-subtitle">
+                    Four infiltration vectors. Each layer presents unique challenges in AI security.
+                    Choose your attack surface wisely.
+                </p>
+            </header>
+
+            <section class="protocols">
+                <article class="protocol-card">
+                    <span class="protocol-index">01</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">NEURAL LAYER</h2>
+                        <span class="protocol-tag">SOVEREIGN_BEHAVIOR_ANALYSIS</span>
+                        <p class="protocol-text">
+                            Adversarial hardening of large-scale neural networks.
+                            Detect and neutralize unintended sovereign agency in latent spaces.
+                            Defend model weights against high-frequency infiltration.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Adversarial ML</span>
+                            <span class="skill-tag">Model Security</span>
+                            <span class="skill-tag">Latent Space Analysis</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="protocol-card">
+                    <span class="protocol-index">02</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">OSCILLATION LAYER</h2>
+                        <span class="protocol-tag">INFRASTRUCTURE_AUTO_DEFENSE</span>
+                        <p class="protocol-text">
+                            Deployment of self-healing meshes to protect critical infrastructure.
+                            Counter algorithmic warfare with real-time traffic decryption
+                            and adaptive signal processing.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Network Security</span>
+                            <span class="skill-tag">Self-Healing Systems</span>
+                            <span class="skill-tag">Traffic Analysis</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="protocol-card">
+                    <span class="protocol-index">03</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">SYNCHRONY LAYER</h2>
+                        <span class="protocol-tag">CRYPTOGRAPHIC_INTEGRITY</span>
+                        <p class="protocol-text">
+                            Privacy-preserving computation at scale. Leverage zero-knowledge
+                            proofs for model verification and secure multi-party
+                            neural training in untrusted environments.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Zero-Knowledge Proofs</span>
+                            <span class="skill-tag">MPC</span>
+                            <span class="skill-tag">Privacy Engineering</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="protocol-card">
+                    <span class="protocol-index">04</span>
+                    <div class="protocol-content">
+                        <h2 class="protocol-title">PHANTOM LAYER</h2>
+                        <span class="protocol-tag">FORENSIC_RECONSTRUCTION</span>
+                        <p class="protocol-text">
+                            Post-breach analysis and reconstruction of synthetic autonomous
+                            threats. Trace the origin of phantom packet streams and
+                            deconstruct adversarial shadow-models.
+                        </p>
+                        <div class="protocol-skills">
+                            <span class="skill-tag">Digital Forensics</span>
+                            <span class="skill-tag">Threat Hunting</span>
+                            <span class="skill-tag">Reverse Engineering</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="cta-section">
+                <h2 class="cta-title">Ready to Breach?</h2>
+                <p class="cta-text">Select your protocol layer and begin infiltration.</p>
+                <a href="register.html" class="btn-primary">
+                    <span>[ INITIATE REGISTRATION ]</span>
+                    <span>>></span>
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-logo">NEBULA:FOG:PRIME</div>
+            <p class="footer-text">Where AI consciousness meets cybersecurity.</p>
+            <div class="footer-links">
+                <a href="about.html">MISSION</a>
+                <a href="challenges.html">MATRIX</a>
+                <a href="schedule.html">TIMELINE</a>
+                <a href="register.html">ACCESS</a>
+            </div>
+            <p class="footer-copyright">© 2026 NEBULA:FOG:PRIME. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html">⌂ HOME</a></li>
+            <li><a href="about.html">◎ MISSION</a></li>
+            <li><a href="challenges.html" class="active">◈ MATRIX</a></li>
+            <li><a href="schedule.html">◷ TIMELINE</a></li>
+            <li><a href="register.html">⊕ ACCESS</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate page header
+            gsap.to('.page-header', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power3.out'
+            });
+
+            // Animate protocol cards with stagger
+            gsap.to('.protocol-card', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                delay: 0.3,
+                ease: 'power3.out'
+            });
+
+            // Animate CTA section
+            gsap.to('.cta-section', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: 1.2,
+                ease: 'power3.out'
+            });
+        });
+    </script>
+</body>
+
+</html>

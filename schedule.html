@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIMELINE - NEBULA:FOG:PRIME 2026</title>
+    <meta name="description" content="The Neural Timeline - Event schedule for NEBULA:FOG:PRIME 2026 hackathon.">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NEBULA:FOG:PRIME 2026 - Timeline">
+    <meta property="og:description" content="Event schedule for the AI x Security hackathon.">
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#00ff9f">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
+
+    <!-- GSAP -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* ========================================
+           CSS CUSTOM PROPERTIES
+           ======================================== */
+        :root {
+            --color-bg: #030303;
+            --color-bg-elevated: #0a0a0a;
+            --color-primary: #00ff9f;
+            --color-secondary: #ff0080;
+            --color-accent: #0ff;
+            --color-text: #ffffff;
+            --color-text-muted: #666666;
+            --color-text-dim: #333333;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+            --font-display: 'Space Grotesk', system-ui, sans-serif;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ========================================
+           RESET & BASE
+           ======================================== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-mono);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection { background: var(--color-primary); color: var(--color-bg); }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* ========================================
+           GRID BACKGROUND & EFFECTS
+           ======================================== */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(0, 255, 159, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 159, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+        }
+
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            background: repeating-linear-gradient(0deg,
+                transparent, transparent 2px,
+                rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px);
+            opacity: 0.15;
+        }
+
+        /* ========================================
+           NAVIGATION
+           ======================================== */
+        .hud-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 10px 20px;
+            background: rgba(3, 3, 3, 0.85);
+            border: 1px solid rgba(0, 255, 159, 0.2);
+            border-radius: 4px;
+            backdrop-filter: blur(15px);
+        }
+
+        .hud-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-right: 15px;
+            border-right: 1px solid rgba(0, 255, 159, 0.2);
+            font-size: 0.75rem;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--color-primary);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .hud-links {
+            display: flex;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .hud-link {
+            color: var(--color-text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .hud-link:hover, .hud-link.active {
+            color: var(--color-primary);
+            text-shadow: 0 0 10px var(--color-primary);
+        }
+
+        /* ========================================
+           MAIN CONTENT
+           ======================================== */
+        .main {
+            padding: 120px 5vw 80px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .page-tag {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--color-text-dim);
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-family: var(--font-mono);
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+            text-shadow: 0 0 40px rgba(0, 255, 159, 0.3);
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ========================================
+           TIMELINE
+           ======================================== */
+        .timeline {
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(180deg,
+                var(--color-primary) 0%,
+                var(--color-secondary) 50%,
+                var(--color-accent) 100%);
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -48px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            background: var(--color-bg);
+            border: 2px solid var(--color-primary);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            background: var(--color-primary);
+            box-shadow: 0 0 20px var(--color-primary);
+        }
+
+        .timeline-content {
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--color-primary);
+            padding: 1.5rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-content {
+            border-left-color: var(--color-secondary);
+            transform: translateX(5px);
+            background: rgba(0, 255, 159, 0.02);
+        }
+
+        .timeline-time {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-time i {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .timeline-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--color-text);
+        }
+
+        .timeline-desc {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           AFTERPARTY SECTION
+           ======================================== */
+        .afterparty {
+            margin-top: 4rem;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(255, 0, 128, 0.1), rgba(0, 255, 255, 0.05));
+            border: 1px solid rgba(255, 0, 128, 0.2);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .afterparty-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .afterparty-text {
+            color: var(--color-text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .afterparty-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-accent);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .afterparty-link:hover {
+            color: var(--color-primary);
+            text-shadow: 0 0 10px var(--color-primary);
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            padding: 60px 5vw;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            opacity: 0;
+        }
+
+        .footer-logo {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            color: var(--color-text-dim);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links a {
+            color: var(--color-text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary);
+        }
+
+        .footer-copyright {
+            color: var(--color-text-dim);
+            font-size: 0.75rem;
+        }
+
+        /* ========================================
+           MOBILE NAV
+           ======================================== */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(3, 3, 3, 0.95);
+            border-top: 1px solid rgba(0, 255, 159, 0.2);
+            padding: 10px 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+        }
+
+        .mobile-nav-links a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--color-text-muted);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-nav-links a i {
+            font-size: 1.1rem;
+        }
+
+        .mobile-nav-links a.active,
+        .mobile-nav-links a:hover {
+            color: var(--color-primary);
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 768px) {
+            .hud-nav {
+                display: none;
+            }
+
+            .mobile-nav {
+                display: block;
+            }
+
+            .main {
+                padding-bottom: 100px;
+            }
+
+            .timeline {
+                padding-left: 40px;
+            }
+
+            .timeline::before {
+                left: 10px;
+            }
+
+            .timeline-dot {
+                left: -38px;
+                width: 12px;
+                height: 12px;
+            }
+
+            .timeline-content {
+                padding: 1.25rem;
+            }
+
+            .afterparty {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* ========================================
+           ACCESSIBILITY
+           ======================================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Effects -->
+    <div class="grid-bg"></div>
+    <div class="scanlines"></div>
+
+    <!-- Navigation -->
+    <nav class="hud-nav" role="navigation" aria-label="Main navigation">
+        <div class="hud-status">
+            <div class="status-dot"></div>
+            <span>SYS_ACTIVE</span>
+        </div>
+        <ul class="hud-links">
+            <li><a href="index.html" class="hud-link">Home</a></li>
+            <li><a href="about.html" class="hud-link">Mission</a></li>
+            <li><a href="challenges.html" class="hud-link">Protocols</a></li>
+            <li><a href="schedule.html" class="hud-link active">Timeline</a></li>
+            <li><a href="register.html" class="hud-link">Register</a></li>
+        </ul>
+    </nav>
+
+    <main class="main">
+        <div class="container">
+            <!-- Header -->
+            <header class="page-header">
+                <span class="page-tag">January 25, 2025</span>
+                <h1 class="page-title">NEURAL_TIMELINE</h1>
+                <p class="page-subtitle">A full day of innovation, learning, and collaboration at the intersection of AI and security.</p>
+            </header>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-coffee"></i>08:00</div>
+                        <h3 class="timeline-title">Arrival & Neural Initialization</h3>
+                        <p class="timeline-desc">Check-in, breakfast, and morning refreshments</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-brain"></i>09:15</div>
+                        <h3 class="timeline-title">Vision Activation</h3>
+                        <p class="timeline-desc">Welcome address and event vision setting</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-lightbulb"></i>09:30</div>
+                        <h3 class="timeline-title">AI Workshop: Building with English</h3>
+                        <p class="timeline-desc">Learn how to code with AI using natural language</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-bolt"></i>10:30</div>
+                        <h3 class="timeline-title">Neural Network Formation</h3>
+                        <p class="timeline-desc">Team formation and start of hacking session</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-pizza-slice"></i>12:30</div>
+                        <h3 class="timeline-title">Sustenance Protocol</h3>
+                        <p class="timeline-desc">Lunch break & industry expert panel</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-brain"></i>13:30</div>
+                        <h3 class="timeline-title">Deep Dive Continuation</h3>
+                        <p class="timeline-desc">Resume hacking with additional workshops</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-bolt"></i>17:00</div>
+                        <h3 class="timeline-title">Lightning Neural Transmissions</h3>
+                        <p class="timeline-desc">15-minute project presentations</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-award"></i>18:30</div>
+                        <h3 class="timeline-title">Achievement Recognition</h3>
+                        <p class="timeline-desc">Awards ceremony with tech prizes</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-pizza-slice"></i>19:00</div>
+                        <h3 class="timeline-title">Neural Celebration</h3>
+                        <p class="timeline-desc">Dinner & closing panel</p>
+                    </div>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time"><i class="fas fa-music"></i>21:30</div>
+                        <h3 class="timeline-title">Quantum Afterparty</h3>
+                        <p class="timeline-desc">Featuring sounds by Synthetix</p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Afterparty Section -->
+            <aside class="afterparty">
+                <h2 class="afterparty-title">QUANTUM_AFTERPARTY</h2>
+                <p class="afterparty-text">Experience the future with sounds by Synthetix</p>
+                <a href="https://synthetix.bandcamp.com/album/ominous-data" target="_blank" rel="noopener" class="afterparty-link">
+                    <i class="fas fa-headphones"></i>
+                    Listen on Bandcamp
+                </a>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-logo">NEBULA:FOG:PRIME</div>
+        <p class="footer-text">Where AI consciousness meets cybersecurity.</p>
+        <nav class="footer-links">
+            <a href="about.html">Mission</a>
+            <a href="challenges.html">Protocols</a>
+            <a href="schedule.html">Timeline</a>
+            <a href="register.html">Register</a>
+        </nav>
+        <p class="footer-copyright">&copy; 2026 NEBULA:FOG:PRIME. All rights reserved.</p>
+    </footer>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <ul class="mobile-nav-links">
+            <li><a href="index.html"><i class="fas fa-home"></i><span>Home</span></a></li>
+            <li><a href="about.html"><i class="fas fa-info-circle"></i><span>Mission</span></a></li>
+            <li><a href="challenges.html"><i class="fas fa-shield-alt"></i><span>Protocols</span></a></li>
+            <li><a href="schedule.html" class="active"><i class="fas fa-clock"></i><span>Timeline</span></a></li>
+            <li><a href="register.html"><i class="fas fa-user-plus"></i><span>Register</span></a></li>
+        </ul>
+    </nav>
+
+    <script>
+        // Initialize GSAP animations
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Page header animation
+            gsap.to('.page-header', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: 'power3.out',
+                delay: 0.2
+            });
+
+            // Timeline items stagger animation
+            gsap.to('.timeline-item', {
+                opacity: 1,
+                x: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.timeline',
+                    start: 'top 80%'
+                }
+            });
+
+            // Afterparty section
+            gsap.to('.afterparty', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: '.afterparty',
+                    start: 'top 85%'
+                }
+            });
+
+            // Footer animation
+            gsap.to('.footer', {
+                opacity: 1,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: '.footer',
+                    start: 'top 90%'
+                }
+            });
+
+            // Page Visibility API for performance
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    gsap.globalTimeline.pause();
+                } else {
+                    gsap.globalTimeline.resume();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
