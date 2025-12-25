@@ -31,7 +31,7 @@ class CyberpunkInterface {
         // Cache frequently used elements for performance
         this.cachedElements = {
             cursor: document.querySelector('.custom-cursor'),
-            terminal: document.querySelector('.terminal-text'),
+            terminal: document.querySelector('.terminal-container'),
             particleCanvas: document.getElementById('particle-canvas'),
             protocolCards: document.querySelectorAll('.protocol-card'),
             faqQuestions: document.querySelectorAll('.faq-question'),
