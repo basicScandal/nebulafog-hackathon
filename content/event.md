@@ -1,7 +1,7 @@
 # Event Configuration
 
 ## Basic Info
-- **name**: NEBULA:FOG:PRIME
+- **name**: NEBULA:FOG:PROTOCOL
 - **tagline**: Where AI meets Security
 - **year**: 2025
 - **date**: January 25, 2025
@@ -10,7 +10,7 @@
 - **venue_address**: 1405 Minnesota St, San Francisco, CA 94107
 
 ## Hero Section
-- **hero_title**: NEBULA:FOG:PRIME
+- **hero_title**: NEBULA:FOG:PROTOCOL
 - **hero_subtitle**: January 25, 2025 • San Francisco
 - **hero_description**: Join us for the Bay Area's premier AI x Security hackathon. Build the future of secure AI systems with like-minded innovators.
 
@@ -40,4 +40,4 @@
 - **partner_portal**: https://partners.nebulafog.ai
 
 ## Meta
-- **meta_description**: NEBULA:FOG:PRIME - The Bay Area's premier AI x Security hackathon. Build, break, and defend the future of secure AI systems.
+- **meta_description**: NEBULA:FOG:PROTOCOL - The Bay Area's premier AI x Security hackathon. Build, break, and defend the future of secure AI systems.

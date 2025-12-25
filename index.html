@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEBULA:FOG:PRIME 2026 - BREACH PROTOCOL</title>
+    <title>NEBULA:FOG:PROTOCOL 2026 - BREACH PROTOCOL</title>
     <meta name="description"
         content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
 
     <!-- Open Graph / Social -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="NEBULA:FOG:PRIME 2026 - The Singularity Protocol">
+    <meta property="og:title" content="NEBULA:FOG:PROTOCOL 2026 - The Singularity Protocol">
     <meta property="og:description"
         content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. $5,000 prize pool. No spectators.">
     <meta property="og:image" content="https://nebulafog.io/og-image.png">
@@ -18,7 +18,7 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="NEBULA:FOG:PRIME 2026">
+    <meta name="twitter:title" content="NEBULA:FOG:PROTOCOL 2026">
     <meta name="twitter:description"
         content="Where AI consciousness meets cybersecurity. 120 builders. 8 hours. No spectators.">
     <meta name="twitter:image" content="https://nebulafog.io/og-image.png">
@@ -102,6 +102,8 @@
             pointer-events: none;
             z-index: 99999;
             mix-blend-mode: difference;
+            left: -100px;
+            top: -100px;
         }
 
         .cursor-dot {
@@ -359,6 +361,17 @@
             margin-bottom: 2rem;
             opacity: 0;
             transform: translateY(-20px);
+        }
+
+        .hero-brand {
+            font-family: var(--font-mono);
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--color-primary);
+            letter-spacing: 0.3em;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            text-shadow: 0 0 20px var(--color-primary);
         }
 
         .hero-title {
@@ -1066,6 +1079,7 @@
             <div class="hero-content" id="hero-content">
                 <span class="hero-tag">INCOMING TRANSMISSION // MARCH 2026</span>
 
+                <div class="hero-brand">NEBULA:FOG</div>
                 <h1 class="hero-title glitch-text" data-text="SINGULARITY:PROTOCOL" id="hero-title">
                     SINGULARITY:PROTOCOL
                 </h1>
@@ -1183,7 +1197,7 @@
 
     <footer class="footer" role="contentinfo">
         <div class="footer-content">
-            <div class="footer-logo">NEBULA:FOG:PRIME</div>
+            <div class="footer-logo">NEBULA:FOG:PROTOCOL</div>
             <p class="footer-text">Where AI consciousness meets cybersecurity.</p>
             <div class="footer-links">
                 <a href="about.html">MISSION</a>
@@ -1203,7 +1217,7 @@
                     <i class="fab fa-linkedin"></i>
                 </a>
             </div>
-            <p class="footer-copyright">&copy; 2026 NEBULA:FOG:PRIME. All rights reserved.</p>
+            <p class="footer-copyright">&copy; 2026 NEBULA:FOG:PROTOCOL. All rights reserved.</p>
         </div>
     </footer>
 
@@ -2030,6 +2044,7 @@
             initHeroAnimations() {
                 const heroContent = document.getElementById('hero-content');
                 const heroTag = document.querySelector('.hero-tag');
+                const heroBrand = document.querySelector('.hero-brand');
                 const heroTitle = document.getElementById('hero-title');
                 const heroSubtitle = document.querySelector('.subtitle-text');
                 const heroStats = document.getElementById('hero-stats');
@@ -2054,6 +2069,7 @@
 
                 tl.to(heroContent, { opacity: 1, duration: 0.5 })
                     .to(heroTag, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, '+=0.2')
+                    .to(heroBrand, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, '+=0.1')
                     .to('.hero-title .char', {
                         opacity: 1,
                         y: 0,
@@ -2193,7 +2209,7 @@
                         return '<p class="success">> Redirecting to registration...</p>';
                     },
                     info: () => `
-                        <p class="success">> NEBULA:FOG:PRIME 2026</p>
+                        <p class="success">> NEBULA:FOG:PROTOCOL 2026</p>
                         <p>  Builders: 120</p>
                         <p>  Duration: 8 hours</p>
                         <p>  Entry: $42</p>

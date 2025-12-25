@@ -1,6 +1,6 @@
 # Content Management Guide
 
-This directory contains all editable content for the NEBULA:FOG:PRIME website.
+This directory contains all editable content for the NEBULA:FOG:PROTOCOL website.
 Content is synced from [nebulafog-prime](https://github.com/basicScandal/nebulafog-prime).
 
 ## File Structure

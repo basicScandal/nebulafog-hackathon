@@ -1,4 +1,4 @@
-# NEBULA:FOG:PRIME
+# NEBULA:FOG:PROTOCOL
 
 ## Event Overview
 - **Date**: January 25, 2025
@@ -19,7 +19,7 @@ Join us for the Bay Area's premier AI x Security hackathon. Build the future of 
 
 ## Terminal Boot Sequence
 ```
-> Initializing NEBULA:FOG:PRIME v1.0.0
+> Initializing NEBULA:FOG:PROTOCOL v1.0.0
 > Loading event parameters...
 > Date: January 25, 2025
 > Location: Future House, SF

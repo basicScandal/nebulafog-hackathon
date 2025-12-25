@@ -1,4 +1,4 @@
-# About NEBULA:FOG:PRIME
+# About NEBULA:FOG:PROTOCOL
 
 ## Mission
 Join the Bay Area's most innovative AI x Security hackathon. Build, break, and defend the future of secure AI systems with fellow enthusiasts.

@@ -173,7 +173,7 @@ class AdvancedTerminal {
                     <span class="control minimize"></span>
                     <span class="control maximize"></span>
                 </div>
-                <div class="terminal-title">NEBULA:FOG:PRIME v2.6.2026</div>
+                <div class="terminal-title">NEBULA:FOG:PROTOCOL v2.6.2026</div>
             </div>
             <div class="terminal-body">
                 <div class="terminal-output"></div>
@@ -308,7 +308,7 @@ class AdvancedTerminal {
                     ██║ ╚████║███████╗███████╗██║  ██║███████╗ ╚████╔╝ ███████╗
                     ╚═╝  ╚═══╝╚══════╝╚══════╝╚═╝  ╚═╝╚══════╝  ╚═══╝  ╚══════╝
                 </div>
-                <p>Welcome to NEBULA:FOG:PRIME 2026</p>
+                <p>Welcome to NEBULA:FOG:PROTOCOL 2026</p>
                 <p>Type 'help' to see available commands</p>
             </div>
         `);

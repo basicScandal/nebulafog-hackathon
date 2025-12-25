@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-NEBULA:FOG:PRIME 2026 is a static hackathon website with an immersive cyberpunk aesthetic. It combines AI x Security themes with advanced interactive features including particle systems, 3D graphics, and an interactive terminal interface.
+NEBULA:FOG:PROTOCOL 2026 is a static hackathon website with an immersive cyberpunk aesthetic. It combines AI x Security themes with advanced interactive features including particle systems, 3D graphics, and an interactive terminal interface.
 
 ## Development
 

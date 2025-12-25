@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Project Overview
 
-NEBULA:FOG:PRIME 2026 is a static hackathon website with a cyberpunk aesthetic for an AI x Security event. No build system - pure HTML/CSS/JS loaded via CDN.
+NEBULA:FOG:PROTOCOL 2026 is a static hackathon website with a cyberpunk aesthetic for an AI x Security event. No build system - pure HTML/CSS/JS loaded via CDN.
 
 ## Development
 

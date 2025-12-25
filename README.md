@@ -1,4 +1,4 @@
-# NEBULA:FOG:PRIME 2026
+# NEBULA:FOG:PROTOCOL 2026
 
 A cyberpunk-themed hackathon website for the AI x Security event. Built with pure HTML/CSS/JS for maximum performance and zero build dependencies.
 
@@ -78,4 +78,4 @@ Static files can be deployed to any host:
 
 ## License
 
-Copyright 2026 NEBULA:FOG:PRIME. All rights reserved.
+Copyright 2026 NEBULA:FOG:PROTOCOL. All rights reserved.

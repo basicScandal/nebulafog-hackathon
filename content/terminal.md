@@ -5,7 +5,7 @@ nebula_terminal_v1.0.0
 
 ## Initial Boot Lines
 ```
-> Initializing NEBULA:FOG:PRIME v1.0.0
+> Initializing NEBULA:FOG:PROTOCOL v1.0.0
 > Loading event parameters...
 > Date: January 25, 2025
 > Location: Future House, SF
