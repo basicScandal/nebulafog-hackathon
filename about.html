@@ -260,11 +260,25 @@
             color: var(--color-text);
         }
 
+        .feature-tagline {
+            font-family: var(--font-mono);
+            color: var(--color-secondary);
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-bottom: 0.75rem;
+        }
+
         .feature-text {
             font-size: 0.9rem;
             color: var(--color-text-muted);
             line-height: 1.7;
         }
+
+        /* Classification Colors */
+        .feature-card[data-classification="RED"] .feature-index { color: #ff4444; }
+        .feature-card[data-classification="BLUE"] .feature-index { color: #4488ff; }
+        .feature-card[data-classification="CIPHER"] .feature-index { color: var(--color-accent); }
+        .feature-card[data-classification="UNBOUND"] .feature-index { color: #aa44ff; }
 
         /* ========================================
            STATS SECTION
@@ -501,9 +515,10 @@
         <ul class="hud-links">
             <li><a href="index.html" class="hud-link">HOME</a></li>
             <li><a href="about.html" class="hud-link active">MISSION</a></li>
-            <li><a href="challenges.html" class="hud-link">MATRIX</a></li>
-            <li><a href="schedule.html" class="hud-link">TIMELINE</a></li>
+            <li><a href="challenges.html" class="hud-link">CHALLENGES</a></li>
+            <li><a href="schedule.html" class="hud-link">SCHEDULE</a></li>
             <li><a href="register.html" class="hud-link">ACCESS</a></li>
+            <li><a href="partners.html" class="hud-link" data-text="PARTNERS">PARTNERS</a></li>
         </ul>
     </nav>
 
@@ -520,43 +535,47 @@
             </header>
 
             <section class="features">
-                <article class="feature-card">
+                <article class="feature-card" data-classification="RED">
                     <span class="feature-index">01</span>
-                    <h2 class="feature-title">Neural Layer</h2>
+                    <h2 class="feature-title">SHADOW::VECTOR</h2>
+                    <p class="feature-tagline">"Break the chain of trust."</p>
                     <p class="feature-text">
-                        Adversarial hardening of large-scale neural networks.
-                        Detect and neutralize unintended sovereign agency in latent spaces.
-                        Defend model weights against high-frequency infiltration.
+                        Autonomous agents are only as secure as the trust they're given.
+                        Exploit that trust. Compromise decision systems, manipulate
+                        agent-to-agent relationships.
                     </p>
                 </article>
 
-                <article class="feature-card">
+                <article class="feature-card" data-classification="BLUE">
                     <span class="feature-index">02</span>
-                    <h2 class="feature-title">Oscillation Layer</h2>
+                    <h2 class="feature-title">SENTINEL::MESH</h2>
+                    <p class="feature-tagline">"Guard the protocol."</p>
                     <p class="feature-text">
-                        Deployment of self-healing meshes to protect critical infrastructure.
-                        Counter algorithmic warfare with real-time traffic decryption
-                        and adaptive signal processing.
+                        When agents manage themselves, who watches the watchers?
+                        Build detection systems, harden autonomous architectures,
+                        deploy self-healing defenses.
                     </p>
                 </article>
 
-                <article class="feature-card">
+                <article class="feature-card" data-classification="CIPHER">
                     <span class="feature-index">03</span>
-                    <h2 class="feature-title">Synchrony Layer</h2>
+                    <h2 class="feature-title">ZERO::PROOF</h2>
+                    <p class="feature-tagline">"Trust without compromise."</p>
                     <p class="feature-text">
-                        Privacy-preserving computation at scale. Leverage zero-knowledge
-                        proofs for model verification and secure multi-party
-                        neural training in untrusted environments.
+                        How do you verify integrity without exposing the system?
+                        Design privacy-preserving verification, establish trust anchors,
+                        prove security without revealing secrets.
                     </p>
                 </article>
 
-                <article class="feature-card">
+                <article class="feature-card" data-classification="UNBOUND">
                     <span class="feature-index">04</span>
-                    <h2 class="feature-title">Phantom Layer</h2>
+                    <h2 class="feature-title">ROGUE::AGENT</h2>
+                    <p class="feature-tagline">"Write your own protocol."</p>
                     <p class="feature-text">
-                        Post-breach analysis and reconstruction of synthetic autonomous
-                        threats. Trace the origin of phantom packet streams and
-                        deconstruct adversarial shadow-models.
+                        Some threats don't fit in boxes. Neither do some solutions.
+                        Novel attack surfaces, experimental defenses, AI-powered
+                        security tooling. You define the problem.
                     </p>
                 </article>
             </section>
@@ -604,8 +623,8 @@
             <p class="footer-text">Where AI consciousness meets cybersecurity.</p>
             <div class="footer-links">
                 <a href="about.html">MISSION</a>
-                <a href="challenges.html">MATRIX</a>
-                <a href="schedule.html">TIMELINE</a>
+                <a href="challenges.html">CHALLENGES</a>
+                <a href="schedule.html">SCHEDULE</a>
                 <a href="register.html">ACCESS</a>
             </div>
             <p class="footer-copyright">© 2026 NEBULA:FOG:PROTOCOL. All rights reserved.</p>

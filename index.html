@@ -620,6 +620,29 @@
             letter-spacing: 0.1em;
         }
 
+        .protocol-tagline {
+            font-family: var(--font-mono);
+            color: var(--color-secondary);
+            font-size: 1rem;
+            font-style: italic;
+            margin: 0.5rem 0;
+            opacity: 0.9;
+        }
+
+        /* Classification Colors */
+        .protocol-card[data-classification="RED"] .protocol-encrypted {
+            color: #ff4444;
+        }
+        .protocol-card[data-classification="BLUE"] .protocol-encrypted {
+            color: #4488ff;
+        }
+        .protocol-card[data-classification="CIPHER"] .protocol-encrypted {
+            color: var(--color-accent);
+        }
+        .protocol-card[data-classification="UNBOUND"] .protocol-encrypted {
+            color: #aa44ff;
+        }
+
         .protocol-text {
             font-size: 1rem;
             color: var(--color-text-muted);
@@ -1106,9 +1129,10 @@
         <ul class="hud-links">
             <li><a href="index.html" class="hud-link active" data-text="HOME">HOME</a></li>
             <li><a href="about.html" class="hud-link" data-text="MISSION">MISSION</a></li>
-            <li><a href="challenges.html" class="hud-link" data-text="MATRIX">MATRIX</a></li>
-            <li><a href="schedule.html" class="hud-link" data-text="TIMELINE">TIMELINE</a></li>
+            <li><a href="challenges.html" class="hud-link" data-text="CHALLENGES">CHALLENGES</a></li>
+            <li><a href="schedule.html" class="hud-link" data-text="SCHEDULE">SCHEDULE</a></li>
             <li><a href="register.html" class="hud-link" data-text="ACCESS">ACCESS</a></li>
+            <li><a href="partners.html" class="hud-link" data-text="PARTNERS">PARTNERS</a></li>
         </ul>
     </nav>
 
@@ -1140,16 +1164,16 @@
 
                 <div class="hero-stats" id="hero-stats">
                     <div class="hero-stat">
-                        <span class="hero-stat-value" data-value="12.4">0</span>
-                        <span class="hero-stat-label">Breach Rate %</span>
+                        <span class="hero-stat-value" id="trust-index" data-value="73.4">0</span>
+                        <span class="hero-stat-label">Agent Trust Index %</span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" data-value="04">0</span>
-                        <span class="hero-stat-label">Detected Models</span>
+                        <span class="hero-stat-value" id="days-countdown" data-value="0">0</span>
+                        <span class="hero-stat-label">Days to Protocol</span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" data-value="100">0</span>
-                        <span class="hero-stat-label">Stability Index</span>
+                        <span class="hero-stat-value" id="operatives-count" data-value="0">—</span>
+                        <span class="hero-stat-label">Operatives Registered</span>
                     </div>
                 </div>
 
@@ -1167,56 +1191,64 @@
             </div>
         </section>
 
-        <!-- Protocol Cards Section -->
+        <!-- Challenge Tracks Section -->
         <section class="protocols" id="protocols">
-            <article class="protocol-card" data-index="01">
+            <article class="protocol-card" data-index="01" data-classification="RED">
                 <span class="protocol-index">01</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">NEURAL LAYER</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] SOVEREIGN_BEHAVIOR_ANALYSIS</p>
+                    <h2 class="protocol-title">SHADOW::VECTOR</h2>
+                    <p class="protocol-encrypted">[CLASSIFICATION: RED] OFFENSIVE PROTOCOL</p>
+                    <p class="protocol-tagline">"Break the chain of trust."</p>
                     <p class="protocol-text">
-                        Adversarial hardening of large-scale neural networks.
-                        Detect and neutralize unintended sovereign agency in latent spaces.
-                        Defend model weights against high-frequency infiltration.
+                        Autonomous agents are only as secure as the trust they're given.
+                        Your mission: exploit that trust. Compromise decision systems,
+                        manipulate agent-to-agent relationships, and demonstrate how
+                        self-governing AI can be turned against itself.
                     </p>
                 </div>
             </article>
 
-            <article class="protocol-card" data-index="02">
+            <article class="protocol-card" data-index="02" data-classification="BLUE">
                 <span class="protocol-index">02</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">OSCILLATION LAYER</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] INFRASTRUCTURE_AUTO_DEFENSE</p>
+                    <h2 class="protocol-title">SENTINEL::MESH</h2>
+                    <p class="protocol-encrypted">[CLASSIFICATION: BLUE] DEFENSIVE PROTOCOL</p>
+                    <p class="protocol-tagline">"Guard the protocol."</p>
                     <p class="protocol-text">
-                        Deployment of self-healing meshes to protect critical infrastructure.
-                        Counter algorithmic warfare with real-time traffic decryption
-                        and adaptive signal processing.
+                        When agents manage themselves, who watches the watchers?
+                        Build detection systems, harden autonomous architectures,
+                        and deploy self-healing defenses that adapt faster than
+                        attackers can pivot.
                     </p>
                 </div>
             </article>
 
-            <article class="protocol-card" data-index="03">
+            <article class="protocol-card" data-index="03" data-classification="CIPHER">
                 <span class="protocol-index">03</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">SYNCHRONY LAYER</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] CRYPTOGRAPHIC_INTEGRITY</p>
+                    <h2 class="protocol-title">ZERO::PROOF</h2>
+                    <p class="protocol-encrypted">[CLASSIFICATION: CIPHER] TRUST PROTOCOL</p>
+                    <p class="protocol-tagline">"Trust without compromise."</p>
                     <p class="protocol-text">
-                        Privacy-preserving computation at scale. Leverage zero-knowledge
-                        proofs for model verification and secure multi-party
-                        neural training in untrusted environments.
+                        In 2026, we trust agents with everything. But how do you verify
+                        integrity without exposing the system? Design privacy-preserving
+                        verification, establish trust anchors, and prove security
+                        without revealing secrets.
                     </p>
                 </div>
             </article>
 
-            <article class="protocol-card" data-index="04">
+            <article class="protocol-card" data-index="04" data-classification="UNBOUND">
                 <span class="protocol-index">04</span>
                 <div class="protocol-content">
-                    <h2 class="protocol-title">PHANTOM LAYER</h2>
-                    <p class="protocol-encrypted">[ENCRYPTED] FORENSIC_RECONSTRUCTION</p>
+                    <h2 class="protocol-title">ROGUE::AGENT</h2>
+                    <p class="protocol-encrypted">[CLASSIFICATION: UNBOUND] UNDEFINED PROTOCOL</p>
+                    <p class="protocol-tagline">"Write your own protocol."</p>
                     <p class="protocol-text">
-                        Post-breach analysis and reconstruction of synthetic autonomous
-                        threats. Trace the origin of phantom packet streams and
-                        deconstruct adversarial shadow-models.
+                        Some threats don't fit in boxes. Neither do some solutions.
+                        Novel attack surfaces, experimental defenses, agent alignment
+                        research, AI-powered security tooling, or something nobody's
+                        thought of yet. You define the problem. You define the solution.
                     </p>
                 </div>
             </article>
@@ -1249,9 +1281,10 @@
             <p class="footer-text">Where AI consciousness meets cybersecurity.</p>
             <div class="footer-links">
                 <a href="about.html">MISSION</a>
-                <a href="challenges.html">MATRIX</a>
-                <a href="schedule.html">TIMELINE</a>
+                <a href="challenges.html">CHALLENGES</a>
+                <a href="schedule.html">SCHEDULE</a>
                 <a href="register.html">ACCESS</a>
+                <a href="partners.html">PARTNERS</a>
                 <a href="code-of-conduct.html">PROTOCOL</a>
             </div>
             <div class="social-links">
@@ -1274,8 +1307,8 @@
         <ul class="mobile-nav-links">
             <li><a href="index.html" class="active"><i class="fas fa-home"></i><span>HOME</span></a></li>
             <li><a href="about.html"><i class="fas fa-info-circle"></i><span>MISSION</span></a></li>
-            <li><a href="challenges.html"><i class="fas fa-trophy"></i><span>MATRIX</span></a></li>
-            <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i><span>TIMELINE</span></a></li>
+            <li><a href="challenges.html"><i class="fas fa-trophy"></i><span>CHALLENGES</span></a></li>
+            <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i><span>SCHEDULE</span></a></li>
             <li><a href="register.html"><i class="fas fa-user-plus"></i><span>ACCESS</span></a></li>
         </ul>
     </nav>
@@ -2149,23 +2182,51 @@
             }
 
             animateCounters() {
-                document.querySelectorAll('.hero-stat-value').forEach(el => {
-                    const target = parseInt(el.dataset.value);
-                    const duration = 2000;
-                    const start = performance.now();
-                    const prefix = el.dataset.value === '5000' ? '$' : '';
+                // Calculate days until March 14, 2026
+                const protocolDate = new Date('2026-03-14T09:00:00');
+                const now = new Date();
+                const daysUntil = Math.max(0, Math.ceil((protocolDate - now) / (1000 * 60 * 60 * 24)));
 
-                    const animate = (now) => {
-                        const progress = Math.min((now - start) / duration, 1);
-                        const eased = 1 - Math.pow(1 - progress, 3);
-                        el.textContent = prefix + Math.floor(target * eased).toLocaleString();
+                // Animate Days to Protocol
+                const daysEl = document.getElementById('days-countdown');
+                if (daysEl) {
+                    this.animateValue(daysEl, 0, daysUntil, 2000);
+                }
 
-                        if (progress < 1) {
-                            requestAnimationFrame(animate);
-                        }
-                    };
-                    requestAnimationFrame(animate);
-                });
+                // Animate Trust Index with fluctuation
+                const trustEl = document.getElementById('trust-index');
+                if (trustEl) {
+                    const baseValue = 73.4;
+                    this.animateValue(trustEl, 0, baseValue, 2000, true);
+                    // Start fluctuation after initial animation
+                    setTimeout(() => this.startTrustFluctuation(trustEl, baseValue), 2500);
+                }
+
+                // Operatives count - show TBD for now
+                const operativesEl = document.getElementById('operatives-count');
+                if (operativesEl) {
+                    operativesEl.textContent = 'TBD';
+                }
+            }
+
+            animateValue(el, start, end, duration, isDecimal = false) {
+                const startTime = performance.now();
+                const animate = (now) => {
+                    const progress = Math.min((now - startTime) / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const value = start + (end - start) * eased;
+                    el.textContent = isDecimal ? value.toFixed(1) : Math.floor(value);
+                    if (progress < 1) requestAnimationFrame(animate);
+                };
+                requestAnimationFrame(animate);
+            }
+
+            startTrustFluctuation(el, baseValue) {
+                setInterval(() => {
+                    const fluctuation = (Math.random() - 0.5) * 2; // +/- 1%
+                    const newValue = Math.max(60, Math.min(90, baseValue + fluctuation));
+                    el.textContent = newValue.toFixed(1);
+                }, 3000);
             }
 
             // ========================================

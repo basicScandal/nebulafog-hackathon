@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHALLENGE:MATRIX - NEBULA:FOG:PROTOCOL 2026</title>
-    <meta name="description" content="The Singularity Challenge Matrix - Four protocol layers await infiltration.">
+    <title>ALLIED PROTOCOLS - NEBULA:FOG:PROTOCOL 2026</title>
+    <meta name="description" content="Partner with NEBULA:FOG:PROTOCOL 2026 - The AI Security Hackathon">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="NEBULA:FOG:PROTOCOL 2026 - Challenge Matrix">
-    <meta property="og:description" content="Four protocol layers. Infinite possibilities. Choose your attack vector.">
+    <meta property="og:title" content="NEBULA:FOG:PROTOCOL 2026 - Partners">
+    <meta property="og:description" content="Support the future of AI security. Partner with NEBULA:FOG:PROTOCOL 2026.">
 
     <!-- Theme -->
     <meta name="theme-color" content="#00ff9f">
@@ -203,29 +203,25 @@
         }
 
         /* ========================================
-           PROTOCOL CARDS (Challenge Tracks)
+           FEATURE GRID
            ======================================== */
-        .protocols {
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
             margin-bottom: 6rem;
         }
 
-        .protocol-card {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 3rem;
-            align-items: start;
-            padding: 3rem;
+        .feature-card {
+            padding: 2.5rem;
             border: 1px solid var(--color-text-dim);
             position: relative;
             opacity: 0;
             transform: translateY(40px);
-            transition: all 0.4s var(--ease-out-expo);
+            transition: border-color 0.4s var(--ease-out-expo);
         }
 
-        .protocol-card::before {
+        .feature-card::before {
             content: '';
             position: absolute;
             inset: 0;
@@ -234,80 +230,107 @@
             transition: opacity 0.4s var(--ease-out-expo);
         }
 
-        .protocol-card:hover {
+        .feature-card:hover {
             border-color: var(--color-primary);
         }
 
-        .protocol-card:hover::before {
+        .feature-card:hover::before {
             opacity: 1;
         }
 
-        .protocol-index {
-            font-size: clamp(3rem, 8vw, 5rem);
+        .feature-index {
+            font-size: 3rem;
             font-weight: 700;
             color: var(--color-text-dim);
             line-height: 1;
-            transition: all 0.4s var(--ease-out-expo);
+            margin-bottom: 1.5rem;
+            transition: color 0.4s var(--ease-out-expo);
         }
 
-        .protocol-card:hover .protocol-index {
+        .feature-card:hover .feature-index {
             color: var(--color-primary);
-            text-shadow: 0 0 30px var(--color-primary);
+            text-shadow: 0 0 20px var(--color-primary);
         }
 
-        .protocol-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .protocol-title {
+        .feature-title {
             font-family: var(--font-display);
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             color: var(--color-text);
         }
 
-        .protocol-tag {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: rgba(0, 255, 159, 0.1);
-            border: 1px solid var(--color-primary);
-            color: var(--color-primary);
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
+        .feature-tagline {
+            font-family: var(--font-mono);
+            color: var(--color-secondary);
+            font-size: 0.85rem;
+            font-style: italic;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            line-height: 1.7;
+        }
+
+        /* Classification Colors */
+        .feature-card[data-classification="RED"] .feature-index { color: #ff4444; }
+        .feature-card[data-classification="BLUE"] .feature-index { color: #4488ff; }
+        .feature-card[data-classification="CIPHER"] .feature-index { color: var(--color-accent); }
+        .feature-card[data-classification="UNBOUND"] .feature-index { color: #aa44ff; }
+
+        /* ========================================
+           STATS SECTION
+           ======================================== */
+        .stats-section {
+            padding: 4rem;
+            border: 1px solid var(--color-text-dim);
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .stats-header {
+            margin-bottom: 2rem;
+        }
+
+        .stats-title {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 600;
             margin-bottom: 1rem;
         }
 
-        .protocol-tagline {
-            font-family: var(--font-mono);
-            color: var(--color-secondary);
-            font-size: 1rem;
-            font-style: italic;
-            margin: 0.5rem 0;
-            opacity: 0.9;
-        }
-
-        .protocol-text {
-            font-size: 0.95rem;
+        .stats-text {
             color: var(--color-text-muted);
             line-height: 1.8;
         }
 
-        .protocol-skills {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--color-text-dim);
         }
 
-        .skill-tag {
-            padding: 0.25rem 0.5rem;
-            background: rgba(255, 0, 128, 0.1);
-            border: 1px solid var(--color-secondary);
-            color: var(--color-secondary);
-            font-size: 0.65rem;
-            letter-spacing: 0.05em;
+        .stat-value {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--color-primary);
+            text-shadow: 0 0 30px var(--color-primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
         }
 
         /* ========================================
@@ -472,13 +495,8 @@
             .hud-nav { display: none; }
             .mobile-nav { display: block; }
             .main { padding-bottom: 120px; }
-            .protocol-card {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            .protocol-index {
-                font-size: 2.5rem;
-            }
+            .stats-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .page-header { margin-bottom: 4rem; }
         }
     </style>
 </head>
@@ -492,15 +510,15 @@
         <div class="hud-status">
             <div class="status-dot"></div>
             <span>SYS_CONNECTED</span>
-            <span style="margin-left: 10px; opacity: 0.7;">CHALLENGES_VIEW</span>
+            <span style="margin-left: 10px; opacity: 0.7;">PARTNERS_VIEW</span>
         </div>
         <ul class="hud-links">
             <li><a href="index.html" class="hud-link">HOME</a></li>
             <li><a href="about.html" class="hud-link">MISSION</a></li>
-            <li><a href="challenges.html" class="hud-link active">CHALLENGES</a></li>
+            <li><a href="challenges.html" class="hud-link">CHALLENGES</a></li>
             <li><a href="schedule.html" class="hud-link">SCHEDULE</a></li>
             <li><a href="register.html" class="hud-link">ACCESS</a></li>
-            <li><a href="partners.html" class="hud-link" data-text="PARTNERS">PARTNERS</a></li>
+            <li><a href="partners.html" class="hud-link active" data-text="PARTNERS">PARTNERS</a></li>
         </ul>
     </nav>
 
@@ -508,103 +526,34 @@
     <main class="main">
         <div class="container">
             <header class="page-header">
-                <span class="page-tag">CHALLENGE TRACKS // 2026</span>
-                <h1 class="page-title">THE SINGULARITY PROTOCOL</h1>
+                <span class="page-tag">ALLIED PROTOCOLS // 2026</span>
+                <h1 class="page-title">PARTNERS</h1>
                 <p class="page-subtitle">
-                    2026: The year we trusted agents to manage themselves. Four tracks.
-                    Eight hours. Build something that matters. This isn't a CTF—it's a build session.
+                    NEBULA:FOG:PROTOCOL 2026 is supported by organizations committed to
+                    securing the future of autonomous AI.
                 </p>
             </header>
 
-            <section class="protocols">
-                <article class="protocol-card" data-classification="RED">
-                    <span class="protocol-index" style="color: #ff4444;">01</span>
-                    <div class="protocol-content">
-                        <h2 class="protocol-title">SHADOW::VECTOR</h2>
-                        <span class="protocol-tag" style="color: #ff4444;">[CLASSIFICATION: RED] OFFENSIVE PROTOCOL</span>
-                        <p class="protocol-tagline">"Break the chain of trust."</p>
-                        <p class="protocol-text">
-                            Autonomous agents are only as secure as the trust they're given.
-                            Your mission: exploit that trust. Compromise decision systems,
-                            manipulate agent-to-agent relationships, and demonstrate how
-                            self-governing AI can be turned against itself.
-                        </p>
-                        <div class="protocol-skills">
-                            <span class="skill-tag">Agent Exploitation</span>
-                            <span class="skill-tag">Trust Manipulation</span>
-                            <span class="skill-tag">Adversarial AI</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="protocol-card" data-classification="BLUE">
-                    <span class="protocol-index" style="color: #4488ff;">02</span>
-                    <div class="protocol-content">
-                        <h2 class="protocol-title">SENTINEL::MESH</h2>
-                        <span class="protocol-tag" style="color: #4488ff;">[CLASSIFICATION: BLUE] DEFENSIVE PROTOCOL</span>
-                        <p class="protocol-tagline">"Guard the protocol."</p>
-                        <p class="protocol-text">
-                            When agents manage themselves, who watches the watchers?
-                            Build detection systems, harden autonomous architectures,
-                            and deploy self-healing defenses that adapt faster than
-                            attackers can pivot.
-                        </p>
-                        <div class="protocol-skills">
-                            <span class="skill-tag">Detection Systems</span>
-                            <span class="skill-tag">Self-Healing Defenses</span>
-                            <span class="skill-tag">Architecture Hardening</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="protocol-card" data-classification="CIPHER">
-                    <span class="protocol-index" style="color: #0ff;">03</span>
-                    <div class="protocol-content">
-                        <h2 class="protocol-title">ZERO::PROOF</h2>
-                        <span class="protocol-tag" style="color: #0ff;">[CLASSIFICATION: CIPHER] TRUST PROTOCOL</span>
-                        <p class="protocol-tagline">"Trust without compromise."</p>
-                        <p class="protocol-text">
-                            In 2026, we trust agents with everything. But how do you verify
-                            integrity without exposing the system? Design privacy-preserving
-                            verification, establish trust anchors, and prove security
-                            without revealing secrets.
-                        </p>
-                        <div class="protocol-skills">
-                            <span class="skill-tag">Zero-Knowledge Proofs</span>
-                            <span class="skill-tag">Trust Anchors</span>
-                            <span class="skill-tag">Privacy Engineering</span>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="protocol-card" data-classification="UNBOUND">
-                    <span class="protocol-index" style="color: #aa44ff;">04</span>
-                    <div class="protocol-content">
-                        <h2 class="protocol-title">ROGUE::AGENT</h2>
-                        <span class="protocol-tag" style="color: #aa44ff;">[CLASSIFICATION: UNBOUND] UNDEFINED PROTOCOL</span>
-                        <p class="protocol-tagline">"Write your own protocol."</p>
-                        <p class="protocol-text">
-                            Some threats don't fit in boxes. Neither do some solutions.
-                            Novel attack surfaces, experimental defenses, agent alignment
-                            research, AI-powered security tooling, or something nobody's
-                            thought of yet. You define the problem. You define the solution.
-                        </p>
-                        <div class="protocol-skills">
-                            <span class="skill-tag">Novel Research</span>
-                            <span class="skill-tag">AI Security Tooling</span>
-                            <span class="skill-tag">Agent Alignment</span>
-                        </div>
-                    </div>
+            <section class="features">
+                <article class="feature-card">
+                    <span class="feature-index" style="color: var(--color-text-dim);">—</span>
+                    <h2 class="feature-title">PARTNER LOGOS</h2>
+                    <p class="feature-text" style="text-align: center; padding: 3rem 0;">
+                        [ COMING SOON ]<br><br>
+                        Partner information will be displayed here.
+                    </p>
                 </article>
             </section>
 
             <section class="cta-section">
-                <h2 class="cta-title">Ready to Build?</h2>
-                <p class="cta-text">Choose your track and join the mission. 8 hours. Ship something real.</p>
-                <a href="register.html" class="btn-primary">
-                    <span>[ INITIATE REGISTRATION ]</span>
-                    <span>>></span>
-                </a>
+                <h2 class="cta-title">Interested in Alliance?</h2>
+                <p class="cta-text">
+                    Partner with NEBULA:FOG:PROTOCOL 2026 to support the next generation of AI security builders.
+                    Sponsorship tiers and benefits coming soon.
+                </p>
+                <p class="cta-text" style="margin-top: 1.5rem; font-family: var(--font-mono); color: var(--color-primary);">
+                    Contact: [ TBD ]
+                </p>
             </section>
         </div>
     </main>
@@ -630,7 +579,7 @@
         <ul class="mobile-nav-links">
             <li><a href="index.html">⌂ HOME</a></li>
             <li><a href="about.html">◎ MISSION</a></li>
-            <li><a href="challenges.html" class="active">◈ CHALLENGES</a></li>
+            <li><a href="challenges.html">◈ CHALLENGES</a></li>
             <li><a href="schedule.html">◷ SCHEDULE</a></li>
             <li><a href="register.html">⊕ ACCESS</a></li>
         </ul>
@@ -646,13 +595,22 @@
                 ease: 'power3.out'
             });
 
-            // Animate protocol cards with stagger
-            gsap.to('.protocol-card', {
+            // Animate feature cards with stagger
+            gsap.to('.feature-card', {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                stagger: 0.2,
+                stagger: 0.15,
                 delay: 0.3,
+                ease: 'power3.out'
+            });
+
+            // Animate stats section
+            gsap.to('.stats-section', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: 0.8,
                 ease: 'power3.out'
             });
 
@@ -661,8 +619,28 @@
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                delay: 1.2,
+                delay: 1,
                 ease: 'power3.out'
+            });
+
+            // Counter animation for stats
+            document.querySelectorAll('.stat-value').forEach(stat => {
+                const target = stat.textContent;
+                const isNumber = !isNaN(parseInt(target));
+
+                if (isNumber) {
+                    const value = parseInt(target);
+                    gsap.from(stat, {
+                        textContent: 0,
+                        duration: 2,
+                        delay: 1.2,
+                        ease: 'power2.out',
+                        snap: { textContent: 1 },
+                        onUpdate: function() {
+                            stat.textContent = Math.round(this.targets()[0].textContent) + (target.includes('+') ? '+' : '');
+                        }
+                    });
+                }
             });
         });
     </script>
