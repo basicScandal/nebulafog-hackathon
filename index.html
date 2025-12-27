@@ -2247,6 +2247,7 @@
                 if (!el) return;
                 const startTime = performance.now();
                 const animate = (now) => {
+                    if (!el) return; // Check again in callback
                     const progress = Math.min((now - startTime) / duration, 1);
                     const eased = 1 - Math.pow(1 - progress, 3);
                     const value = start + (end - start) * eased;
@@ -2259,6 +2260,7 @@
             startTrustFluctuation(el, baseValue) {
                 if (!el) return;
                 setInterval(() => {
+                    if (!el) return; // Check again in callback
                     const fluctuation = (Math.random() - 0.5) * 2; // +/- 1%
                     const newValue = Math.max(60, Math.min(90, baseValue + fluctuation));
                     el.textContent = newValue.toFixed(1);
