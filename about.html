@@ -433,35 +433,100 @@
             margin-top: 0.5rem;
         }
 
-        /* Video embed container */
-        .video-container {
-            position: relative;
+        /* Demo Gallery */
+        .demo-gallery {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             margin: 3rem auto;
-            aspect-ratio: 16/9;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .demo-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
             background: var(--color-bg-elevated);
             border: 1px solid var(--color-text-dim);
-            overflow: hidden;
-            opacity: 0;
-            transform: scale(0.95);
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s var(--ease-out-expo);
         }
 
-        .video-placeholder {
-            width: 100%;
-            height: 100%;
+        .demo-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 255, 170, 0.15);
+        }
+
+        .demo-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(0, 255, 170, 0.1), rgba(255, 0, 128, 0.1));
+            border-color: var(--color-primary);
+        }
+
+        .demo-thumbnail {
+            position: relative;
+            width: 80px;
+            height: 60px;
+            background: var(--color-bg-primary);
+            border-radius: 4px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--color-text-dim);
+            flex-shrink: 0;
         }
 
-        .video-placeholder i {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+        .demo-thumbnail i {
+            font-size: 1.5rem;
             color: var(--color-primary);
-            opacity: 0.5;
+        }
+
+        .demo-card.featured .demo-thumbnail {
+            width: 120px;
+            height: 80px;
+        }
+
+        .demo-card.featured .demo-thumbnail i {
+            font-size: 2.5rem;
+            color: #ff0050;
+        }
+
+        .demo-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff0050;
+            color: #fff;
+            font-size: 0.5rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .demo-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .demo-title {
+            color: var(--color-text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .demo-meta {
+            color: var(--color-text-dim);
+            font-size: 0.75rem;
         }
 
         /* ========================================
@@ -829,6 +894,23 @@
             .track-card {
                 flex: 0 0 260px;
             }
+
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-card.featured {
+                grid-column: span 1;
+            }
+
+            .demo-card.featured .demo-thumbnail {
+                width: 80px;
+                height: 60px;
+            }
+
+            .demo-card.featured .demo-thumbnail i {
+                font-size: 1.5rem;
+            }
         }
 
         /* Reduced motion */
@@ -928,40 +1010,22 @@
                 <!-- Photo Gallery: 2025 Hackathon -->
                 <div class="photo-gallery" id="hackathon-gallery">
                     <div class="photo-item">
-                        <div class="photo-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>IMG_2294</span>
-                        </div>
+                        <img src="images/2025/hackathon/IMG_2294.jpg" alt="NEBULA:FOG 2025 Hackathon" loading="lazy">
                     </div>
                     <div class="photo-item">
-                        <div class="photo-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>IMG_2300</span>
-                        </div>
+                        <img src="images/2025/hackathon/IMG_2300.jpg" alt="NEBULA:FOG 2025 Hackathon" loading="lazy">
                     </div>
                     <div class="photo-item">
-                        <div class="photo-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>IMG_2314</span>
-                        </div>
+                        <img src="images/2025/hackathon/IMG_2314.jpg" alt="NEBULA:FOG 2025 Hackathon" loading="lazy">
                     </div>
                     <div class="photo-item">
-                        <div class="photo-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>IMG_2319</span>
-                        </div>
+                        <img src="images/2025/hackathon/IMG_2319.jpg" alt="NEBULA:FOG 2025 Hackathon" loading="lazy">
                     </div>
                     <div class="photo-item">
-                        <div class="photo-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>IMG_2322</span>
-                        </div>
+                        <img src="images/2025/hackathon/IMG_2322.jpg" alt="NEBULA:FOG 2025 Hackathon" loading="lazy">
                     </div>
                     <div class="photo-item">
-                        <div class="photo-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>IMG_2328</span>
-                        </div>
+                        <img src="images/2025/hackathon/IMG_2328.jpg" alt="NEBULA:FOG 2025 Hackathon" loading="lazy">
                     </div>
                 </div>
             </div>
@@ -998,12 +1062,50 @@
                 </div>
             </div>
 
-            <!-- Video Placeholder -->
-            <div class="video-container">
-                <div class="video-placeholder">
-                    <i class="fas fa-play-circle"></i>
-                    <span>2025 HIGHLIGHTS</span>
-                    <span style="font-size: 0.7rem; margin-top: 0.5rem; color: var(--color-text-dim);">Video coming soon</span>
+            <!-- Demo Gallery: YouTube Highlights -->
+            <div class="demo-gallery">
+                <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--color-text);">
+                    <i class="fab fa-youtube" style="color: #ff0050; margin-right: 0.5rem;"></i>
+                    2025 DEMOS & HIGHLIGHTS
+                </h3>
+                <div class="demo-grid">
+                    <a href="https://www.youtube.com/@NEBULAFOG" target="_blank" rel="noopener noreferrer" class="demo-card featured">
+                        <div class="demo-thumbnail">
+                            <i class="fas fa-play-circle"></i>
+                            <span class="demo-badge">FEATURED</span>
+                        </div>
+                        <div class="demo-info">
+                            <span class="demo-title">2025 Hackathon Highlights</span>
+                            <span class="demo-meta">Watch the full playlist on YouTube</span>
+                        </div>
+                    </a>
+                    <a href="https://www.youtube.com/@NEBULAFOG" target="_blank" rel="noopener noreferrer" class="demo-card">
+                        <div class="demo-thumbnail">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="demo-info">
+                            <span class="demo-title">SENTINEL::MESH Demos</span>
+                            <span class="demo-meta">Defense track presentations</span>
+                        </div>
+                    </a>
+                    <a href="https://www.youtube.com/@NEBULAFOG" target="_blank" rel="noopener noreferrer" class="demo-card">
+                        <div class="demo-thumbnail">
+                            <i class="fas fa-skull-crossbones"></i>
+                        </div>
+                        <div class="demo-info">
+                            <span class="demo-title">SHADOW::VECTOR Demos</span>
+                            <span class="demo-meta">Attack track presentations</span>
+                        </div>
+                    </a>
+                    <a href="https://www.youtube.com/@NEBULAFOG" target="_blank" rel="noopener noreferrer" class="demo-card">
+                        <div class="demo-thumbnail">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div class="demo-info">
+                            <span class="demo-title">ZERO::PROOF Demos</span>
+                            <span class="demo-meta">Privacy track presentations</span>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1078,34 +1180,19 @@
             <!-- Afterparty Photo Gallery -->
             <div class="afterparty-gallery">
                 <div class="photo-item">
-                    <div class="photo-placeholder">
-                        <i class="fas fa-image"></i>
-                        <span>AFTERPARTY_01</span>
-                    </div>
+                    <img src="images/2025/hackathon/IMG_2375.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
                 </div>
                 <div class="photo-item">
-                    <div class="photo-placeholder">
-                        <i class="fas fa-image"></i>
-                        <span>AFTERPARTY_02</span>
-                    </div>
+                    <img src="images/2025/hackathon/IMG_2382.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
                 </div>
                 <div class="photo-item">
-                    <div class="photo-placeholder">
-                        <i class="fas fa-image"></i>
-                        <span>AFTERPARTY_03</span>
-                    </div>
+                    <img src="images/2025/hackathon/IMG_2398.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
                 </div>
                 <div class="photo-item">
-                    <div class="photo-placeholder">
-                        <i class="fas fa-image"></i>
-                        <span>AFTERPARTY_04</span>
-                    </div>
+                    <img src="images/2025/hackathon/IMG_2412.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
                 </div>
                 <div class="photo-item">
-                    <div class="photo-placeholder">
-                        <i class="fas fa-image"></i>
-                        <span>AFTERPARTY_05</span>
-                    </div>
+                    <img src="images/2025/hackathon/IMG_2429.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
                 </div>
             </div>
         </div>
@@ -1282,8 +1369,8 @@
                     });
                 });
 
-                gsap.to('.video-container', {
-                    opacity: 1, scale: 1, duration: 0.8, delay: 1, ease: 'power3.out'
+                gsap.to('.demo-gallery', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 1, ease: 'power3.out'
                 });
             },
             once: true
