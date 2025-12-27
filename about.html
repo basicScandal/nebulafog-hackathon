@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>MISSION:PROTOCOL - NEBULA:FOG:PROTOCOL 2026</title>
-    <meta name="description" content="The Singularity Protocol Mission - AI x Security">
+    <meta name="description" content="The story of AI x Security - From 2025 to 2026">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -23,457 +23,675 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css">
 
-    <!-- GSAP -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
     <style>
         /* ========================================
            CSS CUSTOM PROPERTIES
            ======================================== */
         :root {
-            --color-bg: #030303;
-            --color-bg-elevated: #0a0a0a;
+            --color-bg: #0a0a0a;
+            --color-bg-elevated: #111111;
             --color-primary: #00ff9f;
             --color-secondary: #ff0080;
             --color-accent: #0ff;
             --color-text: #ffffff;
-            --color-text-muted: #666666;
-            --color-text-dim: #333333;
+            --color-text-muted: #888888;
+            --color-text-dim: #444444;
             --font-mono: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
             --font-display: 'Space Grotesk', system-ui, sans-serif;
             --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --section-padding: 10vh 8vw;
         }
 
         /* ========================================
            RESET & BASE
            ======================================== */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html { font-size: 16px; scroll-behavior: smooth; }
-
+        html { font-size: 16px; }
         body {
             font-family: var(--font-mono);
             background: var(--color-bg);
             color: var(--color-text);
             line-height: 1.6;
             overflow-x: hidden;
-            cursor: none;
             -webkit-font-smoothing: antialiased;
         }
-
-        /* ========================================
-           CUSTOM CURSOR
-           ======================================== */
-        .cursor {
-            position: fixed;
-            pointer-events: none;
-            z-index: 99999;
-            mix-blend-mode: difference;
-        }
-
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--color-primary);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .cursor-ring {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--color-primary);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.15s var(--ease-out-expo);
-        }
-
-        .cursor-ring.hover {
-            width: 60px;
-            height: 60px;
-            border-color: var(--color-secondary);
-        }
-
-        .cursor-ring.clicking {
-            transform: translate(-50%, -50%) scale(0.8);
-        }
-
-        /* ========================================
-           PARTICLES CANVAS
-           ======================================== */
-        .particles-canvas {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
+        a { color: inherit; text-decoration: none; }
         ::selection { background: var(--color-primary); color: var(--color-bg); }
 
         /* ========================================
-           CUSTOM CURSOR
+           SCROLL PROGRESS BAR
            ======================================== */
-        .cursor {
+        .scroll-progress {
             position: fixed;
-            pointer-events: none;
-            z-index: 99999;
-            mix-blend-mode: difference;
-            left: -100px;
-            top: -100px;
-        }
-
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--color-primary);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .cursor-ring {
-            width: 40px;
-            height: 40px;
-            border: 1px solid var(--color-primary);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.15s var(--ease-out-expo);
-        }
-
-        .cursor-ring.hover {
-            width: 60px;
-            height: 60px;
-            border-color: var(--color-secondary);
-        }
-
-        .cursor-ring.clicking {
-            transform: translate(-50%, -50%) scale(0.8);
-        }
-
-        /* ========================================
-           PARTICLES CANVAS
-           ======================================== */
-        .particles-canvas {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        a { color: inherit; text-decoration: none; }
-
-        /* ========================================
-           GRID BACKGROUND & EFFECTS
-           ======================================== */
-        .grid-bg {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: -1;
-            background-image:
-                linear-gradient(rgba(0, 255, 159, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 159, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
-        }
-
-        .scanlines {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
             z-index: 9999;
-            background: repeating-linear-gradient(0deg,
-                transparent, transparent 2px,
-                rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px);
-            opacity: 0.15;
+            transition: width 0.1s linear;
         }
 
         /* ========================================
-           NAVIGATION
+           NAVIGATION (Minimal for storytelling)
            ======================================== */
-        .hud-nav {
+        .nav-minimal {
             position: fixed;
             top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-pill {
+            padding: 0.5rem 1rem;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid var(--color-text-dim);
+            color: var(--color-text-muted);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .nav-pill:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        /* Back to home button */
+        .nav-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
             z-index: 1000;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 10px 20px;
-            background: rgba(3, 3, 3, 0.85);
-            border: 1px solid rgba(0, 255, 159, 0.2);
-            border-radius: 4px;
-            backdrop-filter: blur(15px);
-        }
-
-        .hud-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding-right: 15px;
-            border-right: 1px solid rgba(0, 255, 159, 0.2);
-            font-size: 0.75rem;
-            color: var(--color-primary);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--color-primary);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--color-primary);
-            animation: pulse-dot 2s infinite;
-        }
-
-        @keyframes pulse-dot {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .hud-links {
-            display: flex;
-            gap: 1rem;
-            list-style: none;
-        }
-
-        .hud-link {
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(10, 10, 10, 0.8);
+            border: 1px solid var(--color-text-dim);
             color: var(--color-text-muted);
-            font-size: 0.8rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s var(--ease-out-expo);
         }
 
-        .hud-link:hover, .hud-link.active {
+        .nav-back:hover {
+            border-color: var(--color-primary);
             color: var(--color-primary);
-            text-shadow: 0 0 10px var(--color-primary);
         }
 
         /* ========================================
-           MAIN CONTENT
+           SECTION BASE STYLES
            ======================================== */
-        .main {
-            padding: 120px 5vw 80px;
+        .story-section {
             min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        /* Page Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 6rem;
-            opacity: 0;
-            transform: translateY(40px);
-        }
-
-        .page-tag {
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            border: 1px solid var(--color-text-dim);
-            color: var(--color-text-muted);
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-        }
-
-        .page-title {
-            font-family: var(--font-mono);
-            font-size: clamp(2rem, 6vw, 4rem);
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            color: var(--color-primary);
-            text-shadow: 0 0 40px rgba(0, 255, 159, 0.3);
-        }
-
-        .page-subtitle {
-            font-size: 1.1rem;
-            color: var(--color-text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.8;
-        }
-
-        /* ========================================
-           FEATURE GRID
-           ======================================== */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 6rem;
-        }
-
-        .feature-card {
-            padding: 2.5rem;
-            border: 1px solid var(--color-text-dim);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--section-padding);
             position: relative;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: border-color 0.4s var(--ease-out-expo);
+            overflow: hidden;
         }
 
-        .feature-card::before {
-            content: '';
+        .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Section backgrounds */
+        .section-bg {
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(0, 255, 159, 0.02) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.4s var(--ease-out-expo);
+            z-index: 0;
+            opacity: 0.5;
         }
 
-        .feature-card:hover {
-            border-color: var(--color-primary);
+        .section-bg-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
         }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-index {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--color-text-dim);
-            line-height: 1;
-            margin-bottom: 1.5rem;
-            transition: color 0.4s var(--ease-out-expo);
-        }
-
-        .feature-card:hover .feature-index {
-            color: var(--color-primary);
-            text-shadow: 0 0 20px var(--color-primary);
-        }
-
-        .feature-title {
-            font-family: var(--font-display);
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--color-text);
-        }
-
-        .feature-tagline {
-            font-family: var(--font-mono);
-            color: var(--color-secondary);
-            font-size: 0.85rem;
-            font-style: italic;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-text {
-            font-size: 0.9rem;
-            color: var(--color-text-muted);
-            line-height: 1.7;
-        }
-
-        /* Classification Colors */
-        .feature-card[data-classification="RED"] .feature-index { color: #ff4444; }
-        .feature-card[data-classification="BLUE"] .feature-index { color: #4488ff; }
-        .feature-card[data-classification="CIPHER"] .feature-index { color: var(--color-accent); }
-        .feature-card[data-classification="UNBOUND"] .feature-index { color: #aa44ff; }
 
         /* ========================================
-           STATS SECTION
+           TYPOGRAPHY
            ======================================== */
-        .stats-section {
-            padding: 4rem;
+        .section-tag {
+            display: inline-block;
+            padding: 0.4rem 1rem;
             border: 1px solid var(--color-text-dim);
-            margin-bottom: 6rem;
+            color: var(--color-text-muted);
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 1.5rem;
             opacity: 0;
             transform: translateY(40px);
         }
 
-        .stats-header {
+        .section-title-accent {
+            color: var(--color-primary);
+            text-shadow: 0 0 60px rgba(0, 255, 159, 0.4);
+        }
+
+        .section-subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--color-text-muted);
+            max-width: 700px;
+            line-height: 1.8;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .section-quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-style: italic;
+            color: var(--color-secondary);
+            margin: 2rem 0;
+            padding-left: 2rem;
+            border-left: 3px solid var(--color-secondary);
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+
+        /* ========================================
+           SECTION 1: HERO
+           ======================================== */
+        .section-hero {
+            background: radial-gradient(ellipse at center, rgba(0, 255, 159, 0.05) 0%, transparent 70%);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 159, 0.1);
+            border: 1px solid rgba(0, 255, 159, 0.3);
+            color: var(--color-primary);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
             margin-bottom: 2rem;
         }
 
-        .stats-title {
-            font-family: var(--font-display);
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+        .hero-title-line {
+            display: block;
+            overflow: hidden;
         }
 
-        .stats-text {
+        .hero-title-word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
             color: var(--color-text-muted);
-            line-height: 1.8;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            animation: bounce 2s infinite;
         }
 
-        .stats-grid {
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-indicator i {
+            font-size: 1.2rem;
+        }
+
+        /* ========================================
+           SECTION 2: ORIGIN (2025)
+           ======================================== */
+        .section-origin {
+            background: linear-gradient(180deg, var(--color-bg) 0%, rgba(255, 0, 128, 0.03) 100%);
+        }
+
+        .origin-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 3rem;
-            text-align: center;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
             margin-top: 3rem;
-            padding-top: 3rem;
-            border-top: 1px solid var(--color-text-dim);
         }
 
-        .stat-value {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+        .origin-text {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        .origin-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .origin-stat {
+            text-align: center;
+        }
+
+        .origin-stat-value {
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--color-primary);
-            text-shadow: 0 0 30px var(--color-primary);
             display: block;
         }
 
-        .stat-label {
-            font-size: 0.7rem;
+        .origin-stat-label {
+            font-size: 0.65rem;
             color: var(--color-text-muted);
             letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        /* ========================================
+           PHOTO GALLERY STYLES
+           ======================================== */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            opacity: 0;
+            transform: translateX(40px);
+        }
+
+        .photo-item {
+            aspect-ratio: 4/3;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-text-dim);
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .photo-item:hover {
+            border-color: var(--color-primary);
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s var(--ease-out-expo);
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-dim);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+        }
+
+        .photo-placeholder i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        /* Glitch effect on hover */
+        .photo-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent 0%, rgba(0, 255, 159, 0.1) 50%, transparent 100%);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        .photo-item:hover::after {
+            animation: scanline 0.5s linear;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* ========================================
+           SECTION 3: THE BUILDERS
+           ======================================== */
+        .section-builders {
+            background: linear-gradient(180deg, rgba(255, 0, 128, 0.03) 0%, var(--color-bg) 100%);
+        }
+
+        .builders-content {
+            text-align: center;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 6rem;
+            margin: 4rem 0;
+        }
+
+        .big-stat {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .big-stat-value {
+            font-size: clamp(4rem, 12vw, 8rem);
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1;
+            text-shadow: 0 0 80px rgba(0, 255, 159, 0.5);
+        }
+
+        .big-stat-label {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             margin-top: 0.5rem;
         }
 
-        /* ========================================
-           CTA SECTION
-           ======================================== */
-        .cta-section {
-            text-align: center;
-            padding: 4rem;
-            background: linear-gradient(135deg, rgba(0, 255, 159, 0.03) 0%, rgba(255, 0, 128, 0.03) 100%);
+        /* Video embed container */
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 3rem auto;
+            aspect-ratio: 16/9;
+            background: var(--color-bg-elevated);
             border: 1px solid var(--color-text-dim);
+            overflow: hidden;
+            opacity: 0;
+            transform: scale(0.95);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-dim);
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+            opacity: 0.5;
+        }
+
+        /* ========================================
+           SECTION 4: CHALLENGE TRACKS
+           ======================================== */
+        .section-tracks {
+            background: var(--color-bg);
+        }
+
+        .tracks-scroll {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 2rem 0;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tracks-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .tracks-scroll::-webkit-scrollbar-track {
+            background: var(--color-bg-elevated);
+        }
+
+        .tracks-scroll::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+        }
+
+        .track-card {
+            flex: 0 0 300px;
+            padding: 2.5rem;
+            background: var(--color-bg-elevated);
+            border: 1px solid var(--color-text-dim);
+            scroll-snap-align: start;
             opacity: 0;
             transform: translateY(40px);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .track-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-5px);
+        }
+
+        .track-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-text-dim);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .track-card:nth-child(1) .track-number { color: #ff4444; }
+        .track-card:nth-child(2) .track-number { color: #4488ff; }
+        .track-card:nth-child(3) .track-number { color: var(--color-accent); }
+        .track-card:nth-child(4) .track-number { color: #aa44ff; }
+
+        .track-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .track-subtitle {
+            color: var(--color-secondary);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .track-desc {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           SECTION 5: AFTERPARTY
+           ======================================== */
+        .section-afterparty {
+            background: linear-gradient(180deg, var(--color-bg) 0%, rgba(255, 0, 128, 0.05) 50%, var(--color-bg) 100%);
+        }
+
+        .afterparty-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 700;
+            color: var(--color-secondary);
+            text-shadow: 0 0 80px rgba(255, 0, 128, 0.5);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .afterparty-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 200px);
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .afterparty-gallery .photo-item:first-child {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        /* ========================================
+           SECTION 6: 2026 AWAITS
+           ======================================== */
+        .section-future {
+            background: radial-gradient(ellipse at center, rgba(0, 255, 159, 0.08) 0%, transparent 60%);
+        }
+
+        .timeline-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            margin: 4rem 0;
+        }
+
+        .timeline-year {
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .timeline-year-value {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .timeline-year-label {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .timeline-year.past .timeline-year-value {
+            color: var(--color-text-dim);
+        }
+
+        .timeline-year.future .timeline-year-value {
+            color: var(--color-primary);
+            text-shadow: 0 0 60px rgba(0, 255, 159, 0.5);
+        }
+
+        .timeline-arrow {
+            font-size: 2rem;
+            color: var(--color-primary);
+            opacity: 0;
+        }
+
+        .evolution-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .evolution-item {
+            padding: 1.5rem;
+            border: 1px solid var(--color-text-dim);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .evolution-item-title {
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .evolution-item-text {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ========================================
+           SECTION 7: CTA
+           ======================================== */
+        .section-cta {
+            text-align: center;
+            background: linear-gradient(180deg, var(--color-bg) 0%, rgba(0, 255, 159, 0.03) 100%);
         }
 
         .cta-title {
             font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(40px);
         }
 
-        .cta-text {
+        .cta-subtitle {
             color: var(--color-text-muted);
-            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
         }
 
         .btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2.5rem;
+            gap: 1rem;
+            padding: 1.25rem 3rem;
             background: transparent;
-            border: 1px solid var(--color-primary);
+            border: 2px solid var(--color-primary);
             color: var(--color-primary);
             font-family: var(--font-mono);
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             cursor: pointer;
             position: relative;
             overflow: hidden;
             transition: all 0.4s var(--ease-out-expo);
+            opacity: 0;
+            transform: translateY(20px);
         }
 
         .btn-primary::before {
@@ -487,7 +705,7 @@
 
         .btn-primary:hover {
             color: var(--color-bg);
-            box-shadow: 0 0 30px rgba(0, 255, 159, 0.5);
+            box-shadow: 0 0 50px rgba(0, 255, 159, 0.5);
         }
 
         .btn-primary:hover::before {
@@ -500,42 +718,26 @@
         }
 
         /* ========================================
-           FOOTER
+           FOOTER (Minimal)
            ======================================== */
-        .footer {
-            padding: 3rem 5vw;
-            border-top: 1px solid var(--color-text-dim);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
+        .footer-minimal {
+            padding: 2rem;
             text-align: center;
-        }
-
-        .footer-logo {
-            font-weight: 700;
-            color: var(--color-primary);
-            letter-spacing: 0.1em;
-        }
-
-        .footer-text {
-            color: var(--color-text-muted);
-            font-size: 0.85rem;
+            border-top: 1px solid var(--color-text-dim);
         }
 
         .footer-links {
             display: flex;
+            justify-content: center;
             gap: 2rem;
-            font-size: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .footer-links a {
             color: var(--color-text-muted);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             transition: color 0.3s ease;
         }
 
@@ -544,411 +746,640 @@
         }
 
         .footer-copyright {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--color-text-dim);
-        }
-
-        /* ========================================
-           MOBILE NAV
-           ======================================== */
-        .mobile-nav {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: rgba(3, 3, 3, 0.95);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid var(--color-text-dim);
-            padding: 0.5rem 0;
-            padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
-        }
-
-        .mobile-nav-links {
-            display: flex;
-            justify-content: space-around;
-            list-style: none;
-        }
-
-        .mobile-nav-links a {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 0.75rem 0.5rem; /* Increased vertical padding for 44x44px minimum touch target */
-            color: var(--color-text-muted);
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: color 0.3s ease;
-            min-height: 44px; /* WCAG AAA compliance */
-        }
-
-        .mobile-nav-links a.active,
-        .mobile-nav-links a:hover {
-            color: var(--color-primary);
         }
 
         /* ========================================
            RESPONSIVE
            ======================================== */
+        @media (max-width: 1024px) {
+            .origin-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .photo-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .afterparty-gallery {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto;
+            }
+
+            .afterparty-gallery .photo-item:first-child {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            .evolution-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
-            body { cursor: auto; }
-            .cursor, .cursor-dot, .cursor-ring { display: none !important; }
-            .particles-canvas { display: none !important; }
-            .hud-nav { display: none; }
-            .mobile-nav { display: block; }
-            .main { padding-bottom: calc(120px + env(safe-area-inset-bottom)); }
-            .stats-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .page-header { margin-bottom: 4rem; }
+            :root {
+                --section-padding: 15vh 5vw;
+            }
+
+            .nav-minimal, .nav-back {
+                top: 10px;
+            }
+
+            .nav-back {
+                left: 10px;
+            }
+
+            .nav-minimal {
+                right: 10px;
+            }
+
+            .stats-row {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .origin-stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .photo-gallery {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .afterparty-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .afterparty-gallery .photo-item:first-child {
+                grid-column: span 1;
+            }
+
+            .timeline-visual {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .timeline-arrow {
+                transform: rotate(90deg);
+            }
+
+            .track-card {
+                flex: 0 0 260px;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Cursor -->
-    <div class="cursor cursor-dot"></div>
-    <div class="cursor cursor-ring"></div>
-
-    <!-- Visual Effects -->
-    <div class="scanlines"></div>
-    <div class="grid-bg"></div>
-    <canvas class="particles-canvas" id="particles"></canvas>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
 
     <!-- Navigation -->
-    <nav class="hud-nav" role="navigation" aria-label="System Interface">
-        <div class="hud-status">
-            <div class="status-dot"></div>
-            <span>SYS_CONNECTED</span>
-            <span style="margin-left: 10px; opacity: 0.7;">MISSION_VIEW</span>
-        </div>
-        <ul class="hud-links">
-            <li><a href="index.html" class="hud-link">HOME</a></li>
-            <li><a href="about.html" class="hud-link active">MISSION</a></li>
-            <li><a href="challenges.html" class="hud-link">CHALLENGES</a></li>
-            <li><a href="schedule.html" class="hud-link">SCHEDULE</a></li>
-            <li><a href="register.html" class="hud-link">ACCESS</a></li>
-            <li><a href="partners.html" class="hud-link" data-text="PARTNERS">PARTNERS</a></li>
-        </ul>
+    <a href="index.html" class="nav-back">
+        <i class="fas fa-arrow-left"></i>
+        <span>Home</span>
+    </a>
+
+    <nav class="nav-minimal">
+        <a href="register.html" class="nav-pill">Register</a>
+        <a href="challenges.html" class="nav-pill">Challenges</a>
     </nav>
 
-    <!-- Main Content -->
-    <main class="main">
-        <div class="container">
-            <header class="page-header">
-                <span class="page-tag">THE YEAR OF TRUSTING AGENTS // 2026</span>
-                <h1 class="page-title">THE SINGULARITY PROTOCOL</h1>
-                <p class="page-subtitle">
-                    2026: The year we trusted agents to manage themselves. The year we learned what that really means.
-                </p>
-            </header>
+    <!-- SECTION 1: HERO -->
+    <section class="story-section section-hero">
+        <div class="section-content">
+            <div class="hero-badge">
+                <i class="fas fa-signal"></i>
+                <span>TRANSMISSION INCOMING</span>
+            </div>
 
-            <section class="mission-statement" style="margin-bottom: 4rem; padding: 2rem; border: 1px solid var(--color-text-dim); background: rgba(0,255,159,0.02);">
-                <p style="color: var(--color-text); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
-                    In a world where AI agents make decisions for us, securing them isn't optional. It's survival.
-                </p>
-                <p style="color: var(--color-text-muted); line-height: 1.7; margin-bottom: 1.5rem;">
-                    NEBULA:FOG isn't a capture-the-flag. It's a build session. You'll have 8 hours to create something real:
-                    an exploit demonstration, a defensive tool, a trust verification protocol, or something nobody's thought of yet.
-                </p>
-                <p style="color: var(--color-text-muted); line-height: 1.7;">
-                    Choose your challenge track. Form your squad. Ship something that matters.
-                    At sundown, you demo. Then we celebrate.
-                </p>
-            </section>
+            <h1 class="section-title">
+                <span class="hero-title-line">
+                    <span class="hero-title-word">AI</span>
+                    <span class="hero-title-word" style="margin: 0 0.3em;">×</span>
+                    <span class="hero-title-word section-title-accent">SECURITY</span>
+                </span>
+                <span class="hero-title-line" style="margin-top: 0.2em;">
+                    <span class="hero-title-word" style="font-size: 0.6em; color: var(--color-text-muted);">WHERE TWO WORLDS</span>
+                    <span class="hero-title-word section-title-accent" style="font-size: 0.6em;">COLLIDE</span>
+                </span>
+            </h1>
 
-            <section class="features">
-                <article class="feature-card" data-classification="RED">
-                    <span class="feature-index">01</span>
-                    <h2 class="feature-title">SHADOW::VECTOR</h2>
-                    <p class="feature-tagline">"Break the chain of trust."</p>
-                    <p class="feature-text">
-                        Autonomous agents are only as secure as the trust they're given.
-                        Exploit that trust. Compromise decision systems, manipulate
-                        agent-to-agent relationships.
-                    </p>
-                </article>
-
-                <article class="feature-card" data-classification="BLUE">
-                    <span class="feature-index">02</span>
-                    <h2 class="feature-title">SENTINEL::MESH</h2>
-                    <p class="feature-tagline">"Guard the protocol."</p>
-                    <p class="feature-text">
-                        When agents manage themselves, who watches the watchers?
-                        Build detection systems, harden autonomous architectures,
-                        deploy self-healing defenses.
-                    </p>
-                </article>
-
-                <article class="feature-card" data-classification="CIPHER">
-                    <span class="feature-index">03</span>
-                    <h2 class="feature-title">ZERO::PROOF</h2>
-                    <p class="feature-tagline">"Trust without compromise."</p>
-                    <p class="feature-text">
-                        How do you verify integrity without exposing the system?
-                        Design privacy-preserving verification, establish trust anchors,
-                        prove security without revealing secrets.
-                    </p>
-                </article>
-
-                <article class="feature-card" data-classification="UNBOUND">
-                    <span class="feature-index">04</span>
-                    <h2 class="feature-title">ROGUE::AGENT</h2>
-                    <p class="feature-tagline">"Write your own protocol."</p>
-                    <p class="feature-text">
-                        Some threats don't fit in boxes. Neither do some solutions.
-                        Novel attack surfaces, experimental defenses, AI-powered
-                        security tooling. You define the problem.
-                    </p>
-                </article>
-            </section>
-
-            <section class="stats-section">
-                <div class="stats-header">
-                    <h2 class="stats-title">Tech Prizes</h2>
-                    <p class="stats-text">
-                        Winners will receive cutting-edge technology prizes including Apple Vision Pro,
-                        AR glasses, high-performance GPUs, and other advanced hardware to continue
-                        their innovation journey.
-                    </p>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat">
-                        <span class="stat-value">8+</span>
-                        <span class="stat-label">Hours of Hacking</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-value">4</span>
-                        <span class="stat-label">Protocol Layers</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-value">120</span>
-                        <span class="stat-label">Elite Operatives</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="cta-section">
-                <h2 class="cta-title">Ready to Infiltrate?</h2>
-                <p class="cta-text">Secure your position in the Singularity Protocol.</p>
-                <a href="register.html" class="btn-primary">
-                    <span>[ INITIATE REGISTRATION ]</span>
-                    <span>>></span>
-                </a>
-            </section>
+            <p class="section-subtitle">
+                In a world where AI agents make decisions for us, securing them isn't optional. It's survival.
+            </p>
         </div>
-    </main>
+
+        <div class="scroll-indicator">
+            <span>SCROLL TO INFILTRATE</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- SECTION 2: ORIGIN (2025) -->
+    <section class="story-section section-origin">
+        <div class="section-content">
+            <span class="section-tag">ARCHIVE // 2025</span>
+
+            <div class="origin-grid">
+                <div class="origin-text">
+                    <h2 class="section-title" style="font-size: clamp(2rem, 5vw, 3.5rem);">
+                        IT STARTED WITH<br>
+                        <span class="section-title-accent">A QUESTION</span>
+                    </h2>
+
+                    <p class="section-quote">
+                        "What happens when AI systems defend themselves?"
+                    </p>
+
+                    <p class="section-subtitle" style="opacity: 1; transform: none;">
+                        January 2025. 120 hackers gathered in San Francisco to find out.
+                        For 8 hours, they built, broke, and reimagined what AI security could be.
+                    </p>
+
+                    <div class="origin-stats">
+                        <div class="origin-stat">
+                            <span class="origin-stat-value">120</span>
+                            <span class="origin-stat-label">Operatives</span>
+                        </div>
+                        <div class="origin-stat">
+                            <span class="origin-stat-value">8</span>
+                            <span class="origin-stat-label">Hours</span>
+                        </div>
+                        <div class="origin-stat">
+                            <span class="origin-stat-value">4</span>
+                            <span class="origin-stat-label">Tracks</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Photo Gallery: 2025 Hackathon -->
+                <div class="photo-gallery" id="hackathon-gallery">
+                    <div class="photo-item">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>IMG_2294</span>
+                        </div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>IMG_2300</span>
+                        </div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>IMG_2314</span>
+                        </div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>IMG_2319</span>
+                        </div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>IMG_2322</span>
+                        </div>
+                    </div>
+                    <div class="photo-item">
+                        <div class="photo-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>IMG_2328</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: THE BUILDERS -->
+    <section class="story-section section-builders">
+        <div class="section-content builders-content">
+            <span class="section-tag">THE BUILDERS</span>
+
+            <h2 class="section-title" style="font-size: clamp(1.5rem, 4vw, 2.5rem);">
+                NOT A CTF.<br>
+                <span class="section-title-accent">A BUILD SESSION.</span>
+            </h2>
+
+            <p class="section-subtitle" style="margin: 0 auto;">
+                Participants shipped real tools, real exploits, real defenses.
+                Projects that lived beyond the event.
+            </p>
+
+            <div class="stats-row">
+                <div class="big-stat">
+                    <span class="big-stat-value" data-value="120">0</span>
+                    <span class="big-stat-label">Hackers</span>
+                </div>
+                <div class="big-stat">
+                    <span class="big-stat-value" data-value="8">0</span>
+                    <span class="big-stat-label">Hours</span>
+                </div>
+                <div class="big-stat">
+                    <span class="big-stat-value" data-value="4">0</span>
+                    <span class="big-stat-label">Tracks</span>
+                </div>
+            </div>
+
+            <!-- Video Placeholder -->
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <i class="fas fa-play-circle"></i>
+                    <span>2025 HIGHLIGHTS</span>
+                    <span style="font-size: 0.7rem; margin-top: 0.5rem; color: var(--color-text-dim);">Video coming soon</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: CHALLENGE TRACKS -->
+    <section class="story-section section-tracks">
+        <div class="section-content">
+            <span class="section-tag">PROTOCOL LAYERS</span>
+
+            <h2 class="section-title" style="font-size: clamp(2rem, 5vw, 3rem);">
+                CHOOSE YOUR<br>
+                <span class="section-title-accent">MISSION</span>
+            </h2>
+
+            <div class="tracks-scroll">
+                <div class="track-card">
+                    <span class="track-number">01</span>
+                    <h3 class="track-title">SHADOW::VECTOR</h3>
+                    <p class="track-subtitle">Attack AI Systems</p>
+                    <p class="track-desc">
+                        Break the chain of trust. Exploit autonomous agents,
+                        manipulate decision systems, compromise AI-to-AI relationships.
+                    </p>
+                </div>
+
+                <div class="track-card">
+                    <span class="track-number">02</span>
+                    <h3 class="track-title">SENTINEL::MESH</h3>
+                    <p class="track-subtitle">Defend AI Systems</p>
+                    <p class="track-desc">
+                        Guard the protocol. Build detection systems,
+                        harden architectures, deploy self-healing defenses.
+                    </p>
+                </div>
+
+                <div class="track-card">
+                    <span class="track-number">03</span>
+                    <h3 class="track-title">ZERO::PROOF</h3>
+                    <p class="track-subtitle">Verify Without Exposing</p>
+                    <p class="track-desc">
+                        Trust without compromise. Design privacy-preserving verification,
+                        establish trust anchors, prove security without revealing secrets.
+                    </p>
+                </div>
+
+                <div class="track-card">
+                    <span class="track-number">04</span>
+                    <h3 class="track-title">ROGUE::AGENT</h3>
+                    <p class="track-subtitle">Build Something New</p>
+                    <p class="track-desc">
+                        Write your own protocol. Novel attack surfaces,
+                        experimental defenses, AI security tools nobody's thought of yet.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: AFTERPARTY -->
+    <section class="story-section section-afterparty">
+        <div class="section-content">
+            <span class="section-tag">POST-PROTOCOL</span>
+
+            <h2 class="afterparty-title">THEN WE DANCED</h2>
+
+            <p class="section-subtitle" style="text-align: center; margin: 0 auto;">
+                After 8 hours of hacking, we celebrated. Because building the future
+                of AI security deserves a proper send-off.
+            </p>
+
+            <!-- Afterparty Photo Gallery -->
+            <div class="afterparty-gallery">
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>AFTERPARTY_01</span>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>AFTERPARTY_02</span>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>AFTERPARTY_03</span>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>AFTERPARTY_04</span>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <i class="fas fa-image"></i>
+                        <span>AFTERPARTY_05</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: 2026 AWAITS -->
+    <section class="story-section section-future">
+        <div class="section-content">
+            <span class="section-tag">THE EVOLUTION</span>
+
+            <h2 class="section-title" style="text-align: center; font-size: clamp(2rem, 5vw, 3.5rem);">
+                2026:<br>
+                <span class="section-title-accent">THE SINGULARITY PROTOCOL</span>
+            </h2>
+
+            <div class="timeline-visual">
+                <div class="timeline-year past">
+                    <span class="timeline-year-value">2025</span>
+                    <span class="timeline-year-label">The Beginning</span>
+                </div>
+                <div class="timeline-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+                <div class="timeline-year future">
+                    <span class="timeline-year-value">2026</span>
+                    <span class="timeline-year-label">The Evolution</span>
+                </div>
+            </div>
+
+            <p class="section-subtitle" style="text-align: center; margin: 0 auto 3rem;">
+                This year, we trusted agents to manage themselves.
+                Now we learn what that really means.
+            </p>
+
+            <div class="evolution-list">
+                <div class="evolution-item">
+                    <h4 class="evolution-item-title">AUTONOMOUS AGENTS</h4>
+                    <p class="evolution-item-text">AI systems that make decisions without human intervention. The security implications are massive.</p>
+                </div>
+                <div class="evolution-item">
+                    <h4 class="evolution-item-title">SELF-GOVERNING AI</h4>
+                    <p class="evolution-item-text">When AI watches AI, who watches the watchers? Build the answer.</p>
+                </div>
+                <div class="evolution-item">
+                    <h4 class="evolution-item-title">TRUST PROTOCOLS</h4>
+                    <p class="evolution-item-text">New verification systems for a world where agents negotiate with agents.</p>
+                </div>
+                <div class="evolution-item">
+                    <h4 class="evolution-item-title">BIGGER STAKES</h4>
+                    <p class="evolution-item-text">More tracks. More prizes. More impact. March 2026.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: CTA -->
+    <section class="story-section section-cta">
+        <div class="section-content">
+            <h2 class="cta-title">
+                WILL YOU<br>
+                <span class="section-title-accent">BREACH THE PROTOCOL?</span>
+            </h2>
+
+            <p class="cta-subtitle">
+                March 2026. San Francisco. Be there.
+            </p>
+
+            <a href="register.html" class="btn-primary">
+                <span>[ INITIATE REGISTRATION ]</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-        <div class="footer-content">
-            <div class="footer-logo">NEBULA:FOG:PROTOCOL</div>
-            <p class="footer-text">AI x Security</p>
-            <div class="footer-links">
-                <a href="about.html">MISSION</a>
-                <a href="challenges.html">CHALLENGES</a>
-                <a href="schedule.html">SCHEDULE</a>
-                <a href="register.html">ACCESS</a>
-                <a href="partners.html">PARTNERS</a>
-            </div>
-            <p class="footer-copyright">© 2026 NEBULA:FOG:PROTOCOL. All rights reserved.</p>
+    <footer class="footer-minimal">
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="challenges.html">Challenges</a>
+            <a href="schedule.html">Schedule</a>
+            <a href="partners.html">Partners</a>
+            <a href="code-of-conduct.html">Protocol</a>
         </div>
+        <p class="footer-copyright">© 2026 NEBULA:FOG:PROTOCOL. All rights reserved.</p>
     </footer>
 
-    <!-- Mobile Navigation -->
-    <nav class="mobile-nav" aria-label="Mobile navigation">
-        <ul class="mobile-nav-links">
-            <li><a href="index.html"><i class="fas fa-home"></i><span>HOME</span></a></li>
-            <li><a href="about.html" class="active"><i class="fas fa-info-circle"></i><span>MISSION</span></a></li>
-            <li><a href="challenges.html"><i class="fas fa-trophy"></i><span>CHALLENGES</span></a></li>
-            <li><a href="schedule.html"><i class="fas fa-calendar-alt"></i><span>SCHEDULE</span></a></li>
-            <li><a href="register.html"><i class="fas fa-user-plus"></i><span>ACCESS</span></a></li>
-        </ul>
-    </nav>
-
     <script>
-        // CURSOR SYSTEM
-        (function() {
-            if (window.matchMedia('(max-width: 768px)').matches) return;
-            const cursorDot = document.querySelector('.cursor-dot');
-            const cursorRing = document.querySelector('.cursor-ring');
-            if (!cursorDot || !cursorRing) return;
-            let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, ringX = 0, ringY = 0;
-            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-            const animate = () => {
-                dotX += (mouseX - dotX) * 0.5; dotY += (mouseY - dotY) * 0.5;
-                ringX += (mouseX - ringX) * 0.15; ringY += (mouseY - ringY) * 0.15;
-                cursorDot.style.left = dotX + 'px'; cursorDot.style.top = dotY + 'px';
-                cursorRing.style.left = ringX + 'px'; cursorRing.style.top = ringY + 'px';
-                requestAnimationFrame(animate);
-            };
-            animate();
-            document.querySelectorAll('a, button, .btn-primary, .feature-card').forEach(el => {
-                el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
-            });
-            document.addEventListener('mousedown', () => cursorRing.classList.add('clicking'));
-            document.addEventListener('mouseup', () => cursorRing.classList.remove('clicking'));
-        })();
+        // Register GSAP plugins
+        gsap.registerPlugin(ScrollTrigger);
 
-        // PARTICLES SYSTEM
-        (function() {
-            if (window.matchMedia('(max-width: 768px)').matches) return;
-            const canvas = document.getElementById('particles');
-            if (!canvas) return;
-            let gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            if (!gl) { initParticles2D(canvas); return; }
-            const vsSource = `attribute vec4 aPosition; void main() { gl_Position = aPosition; }`;
-            const fsSource = `precision mediump float;
-                uniform vec2 uResolution; uniform float uTime; uniform vec2 uMouse; uniform float uScroll;
-                vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
-                float snoise(vec2 v) {
-                    const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-                    vec2 i = floor(v + dot(v, C.yy)); vec2 x0 = v - i + dot(i, C.xx);
-                    vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-                    vec4 x12 = x0.xyxy + C.xxzz; x12.xy -= i1; i = mod289(i);
-                    vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-                    vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-                    m = m*m; m = m*m;
-                    vec3 x = 2.0 * fract(p * C.www) - 1.0; vec3 h = abs(x) - 0.5;
-                    vec3 ox = floor(x + 0.5); vec3 a0 = x - ox;
-                    m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-                    vec3 g; g.x = a0.x * x0.x + h.x * x0.y; g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-                    return 130.0 * dot(m, g);
-                }
-                void main() {
-                    vec2 uv = gl_FragCoord.xy / uResolution; vec2 p = uv * 2.0 - 1.0;
-                    p.x *= uResolution.x / uResolution.y;
-                    vec2 mouse = uMouse * 2.0 - 1.0; mouse.x *= uResolution.x / uResolution.y;
-                    float mouseDist = length(p - mouse); float mouseInfluence = smoothstep(0.8, 0.0, mouseDist) * 0.3;
-                    float t = uTime * 0.15; float scrollOffset = uScroll * 2.0;
-                    float noise1 = snoise(p * 1.5 + vec2(t, scrollOffset));
-                    float noise2 = snoise(p * 3.0 + vec2(-t * 0.5, scrollOffset * 0.5));
-                    float noise3 = snoise(p * 5.0 + vec2(t * 0.3, -scrollOffset * 0.3));
-                    float n = noise1 * 0.5 + noise2 * 0.3 + noise3 * 0.2; n = n * 0.5 + 0.5;
-                    vec3 colorA = vec3(0.0, 1.0, 0.62); vec3 colorB = vec3(1.0, 0.0, 0.5); vec3 colorC = vec3(0.0, 1.0, 1.0);
-                    vec3 color = mix(colorA, colorB, n * 0.5 + mouseInfluence); color = mix(color, colorC, noise3 * 0.3);
-                    float vignette = clamp(1.0 - length(p) * 0.4, 0.0, 1.0);
-                    vec2 grid = fract(uv * vec2(50.0, 30.0)); float gridLine = (step(0.95, grid.x) + step(0.95, grid.y)) * 0.03;
-                    float alpha = clamp((n * 0.08 + gridLine + mouseInfluence * 0.2) * vignette, 0.0, 0.15);
-                    gl_FragColor = vec4(color, alpha);
-                }`;
-            const compileShader = (source, type) => {
-                const shader = gl.createShader(type); gl.shaderSource(shader, source); gl.compileShader(shader);
-                return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null;
-            };
-            const vs = compileShader(vsSource, gl.VERTEX_SHADER);
-            const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
-            if (!vs || !fs) { initParticles2D(canvas); return; }
-            const program = gl.createProgram(); gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
-            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { initParticles2D(canvas); return; }
-            gl.useProgram(program);
-            const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
-            const buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-            const aPosition = gl.getAttribLocation(program, 'aPosition'); gl.enableVertexAttribArray(aPosition); gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
-            const uResolution = gl.getUniformLocation(program, 'uResolution');
-            const uTime = gl.getUniformLocation(program, 'uTime');
-            const uMouse = gl.getUniformLocation(program, 'uMouse');
-            const uScroll = gl.getUniformLocation(program, 'uScroll');
-            let mouseX = 0.5, mouseY = 0.5, scrollProgress = 0;
-            document.addEventListener('mousemove', (e) => { mouseX = e.clientX / window.innerWidth; mouseY = 1.0 - e.clientY / window.innerHeight; });
-            window.addEventListener('scroll', () => { scrollProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight); }, { passive: true });
-            const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; gl.viewport(0, 0, canvas.width, canvas.height); };
-            resize(); window.addEventListener('resize', resize);
-            gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-            const startTime = performance.now();
-            const animate = () => {
-                const time = (performance.now() - startTime) / 1000;
-                gl.uniform2f(uResolution, canvas.width, canvas.height); gl.uniform1f(uTime, time);
-                gl.uniform2f(uMouse, mouseX, mouseY); gl.uniform1f(uScroll, scrollProgress);
-                gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-                requestAnimationFrame(animate);
-            };
-            animate();
-        })();
-        function initParticles2D(canvas) {
-            const ctx = canvas.getContext('2d'); let particles = []; const maxParticles = 60;
-            const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
-            resize(); window.addEventListener('resize', resize);
-            class Particle {
-                constructor() { this.reset(); }
-                reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5; this.size = Math.random() * 2 + 1; this.alpha = Math.random() * 0.5 + 0.1; }
-                update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset(); }
-                draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(0, 255, 159, ${this.alpha})`; ctx.fill(); }
-            }
-            for (let i = 0; i < maxParticles; i++) particles.push(new Particle());
-            const animate = () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => { p.update(); p.draw(); });
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 120) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = `rgba(0, 255, 159, ${0.1 * (1 - dist / 120)})`; ctx.stroke(); }
-                    }
-                }
-                requestAnimationFrame(animate);
-            };
-            animate();
-        }
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+        });
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Animate page header
-            gsap.to('.page-header', {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                ease: 'power3.out'
-            });
-
-            // Animate feature cards with stagger
-            gsap.to('.feature-card', {
+        // SECTION 1: Hero animations
+        const heroTl = gsap.timeline({ delay: 0.5 });
+        heroTl
+            .to('.hero-badge', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+            .to('.hero-title-word', {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                stagger: 0.15,
-                delay: 0.3,
+                stagger: 0.1,
                 ease: 'power3.out'
-            });
-
-            // Animate stats section
-            gsap.to('.stats-section', {
+            }, '-=0.4')
+            .to('.section-hero .section-subtitle', {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                delay: 0.8,
                 ease: 'power3.out'
-            });
+            }, '-=0.4');
 
-            // Animate CTA section
-            gsap.to('.cta-section', {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                delay: 1,
-                ease: 'power3.out'
-            });
+        // SECTION 2: Origin animations
+        ScrollTrigger.create({
+            trigger: '.section-origin',
+            start: 'top 70%',
+            onEnter: () => {
+                gsap.to('.section-origin .section-tag', {
+                    opacity: 1, y: 0, duration: 0.6, ease: 'power3.out'
+                });
+                gsap.to('.origin-text', {
+                    opacity: 1, x: 0, duration: 0.8, delay: 0.2, ease: 'power3.out'
+                });
+                gsap.to('.section-origin .section-title', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out'
+                });
+                gsap.to('.section-origin .section-quote', {
+                    opacity: 1, x: 0, duration: 0.8, delay: 0.5, ease: 'power3.out'
+                });
+                gsap.to('.photo-gallery', {
+                    opacity: 1, x: 0, duration: 0.8, delay: 0.4, ease: 'power3.out'
+                });
+                gsap.to('.photo-item', {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.6,
+                    stagger: 0.1,
+                    delay: 0.6,
+                    ease: 'power3.out'
+                });
+            },
+            once: true
+        });
 
-            // Counter animation for stats
-            document.querySelectorAll('.stat-value').forEach(stat => {
-                const target = stat.textContent;
-                const isNumber = !isNaN(parseInt(target));
+        // SECTION 3: Builders animations with counter
+        ScrollTrigger.create({
+            trigger: '.section-builders',
+            start: 'top 60%',
+            onEnter: () => {
+                gsap.to('.section-builders .section-tag', {
+                    opacity: 1, y: 0, duration: 0.6, ease: 'power3.out'
+                });
+                gsap.to('.section-builders .section-title', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power3.out'
+                });
+                gsap.to('.section-builders .section-subtitle', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: 'power3.out'
+                });
+                gsap.to('.big-stat', {
+                    opacity: 1, y: 0, duration: 0.8, stagger: 0.15, delay: 0.5, ease: 'power3.out'
+                });
 
-                if (isNumber) {
-                    const value = parseInt(target);
-                    gsap.from(stat, {
-                        textContent: 0,
+                // Animate counters
+                document.querySelectorAll('.big-stat-value').forEach(el => {
+                    const target = parseInt(el.dataset.value);
+                    gsap.to(el, {
+                        textContent: target,
                         duration: 2,
-                        delay: 1.2,
+                        delay: 0.8,
                         ease: 'power2.out',
-                        snap: { textContent: 1 },
-                        onUpdate: function() {
-                            stat.textContent = Math.round(this.targets()[0].textContent) + (target.includes('+') ? '+' : '');
-                        }
+                        snap: { textContent: 1 }
                     });
+                });
+
+                gsap.to('.video-container', {
+                    opacity: 1, scale: 1, duration: 0.8, delay: 1, ease: 'power3.out'
+                });
+            },
+            once: true
+        });
+
+        // SECTION 4: Tracks animations
+        ScrollTrigger.create({
+            trigger: '.section-tracks',
+            start: 'top 70%',
+            onEnter: () => {
+                gsap.to('.section-tracks .section-tag', {
+                    opacity: 1, y: 0, duration: 0.6, ease: 'power3.out'
+                });
+                gsap.to('.section-tracks .section-title', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power3.out'
+                });
+                gsap.to('.track-card', {
+                    opacity: 1, y: 0, duration: 0.6, stagger: 0.1, delay: 0.4, ease: 'power3.out'
+                });
+            },
+            once: true
+        });
+
+        // SECTION 5: Afterparty animations
+        ScrollTrigger.create({
+            trigger: '.section-afterparty',
+            start: 'top 70%',
+            onEnter: () => {
+                gsap.to('.section-afterparty .section-tag', {
+                    opacity: 1, y: 0, duration: 0.6, ease: 'power3.out'
+                });
+                gsap.to('.afterparty-title', {
+                    opacity: 1, y: 0, duration: 1, delay: 0.2, ease: 'power3.out'
+                });
+                gsap.to('.section-afterparty .section-subtitle', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'power3.out'
+                });
+                gsap.to('.afterparty-gallery .photo-item', {
+                    opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, delay: 0.6, ease: 'power3.out'
+                });
+            },
+            once: true
+        });
+
+        // SECTION 6: Future animations
+        ScrollTrigger.create({
+            trigger: '.section-future',
+            start: 'top 70%',
+            onEnter: () => {
+                gsap.to('.section-future .section-tag', {
+                    opacity: 1, y: 0, duration: 0.6, ease: 'power3.out'
+                });
+                gsap.to('.section-future .section-title', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power3.out'
+                });
+                gsap.to('.timeline-year', {
+                    opacity: 1, scale: 1, duration: 0.8, stagger: 0.2, delay: 0.4, ease: 'power3.out'
+                });
+                gsap.to('.timeline-arrow', {
+                    opacity: 1, duration: 0.6, delay: 0.8, ease: 'power3.out'
+                });
+                gsap.to('.section-future .section-subtitle', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 1, ease: 'power3.out'
+                });
+                gsap.to('.evolution-item', {
+                    opacity: 1, y: 0, duration: 0.6, stagger: 0.1, delay: 1.2, ease: 'power3.out'
+                });
+            },
+            once: true
+        });
+
+        // SECTION 7: CTA animations
+        ScrollTrigger.create({
+            trigger: '.section-cta',
+            start: 'top 70%',
+            onEnter: () => {
+                gsap.to('.cta-title', {
+                    opacity: 1, y: 0, duration: 0.8, ease: 'power3.out'
+                });
+                gsap.to('.cta-subtitle', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power3.out'
+                });
+                gsap.to('.btn-primary', {
+                    opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'power3.out'
+                });
+            },
+            once: true
+        });
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
         });
