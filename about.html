@@ -606,37 +606,7 @@
         }
 
         /* ========================================
-           SECTION 5: AFTERPARTY
-           ======================================== */
-        .section-afterparty {
-            background: linear-gradient(180deg, var(--color-bg) 0%, rgba(255, 0, 128, 0.05) 50%, var(--color-bg) 100%);
-        }
-
-        .afterparty-title {
-            font-family: var(--font-display);
-            font-size: clamp(3rem, 10vw, 7rem);
-            font-weight: 700;
-            color: var(--color-secondary);
-            text-shadow: 0 0 80px rgba(255, 0, 128, 0.5);
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .afterparty-gallery {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 200px);
-            gap: 1rem;
-            margin-top: 3rem;
-        }
-
-        .afterparty-gallery .photo-item:first-child {
-            grid-column: span 2;
-            grid-row: span 2;
-        }
-
-        /* ========================================
-           SECTION 6: 2026 AWAITS
+           SECTION 5: 2026 AWAITS
            ======================================== */
         .section-future {
             background: radial-gradient(ellipse at center, rgba(0, 255, 159, 0.08) 0%, transparent 60%);
@@ -828,16 +798,6 @@
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .afterparty-gallery {
-                grid-template-columns: repeat(2, 1fr);
-                grid-template-rows: auto;
-            }
-
-            .afterparty-gallery .photo-item:first-child {
-                grid-column: span 2;
-                grid-row: span 1;
-            }
-
             .evolution-list {
                 grid-template-columns: 1fr;
             }
@@ -872,14 +832,6 @@
 
             .photo-gallery {
                 grid-template-columns: 1fr 1fr;
-            }
-
-            .afterparty-gallery {
-                grid-template-columns: 1fr;
-            }
-
-            .afterparty-gallery .photo-item:first-child {
-                grid-column: span 1;
             }
 
             .timeline-visual {
@@ -1165,40 +1117,7 @@
         </div>
     </section>
 
-    <!-- SECTION 5: AFTERPARTY -->
-    <section class="story-section section-afterparty">
-        <div class="section-content">
-            <span class="section-tag">POST-PROTOCOL</span>
-
-            <h2 class="afterparty-title">THEN WE DANCED</h2>
-
-            <p class="section-subtitle" style="text-align: center; margin: 0 auto;">
-                After 8 hours of hacking, we celebrated. Because building the future
-                of AI security deserves a proper send-off.
-            </p>
-
-            <!-- Afterparty Photo Gallery -->
-            <div class="afterparty-gallery">
-                <div class="photo-item">
-                    <img src="images/2025/hackathon/IMG_2375.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
-                </div>
-                <div class="photo-item">
-                    <img src="images/2025/hackathon/IMG_2382.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
-                </div>
-                <div class="photo-item">
-                    <img src="images/2025/hackathon/IMG_2398.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
-                </div>
-                <div class="photo-item">
-                    <img src="images/2025/hackathon/IMG_2412.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
-                </div>
-                <div class="photo-item">
-                    <img src="images/2025/hackathon/IMG_2429.jpg" alt="NEBULA:FOG 2025 Afterparty" loading="lazy">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- SECTION 6: 2026 AWAITS -->
+    <!-- SECTION 5: 2026 AWAITS -->
     <section class="story-section section-future">
         <div class="section-content">
             <span class="section-tag">THE EVOLUTION</span>
@@ -1394,28 +1313,7 @@
             once: true
         });
 
-        // SECTION 5: Afterparty animations
-        ScrollTrigger.create({
-            trigger: '.section-afterparty',
-            start: 'top 70%',
-            onEnter: () => {
-                gsap.to('.section-afterparty .section-tag', {
-                    opacity: 1, y: 0, duration: 0.6, ease: 'power3.out'
-                });
-                gsap.to('.afterparty-title', {
-                    opacity: 1, y: 0, duration: 1, delay: 0.2, ease: 'power3.out'
-                });
-                gsap.to('.section-afterparty .section-subtitle', {
-                    opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'power3.out'
-                });
-                gsap.to('.afterparty-gallery .photo-item', {
-                    opacity: 1, scale: 1, duration: 0.6, stagger: 0.1, delay: 0.6, ease: 'power3.out'
-                });
-            },
-            once: true
-        });
-
-        // SECTION 6: Future animations
+        // SECTION 5: Future animations
         ScrollTrigger.create({
             trigger: '.section-future',
             start: 'top 70%',
