@@ -1,63 +1,44 @@
-# Content Management Guide
+# Content Reference Files
 
-This directory contains all editable content for the NEBULA:FOG:PROTOCOL website.
-Content is synced from [nebulafog-prime](https://github.com/basicScandal/nebulafog-prime).
+This directory contains markdown content files that serve as **reference/archive** for the website content.
 
-## File Structure
+**Note:** Content is NOT dynamically loaded from these files. All actual content is inline in the HTML files. These files exist for reference and potential future CMS integration.
 
-```
-content/
-├── README.md          # This guide
-├── home.md            # Homepage content & navigation
-├── event.md           # Core event configuration (dates, links, meta)
-├── about.md           # About page content & features
-├── challenges.md      # Challenge tracks info
-├── schedule.md        # Event timeline
-├── sponsors.md        # Partnership information
-├── register.md        # Registration page content
-├── terminal.md        # Terminal boot sequence & commands
-└── navigation.md      # Site navigation structure
-```
+## Current Event Details
 
-## Event Details (January 25, 2025)
+- **Event:** NEBULA:FOG:PRIME 2026
+- **Theme:** AI x Security Hackathon
+- **Date:** March 2026
 
-- **Date**: January 25, 2025
-- **Venue**: Future House, 1405 Minnesota St, San Francisco, CA 94107
-- **Time**: 8:00 AM - 9:30 PM
-- **After-Party**: 9:30 PM onwards featuring Synthetix
+## File Reference
 
-## Key URLs
+| File | Purpose | HTML Equivalent |
+|------|---------|-----------------|
+| `home.md` | Homepage content | `index.html` |
+| `event.md` | Event configuration | Various pages |
+| `about.md` | About page content | `about.html` |
+| `challenges.md` | Challenge tracks | `challenges.html` |
+| `schedule.md` | Event timeline | `schedule.html` |
+| `sponsors.md` | Partnership info | `partners.html` |
+| `register.md` | Registration content | `register.html` |
+| `terminal.md` | Terminal commands | `index.html` (terminal section) |
+| `navigation.md` | Site navigation | All pages (nav) |
+| `protocols.md` | Protocol/track details | `index.html`, `challenges.html` |
 
-| Purpose | URL |
-|---------|-----|
-| Registration | https://partiful.com/e/HdFLRv5PQgspHg8SwL1z |
-| Signal Group | https://signal.group/#CjQKIJNB4GqSEUM8UsNftK9gSWMS21bFZS4z6N5G_KhV2uHTEhBLOjyVsc13mvsb4FyQpMRZ |
-| Challenge Ideas | https://ideas.nebulafog.ai |
-| Partnership | https://partners.nebulafog.ai |
-| Afterparty Music | https://synthetix.bandcamp.com/album/ominous-data |
+## Editing Content
 
-## Challenge Tracks
+To update website content, edit the corresponding HTML file directly:
 
-1. **Offensive Security** - Leverage AI for penetration testing and vulnerability discovery
-2. **Defensive Security** - Build automated threat detection and response systems
-3. **Privacy & Trust** - Enhance data protection and model security
+1. **Homepage content** - Edit `index.html`
+2. **Challenge tracks** - Edit `index.html` (protocols section) or `challenges.html`
+3. **Schedule** - Edit `schedule.html`
+4. **About/Mission** - Edit `about.html`
+5. **Registration** - Edit `register.html`
 
-## How to Edit Content
+## Future Use
 
-1. **Update Event Details** → Edit `event.md`
-2. **Update Challenge Tracks** → Edit `challenges.md` or `protocols.md`
-3. **Update Schedule** → Edit `schedule.md`
-4. **Update About Content** → Edit `about.md`
-5. **Update Terminal Commands** → Edit `terminal.md`
-
-## Syncing from Source
-
-This content was extracted from the React components in [nebulafog-prime](https://github.com/basicScandal/nebulafog-prime):
-
-- `src/pages/Home.tsx` → `home.md`
-- `src/pages/About.tsx` → `about.md`
-- `src/pages/Challenges.tsx` → `challenges.md`
-- `src/pages/Schedule.tsx` → `schedule.md`
-- `src/pages/Sponsors.tsx` → `sponsors.md`
-- `src/pages/Register.tsx` → `register.md`
-- `src/components/Terminal.tsx` → `terminal.md`
+These markdown files may be used for:
+- CMS integration
+- Content versioning
+- Documentation generation
+- API-driven content updates
